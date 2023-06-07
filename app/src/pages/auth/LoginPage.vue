@@ -186,7 +186,7 @@ export default defineComponent({
       }
       if (data.password == password.value) {
         $q.cookies.set('token', data.access_token, {
-          expires: '5m'
+          expires: '3h'
         })
         token.value = data.access_token
         $router.push({ name: 'index' })
