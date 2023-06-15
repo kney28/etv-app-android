@@ -111,22 +111,68 @@
 
 <script>
 
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import { useAuthStore } from 'src/stores/auth';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useQuasar } from 'quasar';
+import { versionOS } from 'src/stores/global';
+import { Device } from '@capacitor/device';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { directories } from '../../constants/directories';
+
 
 export default defineComponent({
   name: 'LoginPage',
   setup() {
     const $router = useRouter()
     const $q = useQuasar()
+    const version = storeToRefs(versionOS)
     const username = ref(null)
     const password = ref(null)
     const auth = useAuthStore()
     const { token } = storeToRefs(auth)
     const utf8Chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[{]}|;:,<.>/?';
+
+    onMounted(() => {
+      getVersion()
+      createDirectory(directories.paths)
+      readFile('count.json')
+    })
+    const readFile = async (path) => {
+      await Filesystem.readFile({
+        path: path,
+        directory: Directory.Data
+      }).then((res) => {
+        return res.data
+      }).catch((err) => {
+        console.log(err)
+        saveFile('count.json', JSON.stringify({ count: 1 }))
+      })
+    }
+    const saveFile = async (path, data) => {
+      await Filesystem.writeFile({
+        path: path,
+        data: data,
+        directory: Directory.Data,
+        encoding: Encoding.UTF8,
+      })
+    }
+    const getVersion = async () => {
+      const info = await Device.getInfo();
+      version.version = info.osVersion
+      // versionOS.version = 12
+      console.log('Versión de Android:', info.osVersion);
+    }
+
+    const createDirectory = async (paths) => {
+      for (const path of paths) {
+        await Filesystem.mkdir({
+          path: path,
+          directory: Directory.Data
+        })
+      }
+    }
 
     function encodeBase64(text) {
       return btoa(encodeURIComponent(text).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1)));
@@ -182,7 +228,7 @@ export default defineComponent({
       const data = {
         username: username.value,
         password: encryptCedula(username.value, salt),
-        access_token: "success_x01"
+        access_token: 'success_x01'
       }
       if (data.password == password.value) {
         $q.cookies.set('token', data.access_token, {
