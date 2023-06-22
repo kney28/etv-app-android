@@ -52,6 +52,11 @@
   resolved "https://registry.npmjs.org/@capacitor/filesystem/-/filesystem-5.0.2.tgz"
   integrity sha512-seAyASEPhHzpJRap+zZRzvcY+R4LSgMgiKCzen8aReGM5+l6ZFENnzCIeHL4ib5HEMMI4s/sbPGpcwpMndfDdA==
 
+"@capacitor/geolocation@^5.0.4":
+  version "5.0.4"
+  resolved "https://registry.npmjs.org/@capacitor/geolocation/-/geolocation-5.0.4.tgz"
+  integrity sha512-/WXiLBY4hxigWMQp/i/BcFLwGSGVNcnPX4M0tNI11bfUsO6DJ0/dMsSw2xn8a7QxEsKmVUYE5UeOOZNLeUiLHg==
+
 "@ionic/cli-framework-output@^2.2.5":
   version "2.2.6"
   resolved "https://registry.npmjs.org/@ionic/cli-framework-output/-/cli-framework-output-2.2.6.tgz"

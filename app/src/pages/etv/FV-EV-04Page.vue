@@ -20,7 +20,7 @@
             <template v-slot:body="props">
               <q-tr :props="props">
                 <q-td key="formato" :props="props">
-                  <q-btn flat style="color: rgb(10,30,200);" :label="props.row.formato" />
+                  {{ props.row.formato }}
                 </q-td>
                 <q-td key="edit" :props="props">
                   <q-btn round size="xs" color="primary" icon="border_color" v-on:click="editing(props.row)" />
@@ -31,138 +31,6 @@
               </q-tr>
             </template>
           </q-table>
-          <!--<q-table dense :rows-per-page-options="[10, 15, 20, 25, 50, 0]" v-model:pagination="pagination"
-            title="Etv_fv-ev-04" :rows="dataEtv" :filter="filter" :columns="columns" row-key="name">
-            <template v-slot:top-left>
-              <q-btn unelevated rounded icon="add" color="primary" @click="creating" label="Agregar" />
-              <q-space />
-            </template>
-            <template v-slot:top-right>
-              <q-input dense debounce="300" v-model="filter" placeholder="Buscar">
-                <template v-slot:append>
-                  <q-icon name="search" />
-                </template>
-              </q-input>
-            </template>
-            <template v-slot:body="props">
-              <q-tr :props="props">
-                <q-td key="formato" :props="props">
-                  {{ props.row.formato }}
-                </q-td>
-                <q-td key="acta" :props="props">
-                  {{ props.row.acta }}
-                </q-td>
-                <q-td key="fecha" :props="props">
-                  {{ props.row.fecha }}
-                </q-td>
-                <q-td key="municipio" :props="props">
-                  {{ props.row.municipio }}
-                </q-td>
-                <q-td key="barrio" :props="props">
-                  {{ props.row.barrio }}
-                </q-td>
-                <q-td key="comuna" :props="props">
-                  {{ props.row.comuna }}
-                </q-td>
-                <q-td key="direccion" :props="props">
-                  {{ props.row.direccion }}
-                </q-td>
-                <q-td key="razon_social" :props="props">
-                  {{ props.row.razon_social }}
-                </q-td>
-                <q-td key="telefono" :props="props">
-                  {{ props.row.telefono }}
-                </q-td>
-                <q-td key="caracterInstitucional" :props="props">
-                  {{ props.row.caracterInstitucional }}
-                </q-td>
-                <q-td key="publica" :props="props">
-                  {{ props.row.publica }}
-                </q-td>
-                <q-td key="privada" :props="props">
-                  {{ props.row.privada }}
-                </q-td>
-                <q-td key="categoria" :props="props">
-                  {{ props.row.categoria }}
-                </q-td>
-                <q-td key="personas_protegidas" :props="props">
-                  {{ props.row.personas_protegidas }}
-                </q-td>
-                <q-td key="representante_legal" :props="props">
-                  {{ props.row.representante_legal }}
-                </q-td>
-                <q-td key="cedula" :props="props">
-                  {{ props.row.cedula }}
-                </q-td>
-                <q-td key="criadero_cantidad" :props="props">
-                  {{ props.row.criadero_cantidad }}
-                </q-td>
-                <q-td key="tipo_criadero" :props="props">
-                  {{ props.row.tipo_criadero }}
-                </q-td>
-                <q-td key="criadero_ubicacion" :props="props">
-                  {{ props.row.criadero_ubicacion }}
-                </q-td>
-                <q-td key="criadero_potencial_cantidad" :props="props">
-                  {{ props.row.criadero_potencial_cantidad }}
-                </q-td>
-                <q-td key="tipo_criadero_potencial" :props="props">
-                  {{ props.row.tipo_criadero_potencial }}
-                </q-td>
-                <q-td key="criadero_potencial_ubicacion" :props="props">
-                  {{ props.row.criadero_potencial_ubicacion }}
-                </q-td>
-                <q-td key="observaciones" :props="props">
-                  {{ props.row.observaciones }}
-                </q-td>
-                <q-td key="toldillo_adulto_bueno" :props="props">
-                  {{ props.row.toldillo_adulto_bueno }}
-                </q-td>
-                <q-td key="toldillo_adulto_regular" :props="props">
-                  {{ props.row.toldillo_adulto_regular }}
-                </q-td>
-                <q-td key="toldillo_adulto_malo" :props="props">
-                  {{ props.row.toldillo_adulto_malo }}
-                </q-td>
-                <q-td key="toldillo_adulto_total" :props="props">
-                  {{ props.row.toldillo_adulto_total }}
-                </q-td>
-                <q-td key="toldillo_adulto_uso" :props="props">
-                  {{ props.row.toldillo_adulto_uso }}
-                </q-td>
-                <q-td key="toldillo_pedriatico_bueno" :props="props">
-                  {{ props.row.toldillo_pedriatico_bueno }}
-                </q-td>
-                <q-td key="toldillo_pedriatico_regular" :props="props">
-                  {{ props.row.toldillo_pedriatico_regular }}
-                </q-td>
-                <q-td key="toldillo_pedriatico_malo" :props="props">
-                  {{ props.row.toldillo_pedriatico_malo }}
-                </q-td>
-                <q-td key="toldillo_pedriatico_total" :props="props">
-                  {{ props.row.toldillo_pedriatico_total }}
-                </q-td>
-                <q-td key="toldillo_pedriatico_uso" :props="props">
-                  {{ props.row.toldillo_pedriatico_uso }}
-                </q-td>
-                <q-td key="toldillo_observaciones" :props="props">
-                  {{ props.row.toldillo_observaciones }}
-                </q-td>
-                <q-td key="email" :props="props">
-                  {{ props.row.email }}
-                </q-td>
-                <q-td key="id" :props="props">
-                  {{ props.row.id }}
-                </q-td>
-                <q-td key="edit" :props="props">
-                  <q-btn round size="xs" color="primary" icon="border_color" v-on:click="editing(props.row)" />
-                </q-td>
-                <q-td key="delete" :props="props">
-                  <q-btn round size="xs" color="negative" icon="delete_forever" v-on:click="onDelete(props.row)" />
-                </q-td>
-              </q-tr>
-            </template>
-          </q-table>-->
         </div>
       </transition>
       <q-inner-loading :showing="visible">
@@ -170,7 +38,7 @@
       </q-inner-loading>
     </div>
     <q-dialog v-model="dialog" persistent>
-      <q-card style="width: 800px; max-width: 95vw;">
+      <q-card style="max-width: 95vw;">
         <q-linear-progress :value="10" color="blue" />
         <q-card-section class="row items-center">
           <div class="text-h6"> </div>
@@ -183,178 +51,435 @@
           </template>
           Los campos marcados con (*) son obligatorios
         </q-banner>
-        <q-card-section>
+        <q-card-section class="q-pa-none q-pt-sm">
           <q-form ref="myForm" @submit.prevent="">
-            <div class="row justify-around">
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="acta" label="Acta *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input filled v-model="fecha" mask="date" :rules="['date']">
-                  <template v-slot:append>
-                    <q-icon name="event" class="cursor-pointer">
-                      <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                        <q-date v-model="fecha">
-                          <div class="row items-center justify-end">
-                            <q-btn v-close-popup label="Close" color="primary" flat />
+            <div style="max-width: 100vw;">
+              <q-tabs v-model="tab" inline-label outside-arrows mobile-arrows active-color="primary"
+                indicator-color="blue-grey" class="text-grey shadow-2">
+                <q-tab name="section1" label="Sección 1" />
+                <q-tab name="section2" label="Sección 2" />
+                <q-tab name="section3" label="Sección 3" />
+                <q-tab name="section4" label="Sección 4" />
+              </q-tabs>
+
+              <q-separator />
+
+              <q-tab-panels v-model="tab" animated>
+                <q-tab-panel name="section1">
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="acta" label="Acta *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input filled v-model="fecha" mask="date" :rules="['date']">
+                      <template v-slot:append>
+                        <q-icon name="event" class="cursor-pointer">
+                          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                            <q-date v-model="fecha">
+                              <div class="row items-center justify-end">
+                                <q-btn v-close-popup label="Close" color="primary" flat />
+                              </div>
+                            </q-date>
+                          </q-popup-proxy>
+                        </q-icon>
+                      </template>
+                    </q-input>
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-select v-model="municipio" label="Municipio *" :options="municipios" option-label="nombre"
+                      option-value="id" emit-value map-options lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']"
+                      @update:model-value="limpiarSelect('barrio')" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-select v-model="barrio" label="Barrio *" :options="barriosFiltrados" option-label="nombre"
+                      option-value="id" emit-value map-options lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']"
+                      @update:model-value="limpiarSelect('comuna')" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-select v-model="comuna" label="Comuna / Sector *" :options="sectoresFiltrados"
+                      option-label="nombre" option-value="id" emit-value map-options lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="direccion" label="Dirección *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="razon_social" label="Razón social *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="telefono" label="Teléfono *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-select v-model="caracter_institucional" label="Caracter institucional *"
+                      :options="[{ label: 'Pública', value: 'publica' }, { label: 'Privada', value: 'privada' }, { label: 'Categoría', value: 'categoria' }]"
+                      emit-value map-options lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" type="number" v-model="personas_protegidas"
+                      label="# de personas protegidas *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="representante_legal" label="Representante legal *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" type="number" v-model="cedula" label="Cédula *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                </q-tab-panel>
+                <q-tab-panel name="section2">
+                  <div class="q-pa-md bg-primary text-white text-center text-bold col-md-12 col-sm-12 col-xs-12">
+                    Criaderos o focos encontrados de:
+                  </div>
+                  <div>
+                    <div class="row justify-between">
+                      <q-btn class="q-mt-sm" color="secondary" @click="addFieldSet(1)" icon="add" label="Agegar"
+                        :disable="criaderos.length == 10" />
+                    </div>
+                    <div v-for="(criadero, index) in criaderos" :key="index">
+                      <div class="bg-grey-2 q-mt-sm q-pa-sm">
+                        <div class="column items-end">
+                          <q-btn round @click="removeFieldSet(index, 1)" icon="delete" />
+                        </div>
+                        <div class="field-set">
+                          <div class="col-md-4 col-sm-6 col-xs-12">
+                            <q-input white color="blue" type="number" v-model="criadero.cantidad" label="Cantidad *"
+                              lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
                           </div>
-                        </q-date>
-                      </q-popup-proxy>
-                    </q-icon>
-                  </template>
-                </q-input>
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="municipio" label="Municipio *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="barrio" label="Barrio *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="comuna" label="Comuna / Sector *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="direccion" label="Dirección *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="razon_social" label="Razón social *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="telefono" label="Teléfono *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-select v-model="caracterInstitucional" label="Caracter institucional *"
-                  :options="[{ label: 'Pública', value: 'publica' }, { label: 'Privada', value: 'privada' }, { label: 'Categoría', value: 'categoria' }]"
-                  emit-value map-options lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" type="number" v-model="personas_protegidas" label="# de personas protegidas *"
-                  lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="representante_legal" label="Representante legal *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" type="number" v-model="cedula" label="Cédula *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="q-pa-md bg-primary text-white text-center text-bold col-md-12 col-sm-12 col-xs-12">
-                Criaderos o focos encontrados de:
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" type="number" v-model="criadero_cantidad" label="Cantidad *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-select v-model="tipo_criadero" label="Tipo criadero o foco *" :options="tipo_criaderoOpt"
-                  option-value="id" option-label="description" emit-value map-options lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-                <q-input white color="blue" v-model="tipo_criadero" label="Tipo criadero o foco *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="criadero_ubicacion" label="Lugar donde se ubica(n) *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="criadero_potencial_cantidad" label="criadero_potencial_cantidad *"
-                  lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="tipo_criadero_potencial" label="tipo_criadero_potencial *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="criadero_potencial_ubicacion" label="criadero_potencial_ubicacion *"
-                  lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="observaciones" label="observaciones *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="toldillo_adulto_bueno" label="toldillo_adulto_bueno *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="toldillo_adulto_regular" label="toldillo_adulto_regular *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="toldillo_adulto_malo" label="toldillo_adulto_malo *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="toldillo_adulto_total" label="toldillo_adulto_total *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="toldillo_adulto_uso" label="toldillo_adulto_uso *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="toldillo_pedriatico_bueno" label="toldillo_pedriatico_bueno *"
-                  lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="toldillo_pedriatico_regular" label="toldillo_pedriatico_regular *"
-                  lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="toldillo_pedriatico_malo" label="toldillo_pedriatico_malo *"
-                  lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="toldillo_pedriatico_total" label="toldillo_pedriatico_total *"
-                  lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="toldillo_pedriatico_uso" label="toldillo_pedriatico_uso *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="toldillo_observaciones" label="toldillo_observaciones *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="email" label="Correo electronico *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <q-input white color="blue" v-model="id" label="id *" lazy-rules
-                  :rules="[val => !!val || 'El campo es obligatorio']" />
-              </div>
+                          <div class="col-md-4 col-sm-6 col-xs-12">
+                            <q-select v-model="criadero.tipo" label="Tipo criadero o foco *" :options="tipo_criaderoOpt"
+                              option-value="id" option-label="description" emit-value map-options lazy-rules
+                              :rules="[val => !!val || 'El campo es obligatorio']" />
+                          </div>
+                          <div class="col-md-4 col-sm-6 col-xs-12">
+                            <q-input white color="blue" v-model="criadero.ubicacion" label="Lugar donde se ubica(n) *"
+                              lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--<div class="row justify-between">
+                    <q-btn class="q-mt-sm" color="secondary" @click="addCampo" icon="add" label="Agegar" />
+                  </div>
+                  <div class="bg-grey-2 q-mt-sm q-pa-sm" :hidden="campos.hidden1">
+                    <div class="column items-end">
+                      <q-btn round color="red" @click="removeCampo(1)" icon="delete_forever" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input ref="criadero1" white color="blue" type="number" v-model="criaderos.criadero1.cantidad"
+                        label="Cantidad *" lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-select v-model="criaderos.criadero1.tipo" label="Tipo criadero o foco *"
+                        :options="tipo_criaderoOpt" option-value="id" option-label="description" emit-value map-options
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" v-model="criaderos.criadero1.ubicacion"
+                        label="Lugar donde se ubica(n) *" lazy-rules
+                        :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                  </div>
+                  <div class="bg-grey-2 q-mt-sm q-pa-sm" :hidden="campos.hidden2">
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" type="number" v-model="criaderos.criadero2.cantidad" label="Cantidad *"
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-select v-model="criaderos.criadero2.tipo" label="Tipo criadero o foco *"
+                        :options="tipo_criaderoOpt" option-value="id" option-label="description" emit-value map-options
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" v-model="criaderos.criadero2.ubicacion"
+                        label="Lugar donde se ubica(n) *" lazy-rules
+                        :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                  </div>
+                  <div :hidden="campos.hidden3">
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" type="number" v-model="criaderos.criadero3.cantidad" label="Cantidad *"
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-select v-model="criaderos.criadero3.tipo" label="Tipo criadero o foco *"
+                        :options="tipo_criaderoOpt" option-value="id" option-label="description" emit-value map-options
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" v-model="criaderos.criadero3.ubicacion"
+                        label="Lugar donde se ubica(n) *" lazy-rules
+                        :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                  </div>
+                  <div :hidden="campos.hidden4">
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" type="number" v-model="criaderos.criadero4.cantidad" label="Cantidad *"
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-select v-model="criaderos.criadero4.tipo" label="Tipo criadero o foco *"
+                        :options="tipo_criaderoOpt" option-value="id" option-label="description" emit-value map-options
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" v-model="criaderos.criadero4.ubicacion"
+                        label="Lugar donde se ubica(n) *" lazy-rules
+                        :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                  </div>
+                  <div :hidden="campos.hidden5">
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" type="number" v-model="criaderos.criadero5.cantidad" label="Cantidad *"
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-select v-model="criaderos.criadero5.tipo" label="Tipo criadero o foco *"
+                        :options="tipo_criaderoOpt" option-value="id" option-label="description" emit-value map-options
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" v-model="criaderos.criadero5.ubicacion"
+                        label="Lugar donde se ubica(n) *" lazy-rules
+                        :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                  </div>
+                  <div :hidden="campos.hidden6">
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" type="number" v-model="criaderos.criadero6.cantidad" label="Cantidad *"
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-select v-model="criaderos.criadero6.tipo" label="Tipo criadero o foco *"
+                        :options="tipo_criaderoOpt" option-value="id" option-label="description" emit-value map-options
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" v-model="criaderos.criadero6.ubicacion"
+                        label="Lugar donde se ubica(n) *" lazy-rules
+                        :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                  </div>
+                  <div :hidden="campos.hidden7">
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" type="number" v-model="criaderos.criadero7.cantidad" label="Cantidad *"
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-select v-model="criaderos.criadero7.tipo" label="Tipo criadero o foco *"
+                        :options="tipo_criaderoOpt" option-value="id" option-label="description" emit-value map-options
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" v-model="criaderos.criadero7.ubicacion"
+                        label="Lugar donde se ubica(n) *" lazy-rules
+                        :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                  </div>
+                  <div :hidden="campos.hidden8">
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" type="number" v-model="criaderos.criadero8.cantidad" label="Cantidad *"
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-select v-model="criaderos.criadero8.tipo" label="Tipo criadero o foco *"
+                        :options="tipo_criaderoOpt" option-value="id" option-label="description" emit-value map-options
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" v-model="criaderos.criadero8.ubicacion"
+                        label="Lugar donde se ubica(n) *" lazy-rules
+                        :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                  </div>
+                  <div :hidden="campos.hidden9">
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" type="number" v-model="criaderos.criadero9.cantidad" label="Cantidad *"
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-select v-model="criaderos.criadero9.tipo" label="Tipo criadero o foco *"
+                        :options="tipo_criaderoOpt" option-value="id" option-label="description" emit-value map-options
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" v-model="criaderos.criadero9.ubicacion"
+                        label="Lugar donde se ubica(n) *" lazy-rules
+                        :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                  </div>
+                  <div :hidden="campos.hidden10">
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" type="number" v-model="criaderos.criadero10.cantidad" label="Cantidad *"
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-select v-model="criaderos.criadero10.tipo" label="Tipo criadero o foco *"
+                        :options="tipo_criaderoOpt" option-value="id" option-label="description" emit-value map-options
+                        lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                      <q-input white color="blue" v-model="criaderos.criadero10.ubicacion"
+                        label="Lugar donde se ubica(n) *" lazy-rules
+                        :rules="[val => !!val || 'El campo es obligatorio']" />
+                    </div>
+                  </div> -->
+                </q-tab-panel>
+                <q-tab-panel name="section3">
+                  <div class="q-pa-md bg-primary text-white text-center text-bold col-md-12 col-sm-12 col-xs-12">
+                    Criaderos o focos potenciales encontrados de:
+                  </div>
+                  <div>
+                    <div class="row justify-between">
+                      <q-btn class="q-mt-sm" color="secondary" @click="addFieldSet(2)" icon="add" label="Agegar"
+                        :disable="criaderosPotencial.length == 10" />
+                    </div>
+                    <div v-for="(criaderoPotencial, index) in criaderosPotencial" :key="index">
+                      <div class="bg-grey-2 q-mt-sm q-pa-sm">
+                        <div class="column items-end">
+                          <q-btn round @click="removeFieldSet(index, 2)" icon="delete" />
+                        </div>
+                        <div class="field-set">
+                          <div class="col-md-4 col-sm-6 col-xs-12">
+                            <q-input white color="blue" type="number" v-model="criaderoPotencial.cantidad"
+                              label="Cantidad *" lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                          </div>
+                          <div class="col-md-4 col-sm-6 col-xs-12">
+                            <q-select v-model="criaderoPotencial.tipo" label="Tipo criadero o foco *"
+                              :options="tipo_criaderoOpt" option-value="id" option-label="description" emit-value
+                              map-options lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                          </div>
+                          <div class="col-md-4 col-sm-6 col-xs-12">
+                            <q-input white color="blue" v-model="criaderoPotencial.ubicacion"
+                              label="Lugar donde se ubica(n) *" lazy-rules
+                              :rules="[val => !!val || 'El campo es obligatorio']" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--<div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="criadero_potencial_cantidad" label="Cantidad *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="tipo_criadero_potencial" label="Tipo *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="criadero_potencial_ubicacion" label="Lugar donde se ubica(n) *"
+                      lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="q-pa-md bg-primary text-white text-center text-bold col-md-12 col-sm-12 col-xs-12">
+                    Observaciones y/o recomendaciones para prevenir o eliminar los focos existentes o potenciales
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="observaciones" label="Observaciones *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>-->
+                </q-tab-panel>
+                <q-tab-panel name="section4">
+                  <div class="q-pa-md bg-primary text-white text-center text-bold col-md-12 col-sm-12 col-xs-12">
+                    Toldillos para pacientes febriles en centros hospitalarios, batallones militares y afines
+                  </div>
+                  <div class="q-pa-md bg-secondary text-white text-center text-bold col-md-12 col-sm-12 col-xs-12">
+                    Adulto
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="toldillo_adulto_bueno" label="Estado bueno (No.) *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="toldillo_adulto_regular" label="Estado regular (No.) *"
+                      lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="toldillo_adulto_malo" label="Estado malo (No.) *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="toldillo_adulto_total" label="Total *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="toldillo_adulto_uso" label="En Uso *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="q-pa-md bg-secondary text-white text-center text-bold col-md-12 col-sm-12 col-xs-12">
+                    Pediátrico
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="toldillo_pedriatico_bueno" label="Estado bueno (No.) *"
+                      lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="toldillo_pedriatico_regular" label="Estado regular (No.) *"
+                      lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="toldillo_pedriatico_malo" label="Estado malo (No.) *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="toldillo_pedriatico_total" label="Total *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="toldillo_pedriatico_uso" label="En Uso *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="toldillo_observaciones" label="toldillo_observaciones *"
+                      lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="email" label="Correo electronico *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio', val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) ? !!val : 'El correo no es valido']" />
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <q-input white color="blue" v-model="id" label="id *" lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                  </div>
+                  <div class="row justify-between">
+                    <q-card-actions align="left" class="bg-white text-teal">
+                    </q-card-actions>
+                    <q-card-actions align="right" class="bg-white text-teal">
+                      <div v-if="!isEditing">
+                        <q-btn round icon="save" @click.prevent="onSubmit" color="primary" />
+                        <q-tooltip>Guardar datos</q-tooltip>
+                      </div>
+                      <div v-else>
+                        <q-btn round icon="save" @click.prevent="onEditing" color="primary" />
+                        <q-tooltip>Editar datos</q-tooltip>
+                      </div> &nbsp;
+                      <div>
+                        <q-btn round icon="cancel" v-close-popup color="negative" />
+                        <q-tooltip>Cancelar</q-tooltip>
+                      </div>
+                    </q-card-actions>
+                  </div>
+                </q-tab-panel>
+              </q-tab-panels>
+              <q-tabs v-model="tab" inline-label outside-arrows mobile-arrows active-color="primary"
+                indicator-color="purple" class="text-grey shadow-2">
+                <q-tab name="section1" label="Sección 1" />
+                <q-tab name="section2" label="Sección 2" />
+                <q-tab name="section3" label="Sección 3" />
+                <q-tab name="section4" label="Sección 4" />
+              </q-tabs>
             </div>
           </q-form>
         </q-card-section>
-        <div class="row justify-between">
-          <q-card-actions align="left" class="bg-white text-teal">
-          </q-card-actions>
-          <q-card-actions align="right" class="bg-white text-teal">
-            <div v-if="!isEditing">
-              <q-btn round icon="save" @click.prevent="onSubmit" color="primary" />
-              <q-tooltip>Guardar datos</q-tooltip>
-            </div>
-            <div v-else>
-              <q-btn round icon="save" @click.prevent="onEditing" color="primary" />
-              <q-tooltip>Editar datos</q-tooltip>
-            </div> &nbsp;
-            <div>
-              <q-btn round icon="cancel" v-close-popup color="negative" />
-              <q-tooltip>Cancelar</q-tooltip>
-            </div>
-          </q-card-actions>
-        </div>
       </q-card>
     </q-dialog>
+
     <q-dialog v-model="dialogWarning" persistent>
       <q-card>
         <q-card-section>
@@ -372,19 +497,119 @@
   </q-page>
 </template>
 <script>
-import { defineComponent, ref, onMounted } from 'vue'
-import { useQuasar } from 'quasar'
-import { api } from 'boot/axios'
+import { defineComponent, ref, onMounted, computed, reactive } from 'vue'
+import { useQuasar, uid } from 'quasar'
 import { TIPOCRIADERO } from '../../constants/constants'
 import { versionOS } from 'src/stores/global'
 // import { Device } from '@capacitor/device'
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
+import { Geolocation } from '@capacitor/geolocation'
+// import { MUNICIPIOS } from '../../constants/municipios'
+// import { BARRIOS } from '../../constants/barrios'
+// import { SECTORES } from '../../constants/sectores'
 
 export default defineComponent({
   name: 'FV-EV-04Page',
   setup() {
+    const municipios = [
+      { id: 1, nombre: 'Obando' },
+      { id: 2, nombre: 'Cartago' },
+      { id: 3, nombre: 'La victoria' }
+    ]
+    const barrios = [
+      { id: 11, idmuni: 1, nombre: 'El laurel' },
+      { id: 12, idmuni: 1, nombre: 'El remanzo' },
+      { id: 13, idmuni: 1, nombre: 'La esperanza' },
+      { id: 14, idmuni: 2, nombre: 'San pablo' },
+      { id: 15, idmuni: 2, nombre: 'San carlos' },
+      { id: 16, idmuni: 2, nombre: 'El saman' },
+      { id: 17, idmuni: 3, nombre: 'La aurora' },
+      { id: 18, idmuni: 3, nombre: 'La sagrada familia' }
+    ]
+    const sectores = [
+      { id: 31, idbarrio: 11, nombre: 'SECTOR 1' },
+      { id: 32, idbarrio: 11, nombre: 'SECTOR 2' },
+      { id: 33, idbarrio: 11, nombre: 'SECTOR 3' },
+      { id: 34, idbarrio: 13, nombre: 'SECTOR 2' },
+      { id: 35, idbarrio: 14, nombre: 'SECTOR 3' },
+      { id: 36, idbarrio: 16, nombre: 'SECTOR 4' },
+      { id: 37, idbarrio: 16, nombre: 'SECTOR 1' },
+      { id: 38, idbarrio: 18, nombre: 'SECTOR 2' }
+    ]
+    const campos = reactive({
+      count: 1,
+      hidden1: true,
+      hidden2: true,
+      hidden3: true,
+      hidden4: true,
+      hidden5: true,
+      hidden6: true,
+      hidden7: true,
+      hidden8: true,
+      hidden9: true,
+      hidden10: true
+    })
+    const lista = reactive({
+      add: [0],
+      remove: [0]
+    })
+    const criaderos = ref([])
+    const criaderosPotencial = ref([])
+    /*const criaderos = reactive({
+      criadero1: {
+        cantidad: null,
+        tipo: null,
+        ubicacion: null
+      },
+      criadero2: {
+        cantidad: null,
+        tipo: null,
+        ubicacion: null
+      },
+      criadero3: {
+        cantidad: null,
+        tipo: null,
+        ubicacion: null
+      },
+      criadero4: {
+        cantidad: null,
+        tipo: null,
+        ubicacion: null
+      },
+      criadero5: {
+        cantidad: null,
+        tipo: null,
+        ubicacion: null
+      },
+      criadero6: {
+        cantidad: null,
+        tipo: null,
+        ubicacion: null
+      },
+      criadero7: {
+        cantidad: null,
+        tipo: null,
+        ubicacion: null
+      },
+      criadero8: {
+        cantidad: null,
+        tipo: null,
+        ubicacion: null
+      },
+      criadero9: {
+        cantidad: null,
+        tipo: null,
+        ubicacion: null
+      },
+      criadero10: {
+        cantidad: null,
+        tipo: null,
+        ubicacion: null
+      }
+    })*/
     const formato = ref(null)
-    const path = '/etv'
+    const dir = 'visitas/ETV'
+    const tab = ref('section1')
     const link = ref(null)
     const dialog = ref(false)
     const dialogWarning = ref(false)
@@ -395,13 +620,13 @@ export default defineComponent({
     const dataEtv = ref([])
     const acta = ref(1)
     const fecha = ref('2023-06-12')
-    const municipio = ref('Obando')
-    const barrio = ref('El laurel')
-    const comuna = ref(13)
+    const municipio = ref(null)
+    const barrio = ref(null)
+    const comuna = ref(null)
     const direccion = ref('Cra 2 5-46')
     const razon_social = ref('Prueba')
     const telefono = ref(2123354)
-    const caracterInstitucional = ref(null)
+    const caracter_institucional = ref(null)
     const publica = ref(null)
     const privada = ref(null)
     const categoria = ref(null)
@@ -439,51 +664,12 @@ export default defineComponent({
     const isEditing = ref(false)
     const shows = ref([
       { name: 'formato', align: 'left', label: 'Formato', field: 'formato', sortable: true },
-      { name: 'edit', align: 'center', label: 'Editar', field: 'edit', sortable: true },
-      { name: 'delete', align: 'center', label: 'Eliminar', field: 'delete', sortable: true }
-    ])
-    const columns = ref([
-      { name: 'formato', align: 'center', label: 'Formato', field: 'formato', sortable: true },
-      { name: 'acta', align: 'center', label: 'acta', field: 'acta', sortable: true },
-      { name: 'fecha', align: 'center', label: 'fecha', field: 'fecha', sortable: true },
-      { name: 'municipio', align: 'center', label: 'municipio', field: 'municipio', sortable: true },
-      { name: 'barrio', align: 'center', label: 'barrio', field: 'barrio', sortable: true },
-      { name: 'comuna', align: 'center', label: 'comuna', field: 'comuna', sortable: true },
-      { name: 'direccion', align: 'center', label: 'direccion', field: 'direccion', sortable: true },
-      { name: 'razon_social', align: 'center', label: 'razon_social', field: 'razon_social', sortable: true },
-      { name: 'telefono', align: 'center', label: 'telefono', field: 'telefono', sortable: true },
-      { name: 'caracterInstitucional', align: 'center', label: 'Caracter institucional', field: 'caracterInstitucional', sortable: true },
-      { name: 'publica', align: 'center', label: 'publica', field: 'publica', sortable: true },
-      { name: 'privada', align: 'center', label: 'privada', field: 'privada', sortable: true },
-      { name: 'categoria', align: 'center', label: 'categoria', field: 'categoria', sortable: true },
-      { name: 'personas_protegidas', align: 'center', label: 'personas_protegidas', field: 'personas_protegidas', sortable: true },
-      { name: 'representante_legal', align: 'center', label: 'representante_legal', field: 'representante_legal', sortable: true },
-      { name: 'cedula', align: 'center', label: 'cedula', field: 'cedula', sortable: true },
-      { name: 'criadero_cantidad', align: 'center', label: 'criadero_cantidad', field: 'criadero_cantidad', sortable: true },
-      { name: 'tipo_criadero', align: 'center', label: 'tipo_criadero', field: 'tipo_criadero', sortable: true },
-      { name: 'criadero_ubicacion', align: 'center', label: 'criadero_ubicacion', field: 'criadero_ubicacion', sortable: true },
-      { name: 'criadero_potencial_cantidad', align: 'center', label: 'criadero_potencial_cantidad', field: 'criadero_potencial_cantidad', sortable: true },
-      { name: 'tipo_criadero_potencial', align: 'center', label: 'tipo_criadero_potencial', field: 'tipo_criadero_potencial', sortable: true },
-      { name: 'criadero_potencial_ubicacion', align: 'center', label: 'criadero_potencial_ubicacion', field: 'criadero_potencial_ubicacion', sortable: true },
-      { name: 'observaciones', align: 'center', label: 'observaciones', field: 'observaciones', sortable: true },
-      { name: 'toldillo_adulto_bueno', align: 'center', label: 'toldillo_adulto_bueno', field: 'toldillo_adulto_bueno', sortable: true },
-      { name: 'toldillo_adulto_regular', align: 'center', label: 'toldillo_adulto_regular', field: 'toldillo_adulto_regular', sortable: true },
-      { name: 'toldillo_adulto_malo', align: 'center', label: 'toldillo_adulto_malo', field: 'toldillo_adulto_malo', sortable: true },
-      { name: 'toldillo_adulto_total', align: 'center', label: 'toldillo_adulto_total', field: 'toldillo_adulto_total', sortable: true },
-      { name: 'toldillo_adulto_uso', align: 'center', label: 'toldillo_adulto_uso', field: 'toldillo_adulto_uso', sortable: true },
-      { name: 'toldillo_pedriatico_bueno', align: 'center', label: 'toldillo_pedriatico_bueno', field: 'toldillo_pedriatico_bueno', sortable: true },
-      { name: 'toldillo_pedriatico_regular', align: 'center', label: 'toldillo_pedriatico_regular', field: 'toldillo_pedriatico_regular', sortable: true },
-      { name: 'toldillo_pedriatico_malo', align: 'center', label: 'toldillo_pedriatico_malo', field: 'toldillo_pedriatico_malo', sortable: true },
-      { name: 'toldillo_pedriatico_total', align: 'center', label: 'toldillo_pedriatico_total', field: 'toldillo_pedriatico_total', sortable: true },
-      { name: 'toldillo_pedriatico_uso', align: 'center', label: 'toldillo_pedriatico_uso', field: 'toldillo_pedriatico_uso', sortable: true },
-      { name: 'toldillo_observaciones', align: 'center', label: 'toldillo_observaciones', field: 'toldillo_observaciones', sortable: true },
-      { name: 'email', align: 'center', label: 'Correo electronico', field: 'email', sortable: true },
-      { name: 'id', align: 'center', label: 'id', field: 'id', sortable: true },
-      { name: 'edit', align: 'center', label: 'Editar', field: 'edit', sortable: true },
-      { name: 'delete', align: 'center', label: 'Eliminar', field: 'delete', sortable: true }
+      { name: 'edit', align: 'center', label: 'Editar', field: 'edit', sortable: false },
+      { name: 'delete', align: 'center', label: 'Eliminar', field: 'delete', sortable: false }
     ])
     onMounted(() => {
       getEtv()
+      printCurrentPosition()
       // getVersion()
       // writeSecretFileA()
       // readSecretFileA()
@@ -493,12 +679,12 @@ export default defineComponent({
     const getEtv = async () => {
       visible.value = true
       const result = await Filesystem.readdir({
-        path: 'visitas/ETV',
+        path: dir,
         directory: Directory.Data
       })
       const data = []
       for (const item of result.files) {
-        const temp = await readFile(`visitas/ETV/${item.name}`)
+        const temp = await readFile(`${dir}/${item.name}`)
         temp.formato = item.name
         data.push(temp)
       }
@@ -506,6 +692,84 @@ export default defineComponent({
       dataEtv.value = data
       visible.value = false
     }
+    const printCurrentPosition = async () => {
+      const coordinates = await Geolocation.getCurrentPosition()
+      console.log('Current position:', coordinates)
+      return coordinates
+    }
+    const barriosFiltrados = computed(() => {
+      if (municipio.value) {
+        return barrios.filter(
+          (barrio) => barrio.idmuni === municipio.value
+        );
+      } else {
+        return [];
+      }
+    })
+    const sectoresFiltrados = computed(() => {
+      if (barrio.value) {
+        return sectores.filter(
+          (sector) => sector.idbarrio === barrio.value
+        );
+      } else {
+        return [];
+      }
+    })
+    const limpiarSelect = (nomSelect) => {
+      if (nomSelect == 'barrio') {
+        barrio.value = null
+      }
+      if (nomSelect == 'comuna') {
+        comuna.value = null
+      }
+    }
+
+    const addFieldSet = (type) => {
+      if (type == 1) {
+        criaderos.value.push({ cantidad: '', tipo: '', ubicacion: '' })
+      }
+      if (type == 2) {
+        criaderosPotencial.value.push({ cantidad: '', tipo: '', ubicacion: '' })
+      }
+    }
+    const removeFieldSet = (index, type) => {
+      if (type == 1) {
+        criaderos.value.splice(index, 1)
+      }
+      if (type == 2) {
+        criaderosPotencial.value.splice(index, 1)
+      }
+    }
+    /* const addCampo = () => {
+      if (campos.count < 11) {
+        campos[`hidden${campos.count}`] = false
+        campos.count++
+      }
+    } */
+    /* const addCampo = () => {
+      const difference = lista.remove.filter((e) => !lista.add.includes(e));
+      console.log(difference)
+      if (difference.length > 0) {
+        lista.add.push(difference[0])
+        lista.remove = lista.remove.filter((e) => e !== difference[0])
+        campos[`hidden${difference[0]}`] = false
+      } else {
+        const maxNumber = Math.max(...lista.add) + 1
+        lista.add.push(maxNumber)
+        if (maxNumber < 11) {
+          campos[`hidden${maxNumber}`] = false
+
+        }
+      }
+    }
+    const removeCampo = (id) => {
+      lista.remove.push(id)
+      lista.add = lista.add.filter((e) => e !== id)
+      campos[`hidden${id}`] = true
+      criaderos[`criadero${campos.count}`].cantidad = null
+      criaderos[`criadero${campos.count}`].tipo = null
+      criaderos[`criadero${campos.count}`].ubicacion = null
+    } */
     /* async function getVersion() {
       const info = await Device.getInfo();
       console.log('Versión de Android:', info.osVersion);
@@ -569,11 +833,12 @@ export default defineComponent({
       const obj = JSON.parse(result.data)
       return obj
     }
-
     const creating = () => {
       // onReset()
+      isEditing.value = false
       dialog.value = true
     }
+
     const onReset = () => {
       formato.value = null
       acta.value = null
@@ -615,7 +880,11 @@ export default defineComponent({
     const onSubmit = () => {
       myForm.value.validate().then(async success => {
         if (success) {
+          const coords = await printCurrentPosition()
           const data = {
+            id: uid(),
+            gps: coords.coords,
+            timestamp: coords.timestamp,
             acta: acta.value,
             fecha: fecha.value,
             municipio: municipio.value,
@@ -624,14 +893,15 @@ export default defineComponent({
             direccion: direccion.value,
             razon_social: razon_social.value,
             telefono: telefono.value,
-            caracterInstitucional: caracterInstitucional.value,
+            caracter_institucional: caracter_institucional.value,
             publica: publica.value,
             privada: privada.value,
             categoria: categoria.value,
             personas_protegidas: personas_protegidas.value,
             representante_legal: representante_legal.value,
             cedula: cedula.value,
-            criadero_cantidad: criadero_cantidad.value,
+            criaderos: criaderos.value,
+            criaderos_potenciales: criaderosPotencial.value,
             tipo_criadero: tipo_criadero.value,
             criadero_ubicacion: criadero_ubicacion.value,
             criadero_potencial_cantidad: criadero_potencial_cantidad.value,
@@ -648,13 +918,13 @@ export default defineComponent({
             toldillo_pedriatico_malo: toldillo_pedriatico_malo.value,
             toldillo_pedriatico_total: toldillo_pedriatico_total.value,
             toldillo_pedriatico_uso: toldillo_pedriatico_uso.value,
-            toldillo_observaciones: toldillo_observaciones.value,
-            id: id.value
+            toldillo_observaciones: toldillo_observaciones.value
           }
+          console.log(JSON.stringify(data))
           const consecutivo = await readFile('count.json')
 
           console.log(consecutivo.count)
-          saveFile(`visitas/ETV/${consecutivo.count}-FV-EV-04.json`, JSON.stringify(data))
+          saveFile(`${dir}/${consecutivo.count}-FV-EV-04.json`, JSON.stringify(data))
             .then(() => {
               saveFile('count.json', JSON.stringify({ count: consecutivo.count + 1 }))
               dialog.value = false
@@ -665,7 +935,6 @@ export default defineComponent({
               dialogWarning.value = true
             })
         }
-        //console.log(JSON.stringify(data))
       })
     }
     const editing = (row) => {
@@ -682,7 +951,7 @@ export default defineComponent({
       direccion.value = row.direccion
       razon_social.value = row.razon_social
       telefono.value = row.telefono
-      caracterInstitucional.value = row.caracterInstitucional
+      caracter_institucional.value = row.caracter_institucional
       publica.value = row.publica
       privada.value = row.privada
       categoria.value = row.categoria
@@ -747,7 +1016,7 @@ export default defineComponent({
             toldillo_observaciones: toldillo_observaciones.value,
             id: id.value
           }
-          saveFile(`visitas/ETV/${formato.value}`, JSON.stringify(data))
+          saveFile(`${dir}/${formato.value}`, JSON.stringify(data))
             .then(() => {
               dialog.value = false
               getEtv()
@@ -773,7 +1042,7 @@ export default defineComponent({
         }
       }).onOk(async () => {
         await Filesystem.deleteFile({
-          path: `visitas/ETV/${row.formato}`,
+          path: `${dir}/${row.formato}`,
           directory: Directory.Data
         }).then(() => {
           dialog.value = false
@@ -783,6 +1052,7 @@ export default defineComponent({
     }
     return {
       formato,
+      tab,
       dialog,
       dialogWarning,
       message,
@@ -794,7 +1064,6 @@ export default defineComponent({
       pagination,
       creating,
       shows,
-      columns,
       visible,
       filter,
       acta,
@@ -805,13 +1074,15 @@ export default defineComponent({
       direccion,
       razon_social,
       telefono,
-      caracterInstitucional,
+      caracter_institucional,
       publica,
       privada,
       categoria,
       personas_protegidas,
       representante_legal,
       cedula,
+      criaderos,
+      criaderosPotencial,
       criadero_cantidad,
       tipo_criaderoOpt,
       tipo_criadero,
@@ -838,7 +1109,17 @@ export default defineComponent({
       editing,
       onEditing,
       onDelete,
-      link
+      link,
+      municipios,
+      barrios,
+      barriosFiltrados,
+      sectores,
+      sectoresFiltrados,
+      limpiarSelect,
+      campos,
+      lista,
+      addFieldSet,
+      removeFieldSet
     }
   }
 })
