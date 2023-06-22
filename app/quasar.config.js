@@ -64,7 +64,7 @@ module.exports = configure(function (/* ctx */) {
         node: 'node16'
       },
 
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -175,6 +175,7 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-capacitor-apps/configuring-capacitor
     capacitor: {
       hideSplashscreen: true
+      // capacitorCliPreparationParams: [ 'sync', ctx.targetName ]
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron

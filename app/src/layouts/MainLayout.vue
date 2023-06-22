@@ -26,127 +26,74 @@
               Actividades
             </q-item-section>
           </template>
-          <q-item @click="setTabSelected('/encuestalarvaria/encuestalarvaria', 'Encuesta larvaria')"
-            active-class="tab-active" to="/encuestalarvaria" exact class="q-ma-sm navigation-item" clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="cyan" name="fa-solid fa-marker" />
-            </q-item-section>
+          <q-expansion-item :header-inset-level="0.2" :content-inset-level="0.5" expand-separator>
+            <template v-slot:header>
+              <q-item-section avatar>
+                <q-icon name="fa-solid fa-mosquito" color="primary" text-color="white" />
+              </q-item-section>
+  
+              <q-item-section>
+                Enfermedades transmitidas por vectores
+              </q-item-section>
+            </template>
 
-            <q-item-section>
-              Encuesta larvaria
-            </q-item-section>
-          </q-item>
+            <q-item @click="setTabSelected('/etv/encuestalarvaria', 'Enfermedades transmitidas por vectores')"
+              active-class="tab-active" to="/etv/FV-EV-04" exact class="q-ma-sm navigation-item" clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon color="black" name="fa-solid fa-marker" />
+              </q-item-section>
 
-          <q-item @click="setTabSelected('/profiles', 'Perfiles')" active-class="tab-active" to="/profiles" exact
-            class="q-ma-sm navigation-item" clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="cyan" name="fa-solid fa-marker" />
-            </q-item-section>
+              <q-item-section>
+                Formulario FV-EV-04
+              </q-item-section>
+            </q-item>
+          </q-expansion-item>
 
-            <q-item-section>
-              Control larvario
-            </q-item-section>
-          </q-item>
+          <q-expansion-item :header-inset-level="0.2" :content-inset-level="0.5" expand-separator>
+            <template v-slot:header>
+              <q-item-section avatar>
+                <q-icon name="fa-solid fa-cat" color="primary" text-color="white" />
+              </q-item-section>
+  
+              <q-item-section>
+                Zoonosis
+              </q-item-section>
+            </template>
 
-          <q-item @click="setTabSelected('/profiles', 'Perfiles')" active-class="tab-active" to="/profiles" exact
-            class="q-ma-sm navigation-item" clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="cyan" name="fa-solid fa-marker" />
-            </q-item-section>
+            <q-item @click="setTabSelected('/encuestalarvaria/encuestalarvaria', 'Encuesta larvaria')"
+              active-class="tab-active" to="/encuestalarvaria" exact class="q-ma-sm navigation-item" clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon color="black" name="fa-solid fa-marker" />
+              </q-item-section>
 
-            <q-item-section>
-              Evaluación de control
-            </q-item-section>
-          </q-item>
+              <q-item-section>
+                Encuesta larvaria
+              </q-item-section>
+            </q-item>
+          </q-expansion-item>
 
-          <q-item @click="setTabSelected('/profiles', 'Perfiles')" active-class="tab-active" to="/profiles" exact
-            class="q-ma-sm navigation-item" clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="cyan" name="fa-solid fa-marker" />
-            </q-item-section>
+          <q-expansion-item :header-inset-level="0.2" :content-inset-level="0.5" expand-separator>
+            <template v-slot:header>
+              <q-item-section avatar>
+                <q-icon name="fa-solid fa-glass-water-droplet" color="primary" text-color="white" />
+              </q-item-section>
+  
+              <q-item-section>
+                Agua para consumo humano
+              </q-item-section>
+            </template>
 
-            <q-item-section>
-              Sumideros
-            </q-item-section>
-          </q-item>
+            <q-item @click="setTabSelected('/encuestalarvaria/encuestalarvaria', 'Encuesta larvaria')"
+              active-class="tab-active" to="/encuestalarvaria" exact class="q-ma-sm navigation-item" clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon color="black" name="fa-solid fa-marker" />
+              </q-item-section>
 
-          <q-item @click="setTabSelected('/profiles', 'Perfiles')" active-class="tab-active" to="/profiles" exact
-            class="q-ma-sm navigation-item" clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="cyan" name="fa-solid fa-marker" />
-            </q-item-section>
-
-            <q-item-section>
-              Factores de riesgo
-            </q-item-section>
-          </q-item>
-
-          <q-item @click="setTabSelected('/profiles', 'Perfiles')" active-class="tab-active" to="/profiles" exact
-            class="q-ma-sm navigation-item" clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="cyan" name="fa-solid fa-marker" />
-            </q-item-section>
-
-            <q-item-section>
-              Casos ETV
-            </q-item-section>
-          </q-item>
-
-          <q-item @click="setTabSelected('/profiles', 'Perfiles')" active-class="tab-active" to="/profiles" exact
-            class="q-ma-sm navigation-item" clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="cyan" name="fa-solid fa-marker" />
-            </q-item-section>
-
-            <q-item-section>
-              Verificación control
-            </q-item-section>
-          </q-item>
-
-          <q-item @click="setTabSelected('/profiles', 'Perfiles')" active-class="tab-active" to="/profiles" exact
-            class="q-ma-sm navigation-item" clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="cyan" name="fa-solid fa-marker" />
-            </q-item-section>
-
-            <q-item-section>
-              Verificación encuesta
-            </q-item-section>
-          </q-item>
-
-          <q-item @click="setTabSelected('/profiles', 'Perfiles')" active-class="tab-active" to="/profiles" exact
-            class="q-ma-sm navigation-item" clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="cyan" name="fa-solid fa-marker" />
-            </q-item-section>
-
-            <q-item-section>
-              Verificación sumidero
-            </q-item-section>
-          </q-item>
-
-          <q-item @click="setTabSelected('/profiles', 'Perfiles')" active-class="tab-active" to="/profiles" exact
-            class="q-ma-sm navigation-item" clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="cyan" name="fa-solid fa-marker" />
-            </q-item-section>
-
-            <q-item-section>
-              Programa Comumitario vivienda
-            </q-item-section>
-          </q-item>
-
-          <q-item @click="setTabSelected('/profiles', 'Perfiles')" active-class="tab-active" to="/profiles" exact
-            class="q-ma-sm navigation-item" clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="cyan" name="fa-solid fa-marker" />
-            </q-item-section>
-
-            <q-item-section>
-              Programa Comumitario sumidero
-            </q-item-section>
-          </q-item>
-
+              <q-item-section>
+                Encuesta larvaria
+              </q-item-section>
+            </q-item>
+          </q-expansion-item>
         </q-expansion-item>
 
         <q-separator></q-separator>
