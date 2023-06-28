@@ -4,7 +4,6 @@ import { useAuthStore } from 'src/stores/auth'
 import {
   createMemoryHistory,
   createRouter,
-  createWebHashHistory,
   createWebHistory,
 } from 'vue-router';
 

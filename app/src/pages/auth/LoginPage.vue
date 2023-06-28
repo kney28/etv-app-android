@@ -76,8 +76,9 @@
             <div>
               <label class="font-poppins-regular" style="color: rgb(40,40,40)" for="">Usuario</label>
               <q-input v-model="username" placeholder="Ej. will2023" lazy-rules
-                :rules="[val => !!val || 'Completa el campo']" rounded outlined :input-style="{ marginTop: '15px' }"
-                :input-class="{ 'input-login': 'a' }" class="font-poppins-regular" mask="#" reverse-fill-mask />
+                :rules="[val => !!val || 'Completa el campo', val => val.length >= 6 || 'Mínimo 6 caracteres']" rounded
+                outlined :input-style="{ marginTop: '15px' }" :input-class="{ 'input-login': 'a' }"
+                class="font-poppins-regular" mask="#" reverse-fill-mask />
             </div>
             <div>
               <label class="font-poppins-regular" style="color: rgb(40,40,40)" for="">Constraseña</label>
