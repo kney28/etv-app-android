@@ -76,8 +76,9 @@
             <div>
               <label class="font-poppins-regular" style="color: rgb(40,40,40)" for="">Usuario</label>
               <q-input v-model="username" placeholder="Ej. will2023" lazy-rules
-                :rules="[val => !!val || 'Completa el campo']" rounded outlined :input-style="{ marginTop: '15px' }"
-                :input-class="{ 'input-login': 'a' }" class="font-poppins-regular" mask="#" reverse-fill-mask />
+                :rules="[val => !!val || 'Completa el campo', val => val.length >= 6 || 'Mínimo 6 caracteres']" rounded
+                outlined :input-style="{ marginTop: '15px' }" :input-class="{ 'input-login': 'a' }"
+                class="font-poppins-regular" mask="#" reverse-fill-mask />
             </div>
             <div>
               <label class="font-poppins-regular" style="color: rgb(40,40,40)" for="">Constraseña</label>
@@ -131,7 +132,7 @@ export default defineComponent({
     const username = ref(null)
     const password = ref(null)
     const auth = useAuthStore()
-    const { token } = storeToRefs(auth)
+    const { token, userName, passWord  } = storeToRefs(auth)
     const utf8Chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[{]}|;:,<.>/?';
 
     onMounted(() => {
@@ -224,6 +225,8 @@ export default defineComponent({
     const salt = '10x104q'
 
     const login = () => {
+      userName.value = username.value
+      passWord.value = password.value
       console.log(encryptCedula(username.value, salt))
       const data = {
         username: username.value,
