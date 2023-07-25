@@ -31,7 +31,7 @@
               <q-item-section avatar>
                 <q-icon name="fa-solid fa-mosquito" color="primary" text-color="white" />
               </q-item-section>
-  
+
               <q-item-section>
                 Enfermedades transmitidas por vectores
               </q-item-section>
@@ -49,7 +49,7 @@
             </q-item>
           </q-expansion-item>
 
-          <q-expansion-item :header-inset-level="0.2" :content-inset-level="0.5" expand-separator>
+          <!--<q-expansion-item :header-inset-level="0.2" :content-inset-level="0.5" expand-separator>
             <template v-slot:header>
               <q-item-section avatar>
                 <q-icon name="fa-solid fa-cat" color="primary" text-color="white" />
@@ -93,13 +93,12 @@
                 Encuesta larvaria
               </q-item-section>
             </q-item>
-          </q-expansion-item>
+          </q-expansion-item>-->
         </q-expansion-item>
 
         <q-separator></q-separator>
 
-        <q-item @click="setTabSelected('/profiles', 'Perfiles')" active-class="tab-active" to="/profiles" exact
-          class="q-ma-sm navigation-item" clickable v-ripple>
+        <q-item @click="upload()" active-class="tab-active" exact class="q-ma-sm navigation-item" clickable v-ripple>
           <q-item-section avatar>
             <q-icon color="primary" name="fa-solid fa-cloud-arrow-up" />
           </q-item-section>
@@ -122,29 +121,89 @@
 
       </q-list>
     </q-drawer>
-
     <q-page-container>
       <router-view />
     </q-page-container>
+    <q-dialog v-model="dialogInfo" persistent>
+      <q-card>
+        <q-card-section>
+          <div class="row q-mb-sm">
+            <div class="col-lg-8 col-md-8 col-xs-8 text-h6">
+            </div>
+            <div class="col-lg-4 col-md-4 col-xs-4 text-right">
+              <q-btn icon="close" flat round dense v-close-popup />
+            </div>
+          </div>
+          <q-markup-table>
+            <thead>
+              <tr>
+                <th colspan="2" class="text-center bg-black text-yellow-7">Resumen de la operación</th>
+              </tr>
+              <tr>
+                <th class="text-left">Archivo</th>
+                <th class="text-center">Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(dato, index) in datos.nom_exitosos" :key="index">
+                <td>{{ dato }}</td>
+                <td class="text-center"><q-avatar text-color="white" size="xs" round color="green"
+                    icon="fa-solid fa-check"></q-avatar></td>
+              </tr>
+              <tr v-for="(dato, index) in datos.nom_fallidos" :key="index">
+                <td>{{ dato }}</td>
+                <td class="text-center"><q-avatar text-color="white" size="xs" round color="red"
+                    icon="fa-solid fa-xmark"></q-avatar></td>
+              </tr>
+            </tbody>
+          </q-markup-table>
+        </q-card-section>
+        <q-card-section>
+          <div class="row shadow-2 q-pa-sm">
+            <div class="col-lg-12 col-md-12 col-xs-12">
+
+              Archivos enviados: {{ datos.enviados }}
+            </div>
+            <div class="col-lg-12 col-md-12 col-xs-12">
+              Archivos almacenados: {{ datos.almacenados }}
+            </div>
+            <div class="col-lg-12 col-md-12 col-xs-12">
+              Archivos no almacenados: {{ datos.no_almacenados }}
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right" class="bg-white text-teal">
+          <div>
+            <q-btn flat round dense v-close-popup label="Ok" />
+          </div>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent, ref } from 'vue';
-import { useQuasar } from 'quasar';
+import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from 'src/stores/auth';
 import { storeToRefs } from 'pinia';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { api } from 'src/boot/axios';
+import axios from 'axios';
 
 export default defineComponent({
   name: 'MainLayout',
 
   setup() {
+    const dialogInfo = ref(false)
+    const datos = ref(null)
     const $q = useQuasar()
     const router = useRouter()
     const auth = useAuthStore()
-    const { token } = storeToRefs(auth)
+    const { token, userName, passWord } = storeToRefs(auth)
     const leftDrawerOpen = ref(false)
+    const dir = 'visitas/ETV'
 
     const logout = () => {
       $q.dialog({
@@ -165,11 +224,115 @@ export default defineComponent({
       })
     }
 
-    const setTabSelected = (url: any, name: any) => { return url + name }
+    const setTabSelected = (url, name) => { return url + name }
+
+    const upload = async () => {
+      //visible.value = true
+      $q.loading.show({
+        spinner: QSpinnerFacebook,
+        spinnerColor: 'yellow',
+        spinnerSize: 140,
+        backgroundColor: 'blue-grey-10',
+        message: 'Subiendo archivos...',
+        messageColor: 'white'
+      })
+      const result = await Filesystem.readdir({
+        path: dir,
+        directory: Directory.Data
+      })
+      const data = []
+      const formData = new FormData()
+      //formData.append("nombre", "kevin")
+      //console.log(formData)
+
+      for (const item of result.files) {
+        const temp = await readFile(`${dir}/${item.name}`)
+        // temp.formato = item.name
+        data.push(temp)
+        const blob = new Blob([temp],
+          {
+            type: 'application/json'
+          })
+        formData.append(`file[]`, blob, item.name)
+      }
+
+      for (var entrie of formData.entries()) {
+        console.log(entrie[0] + ': ' + entrie[1]);
+      }
+
+      for (const value of formData.values()) {
+        console.log(value);
+      }
+
+      formData.append('user', userName.value)
+      formData.append('pass', passWord.value)
+      api.post('https://uesapi.000webhostapp.com/apiPost.php', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+        .then(({ data }) => {
+          console.log(data)
+          datos.value = data
+          dialogInfo.value = true
+          //visible.value = false
+          $q.loading.hide()
+          let response = ''
+          //data.nom_exitosos ?? []
+          //data.nom_fallidos ?? []
+
+          for (const item of data.nom_exitosos ? data.nom_exitosos : []) {
+            response += `Archivo ${item} fue subido con éxito`
+            response += '</b>'
+            response += '<br>'
+          }
+
+          for (const item of data.nom_fallidos ? data.nom_fallidos : []) {
+            response += '<b style="color: red">'
+            response += `Error al intentar guardar el archivo ${item}`
+            response += '</b>'
+            response += '<br>'
+          }
+          response += `Total enviados: ${data.enviados}<br>`
+          response += `Archivos guardados: ${data.almacenados}<br>`
+          response += `Archivos no guardados: ${data.no_almacenados}`
+
+          /*$q.dialog({
+            title: 'Resumen',
+            message: response,
+            persistent: true,
+            html: true
+          })*/
+        }).catch((error) => {
+          console.log(error)
+          $q.loading.hide()
+
+          $q.dialog({
+            title: '!Ups, algo salio mal!',
+            message: `Por favor revisa tu conexión a internet`,
+            persistent: true
+          })
+        })
+
+      // 
+    }
+
+    const readFile = async (path) => {
+      const result = await Filesystem.readFile({
+        path: path,
+        directory: Directory.Data,
+        encoding: Encoding.UTF8
+      })
+      // const obj = JSON.parse(result.data)
+      return result.data
+    }
 
     return {
+      datos,
+      dialogInfo,
       logout,
       setTabSelected,
+      upload,
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value

@@ -522,6 +522,8 @@ import { defineComponent, ref, onMounted, computed, reactive } from 'vue'
 import { useQuasar, uid } from 'quasar'
 import { TIPOCRIADERO } from '../../constants/constants'
 import { versionOS } from 'src/stores/global'
+import { useAuthStore } from 'src/stores/auth'
+import { storeToRefs } from 'pinia'
 // import { Device } from '@capacitor/device'
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
 import { Geolocation } from '@capacitor/geolocation'
@@ -532,6 +534,8 @@ import { Geolocation } from '@capacitor/geolocation'
 export default defineComponent({
   name: 'FV-EV-04Page',
   setup() {
+    const auth = useAuthStore()
+    const { userName } = storeToRefs(auth)
     const municipios = [
       { id: 1, nombre: 'Obando' },
       { id: 2, nombre: 'Cartago' },
@@ -927,6 +931,7 @@ export default defineComponent({
             id: uid(),
             gps: coords.value.coords,
             timestamp: coords.value.timestamp,
+            usuario: userName.value,
             acta: acta.value,
             dia: fecha.value[2],
             mes: fecha.value[1],
