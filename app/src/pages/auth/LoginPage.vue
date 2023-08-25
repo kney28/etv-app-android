@@ -33,8 +33,35 @@
 .input-login {
   height: 25px;
 }
+.fondo {
+  background-image: url(../../images/fondo.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: fixed;
+  height: 110vh;
+  width: 100vw;
+}
+.fondo2 {
+  background-image: url(../../images/fondo.svg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: auto;
+  width: auto;
+}
+.pie {
+  background-image: url(../../images/pie.svg);
+  background-repeat: no-repeat;
+  transform: rotate(180deg);
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+}
 </style>
 <template>
+  <div class="fondo"></div>
   <div class="row items-start q-col-gutter-sm fit wrap justify-center content-center">
     <!-- <div class="col-12 col-md-8" style="min-width: 300px;">
       <div>
@@ -59,15 +86,13 @@
           <div class="text-center">
             <!--<q-icon name="fa-solid fa-stethoscope" size="70px" style="color: #12506A" class="q-mb-lg" />-->
           </div>
-          <div>
-            <p style="color: #60818E; font-size: 20px; font-weight: bolder;" class="text-center q-mb-xs">
-              Entidad
-            </p>
+          <div class="q-pt-xl">
             <p style="color: #12506A; font-size: 30px; font-weight: bolder;" class="text-center q-mb-lg">
               UESVALLE
             </p>
           </div>
-          <div class="col text-h6 text-center font-poppins-bold" style="color: #12506A; font-weight:bold">
+
+          <div class="col text-h6 text-center font-poppins-bold q-pt-lg" style="color: #12506A; font-weight:bold">
             Iniciar sesión
           </div>
         </q-card-section>
@@ -75,14 +100,14 @@
           <form class="q-form q-gutter-md">
             <div>
               <label class="font-poppins-regular" style="color: rgb(40,40,40)" for="">Usuario</label>
-              <q-input v-model="username" placeholder="Ej. will2023" lazy-rules
+              <q-input standout="bg-white" v-model="username" placeholder="Ej. 1234567890" lazy-rules
                 :rules="[val => !!val || 'Completa el campo', val => val.length >= 6 || 'Mínimo 6 caracteres']" rounded
                 outlined :input-style="{ marginTop: '15px' }" :input-class="{ 'input-login': 'a' }"
                 class="font-poppins-regular" mask="#" reverse-fill-mask />
             </div>
             <div>
               <label class="font-poppins-regular" style="color: rgb(40,40,40)" for="">Constraseña</label>
-              <q-input v-model="password" placeholder="Ingresa tu contraseña..." lazy-rules
+              <q-input standout="bg-white" v-model="password" placeholder="Ingresa tu contraseña..." lazy-rules
                 :rules="[val => !!val || 'Completa el campo']" rounded outlined :input-style="{ marginTop: '15px' }"
                 :input-class="{ 'input-login': 'c' }" class="font-poppins-regular" :type="isPwd ? 'password' : 'text'">
                 <template v-slot:append>
@@ -94,9 +119,9 @@
             <!--<div class="text-right font-poppins-bold q-mt-sm" style="color: #2fc1ff; font-size: 12px;">
               Recuperar contraseña
             </div>-->
-            <div>
+            <div class="q-mb-xl">
               <q-btn label="Iniciar sesión" @click="login" lazy-rules rounded class="full-width font-poppins-bold q-mt-md"
-                no-caps size="lg" style="background: #2fc1ff; color: white;" />
+                no-caps size="lg" style="background: linear-gradient(45deg, #20cbffa2, #073461e1); color: white;" />
             </div>
             <!--<div class="q-mt-lg">
               <p class="text-center font-poppins-regular q-mb-xs" style="font-size: 11px;">¿Necesitas usuario para
@@ -179,9 +204,9 @@ export default defineComponent({
       return btoa(encodeURIComponent(text).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1)));
     }
 
-    function decodeBase64(base64) {
+    /*function decodeBase64(base64) {
       return decodeURIComponent(Array.prototype.map.call(atob(base64), (c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-    }
+    }*/
 
     function encryptCedula(cedula, salt) {
       const encodedSalt = encodeBase64(salt);
@@ -198,7 +223,7 @@ export default defineComponent({
       return encryptedCedula.join('');
     }
 
-    function decryptCedula(encryptedCedula, salt) {
+    /*function decryptCedula(encryptedCedula, salt) {
       const encodedSalt = encodeBase64(salt);
       const decryptedCedula = [];
 
@@ -212,7 +237,7 @@ export default defineComponent({
       }
 
       return decryptedCedula.join('');
-    }
+    }*/
 
     // Ejemplo de uso
     /* 

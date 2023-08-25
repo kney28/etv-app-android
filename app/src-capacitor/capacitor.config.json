@@ -5,6 +5,7 @@
   "npmClient": "yarn",
   "webDir": "www",
   "server": {
-    "androidScheme": "https"
+    "androidScheme": "https",
+    "url": "http://172.17.0.1:9500"
   }
 }

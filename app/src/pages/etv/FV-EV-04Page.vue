@@ -22,9 +22,9 @@
                 <q-td key="formato" :props="props">
                   <q-btn flat text-color="blue-10" :label="props.row.formato" @click="showFormat(props.row)" />
                 </q-td>
-                <q-td key="edit" :props="props">
+                <!--<q-td key="edit" :props="props">
                   <q-btn round size="xs" color="primary" icon="border_color" v-on:click="editing(props.row)" />
-                </q-td>
+                </q-td>-->
                 <q-td key="delete" :props="props">
                   <q-btn round size="xs" color="red-7" icon="delete_forever" v-on:click="onDelete(props.row)" />
                 </q-td>
@@ -45,7 +45,7 @@
           <q-space />
           <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
-        <q-banner class="bg-grey-3">
+        <q-banner>
           <template v-slot:avatar>
             <q-icon name="warning" color="warning" />
           </template>
@@ -66,10 +66,10 @@
 
               <q-tab-panels keep-alive v-model="tab" animated>
                 <q-tab-panel name="section1">
-                  <div class="col-md-4 col-sm-6 col-xs-12">
+                  <!--<div class="col-md-4 col-sm-6 col-xs-12">
                     <q-input white color="blue" v-model="acta" label="Acta *" lazy-rules
                       :rules="[val => !!val || 'El campo es obligatorio']" />
-                  </div>
+                  </div>-->
                   <div class="col-md-4 col-sm-6 col-xs-12">
                     <q-input filled v-model="fecha" mask="date" :rules="['date']">
                       <template v-slot:append>
@@ -86,33 +86,50 @@
                     </q-input>
                   </div>
                   <div class="col-md-4 col-sm-6 col-xs-12">
-                    <q-select v-model="municipio" label="Municipio *" :options="municipios" option-label="nombre"
-                      option-value="id" emit-value map-options lazy-rules
+                    <q-select
+                      use-input
+                      v-model="municipio"
+                      label="Municipio *"
+                      @filter="filterMunicipios"
+                      :options="optMunicipios"
+                      option-label="nombreMunicipio"
+                      option-value="nombreMunicipio"
+                      emit-value
+                      lazy-rules
                       :rules="[val => !!val || 'El campo es obligatorio']"
-                      @update:model-value="limpiarSelect('barrio')" />
+                      @update:model-value="limpiarSelect('establecimiento')"
+                    />
                   </div>
                   <div class="col-md-4 col-sm-6 col-xs-12">
-                    <q-select v-model="barrio" label="Barrio *" :options="barriosFiltrados" option-label="nombre"
-                      option-value="id" emit-value map-options lazy-rules
+                    <q-select
+                      use-input
+                      v-model="establecimiento"
+                      label="Establecimiento *"
+                      @filter="filterEntidades"
+                      :options="optEntidades"
+                      option-label="nombreEstablecimiento"
+                      option-value="nombreEstablecimiento"
+                      emit-value
+                      map-options
+                      lazy-rules
                       :rules="[val => !!val || 'El campo es obligatorio']"
-                      @update:model-value="limpiarSelect('comuna')" />
+                      @update:model-value="limpiarSelect('direccion')"
+                    />
                   </div>
                   <div class="col-md-4 col-sm-6 col-xs-12">
-                    <q-select v-model="comuna" label="Comuna / Sector *" :options="sectoresFiltrados"
-                      option-label="nombre" option-value="id" emit-value map-options lazy-rules
-                      :rules="[val => !!val || 'El campo es obligatorio']" />
-                  </div>
-                  <div class="col-md-4 col-sm-6 col-xs-12">
-                    <q-input white color="blue" v-model="direccion" label="Dirección *" lazy-rules
-                      :rules="[val => !!val || 'El campo es obligatorio']" />
-                  </div>
-                  <div class="col-md-4 col-sm-6 col-xs-12">
-                    <q-input white color="blue" v-model="razon_social" label="Razón social *" lazy-rules
-                      :rules="[val => !!val || 'El campo es obligatorio']" />
-                  </div>
-                  <div class="col-md-4 col-sm-6 col-xs-12">
-                    <q-input white color="blue" v-model="telefono" label="Teléfono *" lazy-rules
-                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                    <q-select
+                      use-input
+                      v-model="direccion"
+                      label="Dirección *"
+                      @filter="filterDirecciones"
+                      :options="optDirecciones"
+                      option-label="direccion"
+                      option-value="id"
+                      emit-value
+                      map-options
+                      lazy-rules
+                      :rules="[val => !!val || 'El campo es obligatorio']"
+                    />
                   </div>
                   <div class="col-md-4 col-sm-6 col-xs-12">
                     <q-select v-model="caracter_institucional" label="Caracter institucional *"
@@ -121,21 +138,21 @@
                   </div>
                   <div class="col-md-4 col-sm-6 col-xs-12">
                     <q-input white color="blue" type="number" v-model="categoria" label="Categoría *" lazy-rules
-                      :rules="[val => !!val || 'El campo es obligatorio']" />
+                      :rules="[val => !!val || 'El campo es obligatorio', val => val <= 14 || 'La categoría debe ser menor o igual a 14']" />
                   </div>
                   <div class="col-md-4 col-sm-6 col-xs-12">
                     <q-input white color="blue" type="number" v-model="personas_protegidas"
                       label="# de personas protegidas *" lazy-rules
                       :rules="[val => !!val || 'El campo es obligatorio']" />
                   </div>
-                  <div class="col-md-4 col-sm-6 col-xs-12">
+                  <!--<div class="col-md-4 col-sm-6 col-xs-12">
                     <q-input white color="blue" v-model="representante_legal" label="Representante legal *" lazy-rules
                       :rules="[val => !!val || 'El campo es obligatorio']" />
                   </div>
                   <div class="col-md-4 col-sm-6 col-xs-12">
                     <q-input white color="blue" type="number" v-model="cedula" label="Cédula *" lazy-rules
                       :rules="[val => !!val || 'El campo es obligatorio']" />
-                  </div>
+                  </div>-->
                 </q-tab-panel>
                 <q-tab-panel name="section2">
                   <q-banner class="text-blue">
@@ -151,8 +168,11 @@
                     </div>
                     <div v-for="(criadero, index) in criaderos" :key="index">
                       <div class="bg-grey-2 q-mt-sm q-pa-sm">
-                        <div class="column items-end">
-                          <q-btn round @click="removeFieldSet(index, 1)" icon="delete" />
+                        <div class="row">
+                          <div class="text-blue">{{ index + 1 }}</div>
+                          <div class="col text-right">
+                            <q-btn round @click="removeFieldSet(index, 1)" icon="delete" />
+                          </div>
                         </div>
                         <div class="field-set">
                           <div class="col-md-4 col-sm-6 col-xs-12">
@@ -353,8 +373,11 @@
                     </div>
                     <div v-for="(criaderoPotencial, index) in criaderosPotencial" :key="index">
                       <div class="bg-grey-2 q-mt-sm q-pa-sm">
-                        <div class="column items-end">
-                          <q-btn round @click="removeFieldSet(index, 2)" icon="delete" />
+                        <div class="row">
+                          <div class="text-blue">{{ index + 1 }}</div>
+                          <div class="col text-right">
+                            <q-btn round @click="removeFieldSet(index, 2)" icon="delete" />
+                          </div>
                         </div>
                         <div class="field-set">
                           <div class="col-md-4 col-sm-6 col-xs-12">
@@ -536,31 +559,6 @@ export default defineComponent({
   setup() {
     const auth = useAuthStore()
     const { userName } = storeToRefs(auth)
-    const municipios = [
-      { id: 1, nombre: 'Obando' },
-      { id: 2, nombre: 'Cartago' },
-      { id: 3, nombre: 'La victoria' }
-    ]
-    const barrios = [
-      { id: 11, idmuni: 1, nombre: 'El laurel' },
-      { id: 12, idmuni: 1, nombre: 'El remanzo' },
-      { id: 13, idmuni: 1, nombre: 'La esperanza' },
-      { id: 14, idmuni: 2, nombre: 'San pablo' },
-      { id: 15, idmuni: 2, nombre: 'San carlos' },
-      { id: 16, idmuni: 2, nombre: 'El saman' },
-      { id: 17, idmuni: 3, nombre: 'La aurora' },
-      { id: 18, idmuni: 3, nombre: 'La sagrada familia' }
-    ]
-    const sectores = [
-      { id: 31, idbarrio: 11, nombre: 'SECTOR 1' },
-      { id: 32, idbarrio: 11, nombre: 'SECTOR 2' },
-      { id: 33, idbarrio: 11, nombre: 'SECTOR 3' },
-      { id: 34, idbarrio: 13, nombre: 'SECTOR 2' },
-      { id: 35, idbarrio: 14, nombre: 'SECTOR 3' },
-      { id: 36, idbarrio: 16, nombre: 'SECTOR 4' },
-      { id: 37, idbarrio: 16, nombre: 'SECTOR 1' },
-      { id: 38, idbarrio: 18, nombre: 'SECTOR 2' }
-    ]
     const campos = reactive({
       count: 1,
       hidden1: true,
@@ -650,11 +648,8 @@ export default defineComponent({
     const mes = ref(null)
     const anio = ref(null)
     const municipio = ref(null)
-    const barrio = ref(null)
-    const comuna = ref(null)
-    const direccion = ref('Cra 2 5-46')
-    const razon_social = ref('Prueba')
-    const telefono = ref(2123354)
+    const establecimiento = ref(null)
+    const direccion = ref(null)
     const caracter_institucional = ref(null)
     const categoria = ref(3)
     const personas_protegidas = ref(2)
@@ -694,12 +689,18 @@ export default defineComponent({
     const isEditing = ref(false)
     const shows = ref([
       { name: 'formato', align: 'left', label: 'Formato', field: 'formato', sortable: true },
-      { name: 'edit', align: 'center', label: 'Editar', field: 'edit', sortable: false },
+      //{ name: 'edit', align: 'center', label: 'Editar', field: 'edit', sortable: false },
       { name: 'delete', align: 'center', label: 'Eliminar', field: 'delete', sortable: false }
     ])
+    const dataMunicipios = ref([])
+    const optMunicipios = ref(null)
+    const optEntidades = ref(null)
+    const optDirecciones = ref(null)
+    let establecimientos = ref([])
     onMounted(() => {
       getEtv()
       printCurrentPosition()
+      getEstablecimientos()
       // getVersion()
       // writeSecretFileA()
       // readSecretFileA()
@@ -722,6 +723,73 @@ export default defineComponent({
       dataEtv.value = data
       visible.value = false
     }
+    const getEstablecimientos = async () => {
+      establecimientos.value = await readFile('establecimientos/establecimientos.json')
+      getMunicipios()
+    }
+    const getMunicipios = async () => {
+      dataMunicipios.value = [...new Set(establecimientos.value.establecimientos.map(v => v.nombreMunicipio))].sort()
+      console.log(dataMunicipios.value)
+    }
+    const dataEntidades = computed(() => {
+      if (municipio.value) {
+        const result = [...new Set(establecimientos.value.establecimientos.map(v => municipio.value === v.nombreMunicipio ? v.nombreEstablecimiento : null))].sort()
+        result.pop()
+        return result
+
+        
+      } else {
+        return [];
+      }
+    })
+    const dataDirecciones = computed(() => {
+      if (establecimiento.value) {
+        const result = [...new Set(establecimientos.value.establecimientos.map(v => 
+          establecimiento.value === v.nombreEstablecimiento ? {id: v.documentoEstablecimiento, direccion: v.direccionEstablecimiento} : null))].sort()
+        result.pop()
+        return result
+
+        
+      } else {
+        return [];
+      }
+    })
+    const filterMunicipios = (val, update) => {
+      if (val === '') {
+        update(() => {
+          optMunicipios.value = dataMunicipios.value
+        })
+        return
+      }
+      update(() => {
+        const needle = val.toLowerCase()
+        optMunicipios.value = dataMunicipios.value.filter(v => v.toLowerCase().indexOf(needle) > -1)
+      })
+    }
+    const filterEntidades = (val, update) => {
+      if (val === '') {
+        update(() => {
+          optEntidades.value = dataEntidades.value
+        })
+        return
+      }
+      update(() => {
+        const needle = val.toLowerCase()
+        optEntidades.value = dataEntidades.value.filter(v => v.toLowerCase().indexOf(needle) > -1)
+      })
+    }
+    const filterDirecciones = (val, update) => {
+      if (val === '') {
+        update(() => {
+          optDirecciones.value = dataDirecciones.value
+        })
+        return
+      }
+      update(() => {
+        const needle = val.toLowerCase()
+        optDirecciones.value = dataDirecciones.value.filter(v => v.toLowerCase().indexOf(needle) > -1)
+      })
+    }
     const printCurrentPosition = async () => {
       const coordinates = await Geolocation.getCurrentPosition()
       console.log('Current position:', coordinates)
@@ -736,30 +804,12 @@ export default defineComponent({
         message.value = 'Por favor activa el GPS para poder continuar'
       }
     }
-    const barriosFiltrados = computed(() => {
-      if (municipio.value) {
-        return barrios.filter(
-          (barrio) => barrio.idmuni === municipio.value
-        );
-      } else {
-        return [];
-      }
-    })
-    const sectoresFiltrados = computed(() => {
-      if (barrio.value) {
-        return sectores.filter(
-          (sector) => sector.idbarrio === barrio.value
-        );
-      } else {
-        return [];
-      }
-    })
     const limpiarSelect = (nomSelect) => {
-      if (nomSelect == 'barrio') {
+      if (nomSelect == 'establecimiento') {
         barrio.value = null
       }
-      if (nomSelect == 'comuna') {
-        comuna.value = null
+      if (nomSelect == 'direccion') {
+        direccion.value = null
       }
     }
 
@@ -891,8 +941,7 @@ export default defineComponent({
       mes.value = null
       anio.value = null
       municipio.value = null
-      barrio.value = null
-      comuna.value = null
+      establecimiento.value = null
       direccion.value = null
       razon_social.value = null
       telefono.value = null
@@ -932,21 +981,17 @@ export default defineComponent({
             gps: coords.value.coords,
             timestamp: coords.value.timestamp,
             usuario: userName.value,
-            acta: acta.value,
             dia: fecha.value[2],
             mes: fecha.value[1],
             anio: fecha.value[0],
-            municipio: municipio.value,
-            barrio: barrio.value,
-            comuna: comuna.value,
-            direccion: direccion.value,
-            razon_social: razon_social.value,
-            telefono: telefono.value,
+            idEstablecimiento: direccion.value, // es direccion ya que es el id del establecimiento
+            //razon_social: razon_social.value,
+            //telefono: telefono.value,
             caracter_institucional: caracter_institucional.value,
             categoria: categoria.value,
             personas_protegidas: personas_protegidas.value,
-            representante_legal: representante_legal.value,
-            cedula: cedula.value,
+            //representante_legal: representante_legal.value,
+            //cedula: cedula.value,
             criaderos: criaderos.value,
             criaderos_potenciales: criaderosPotencial.value,
             observaciones: observaciones.value,
@@ -993,8 +1038,7 @@ export default defineComponent({
       acta.value = row.acta
       fecha.value = `${row.anio}/${row.mes}/${row.dia}`
       municipio.value = row.municipio
-      barrio.value = row.barrio
-      comuna.value = row.comuna
+      establecimiento.value = row.es
       direccion.value = row.direccion
       razon_social.value = row.razon_social
       telefono.value = row.telefono
@@ -1031,9 +1075,7 @@ export default defineComponent({
             dia: fecha.value[2],
             mes: fecha.value[1],
             anio: fecha.value[0],
-            municipio: municipio.value,
-            barrio: barrio.value,
-            comuna: comuna.value,
+            idEstablecimiento: barrio.value,
             direccion: direccion.value,
             razon_social: razon_social.value,
             telefono: telefono.value,
@@ -1119,11 +1161,8 @@ export default defineComponent({
       mes,
       anio,
       municipio,
-      barrio,
-      comuna,
+      establecimiento,
       direccion,
-      razon_social,
-      telefono,
       caracter_institucional,
       categoria,
       personas_protegidas,
@@ -1153,18 +1192,24 @@ export default defineComponent({
       onEditing,
       onDelete,
       link,
-      municipios,
-      barrios,
-      barriosFiltrados,
-      sectores,
-      sectoresFiltrados,
       limpiarSelect,
       campos,
       lista,
       addFieldSet,
       removeFieldSet,
       showFormat,
-      checkGps
+      checkGps,
+      establecimientos,
+      dataMunicipios,
+      getMunicipios,
+      dataEntidades,
+      dataDirecciones,
+      filterMunicipios,
+      optMunicipios,
+      filterEntidades,
+      optEntidades,
+      filterDirecciones,
+      optDirecciones
     }
   }
 })

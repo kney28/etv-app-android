@@ -24,7 +24,7 @@ module.exports = configure(function (/* ctx */) {
     },
 
     bin: {
-      linuxAndroidStudio: '/home/kney28/Documentos/Android Studio/android-studio/bin/studio.sh'
+      linuxAndroidStudio: '/home/kney28/Documentos/android-studio/bin/studio.sh'
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
@@ -97,7 +97,9 @@ module.exports = configure(function (/* ctx */) {
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
-      config: {},
+      config: {
+        dark: 'auto'
+      },
 
       // iconSet: 'material-icons', // Quasar icon set
       // lang: 'en-US', // Quasar language pack

@@ -16,6 +16,18 @@
           Menú
         </q-item-label>
 
+        <q-item active-class="tab-active" to="/" exact class="navigation-item" clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon color="orange" name="fa-solid fa-house" />
+          </q-item-section>
+
+          <q-item-section>
+            Dashboard
+          </q-item-section>
+        </q-item>
+
+        <q-separator></q-separator>
+
         <q-expansion-item>
           <template v-slot:header>
             <q-item-section avatar>
@@ -118,8 +130,19 @@
             Compartir
           </q-item-section>
         </q-item>
-
       </q-list>
+      <br>
+      <div class="col-lg-12 col-md-12 col-xs-12 text-left">
+        <q-toggle 
+          v-model="dark"
+          checked-icon="fa-solid fa-moon"
+          color="blue-grey"
+          unchecked-icon="fa-solid fa-sun"
+          size="lg"
+          label="Modo oscuro"
+          @update:model-value="(val) => $q.dark.set(val)"
+        />
+      </div>
     </q-drawer>
     <q-page-container>
       <router-view />
@@ -183,19 +206,19 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from 'src/stores/auth';
 import { storeToRefs } from 'pinia';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { api } from 'src/boot/axios';
-import axios from 'axios';
 
 export default defineComponent({
   name: 'MainLayout',
 
   setup() {
+    const dark = ref(false)
     const dialogInfo = ref(false)
     const datos = ref(null)
     const $q = useQuasar()
@@ -204,6 +227,10 @@ export default defineComponent({
     const { token, userName, passWord } = storeToRefs(auth)
     const leftDrawerOpen = ref(false)
     const dir = 'visitas/ETV'
+
+    onMounted(() => {
+      saveEstablecimientos()
+    })
 
     const logout = () => {
       $q.dialog({
@@ -222,6 +249,96 @@ export default defineComponent({
         $q.cookies.remove('token')
         router.push({ name: 'login' })
       })
+    }
+
+    const  getEstablecimientos = async () => {
+      let response = null
+      try{     
+        response = await api.post('http://192.168.1.95:8081/index.php?r=sistema/obtener-establecimientos',
+          {
+            usuario: 'kevin',
+            clave: 'kevin'
+          },
+          {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+      } catch (error) {
+        console.log(error)
+        return null
+      }
+      console.log(response.data)
+      return response
+    }
+
+    const readFile = async (path) => {
+      let result = null
+      try{
+        result = await Filesystem.readFile({
+          path: path,
+          directory: Directory.Data,
+          encoding: Encoding.UTF8
+        })
+      } catch (error) {
+        console.log(error)
+        return null
+      }
+      // const obj = JSON.parse(result.data)
+      console.log(result.data)
+      return result.data
+    }
+
+    const saveFile = async (path, data) => {
+      console.log(data)
+      await Filesystem.writeFile({
+        path: path,
+        data: data,
+        directory: Directory.Data,
+        encoding: Encoding.UTF8,
+      })
+    }
+
+    const saveEstablecimientos = async () => {
+      const exist = await readFile('establecimientos/establecimientos.json')
+      if (exist) {
+        console.log('existe')
+        $q.loading.hide()
+        return
+      } else {
+        $q.loading.show({
+          spinner: QSpinnerFacebook,
+          spinnerColor: 'yellow',
+          spinnerSize: 140,
+          backgroundColor: 'blue-grey-10',
+          message: 'Actualizando listado de establecimientos...',
+          messageColor: 'white'
+        })
+        const establecimientos = await getEstablecimientos()
+        if(!establecimientos || establecimientos.data.hasOwnProperty( 'error')){
+          $q.loading.hide()
+          const mensaje = !establecimientos ? '' : establecimientos.data.hasOwnProperty( 'error') ? establecimientos.data.mensaje : ''
+          $q.dialog({
+            title: 'Ups! algo salio mal',
+            message: 'Error al obtener los establecimientos, revise su conexión a internet e intente nuevamente: ' + mensaje,
+            ok: {
+              label: 'ok',
+              color: 'positive'
+            }
+          })
+        } else {
+          saveFile('establecimientos/establecimientos.json', JSON.stringify(establecimientos.data))
+          $q.loading.hide()
+          $q.dialog({
+            title: '¡Exito!',
+            message: 'El listado de establecimientos fue actualizado exitosamente',
+            ok: {
+              label: 'ok',
+              color: 'positive'
+            }
+          })
+        }
+      }
     }
 
     const setTabSelected = (url, name) => { return url + name }
@@ -253,7 +370,7 @@ export default defineComponent({
           {
             type: 'application/json'
           })
-        formData.append(`file[]`, blob, item.name)
+        formData.append('file[]', blob, item.name)
       }
 
       for (var entrie of formData.entries()) {
@@ -266,7 +383,7 @@ export default defineComponent({
 
       formData.append('user', userName.value)
       formData.append('pass', passWord.value)
-      api.post('https://uesapi.000webhostapp.com/apiPost.php', formData, {
+      api.post('https://uesapi.000webhostapp.com/upload/graphql/apiPost.php', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -281,7 +398,7 @@ export default defineComponent({
           //data.nom_exitosos ?? []
           //data.nom_fallidos ?? []
 
-          for (const item of data.nom_exitosos ? data.nom_exitosos : []) {
+          /*for (const item of data.nom_exitosos ? data.nom_exitosos : []) {
             response += `Archivo ${item} fue subido con éxito`
             response += '</b>'
             response += '<br>'
@@ -297,7 +414,7 @@ export default defineComponent({
           response += `Archivos guardados: ${data.almacenados}<br>`
           response += `Archivos no guardados: ${data.no_almacenados}`
 
-          /*$q.dialog({
+          $q.dialog({
             title: 'Resumen',
             message: response,
             persistent: true,
@@ -309,7 +426,7 @@ export default defineComponent({
 
           $q.dialog({
             title: '!Ups, algo salio mal!',
-            message: `Por favor revisa tu conexión a internet`,
+            message: `Por favor revisa tu conexión a internet: ${error}`,
             persistent: true
           })
         })
@@ -317,17 +434,8 @@ export default defineComponent({
       // 
     }
 
-    const readFile = async (path) => {
-      const result = await Filesystem.readFile({
-        path: path,
-        directory: Directory.Data,
-        encoding: Encoding.UTF8
-      })
-      // const obj = JSON.parse(result.data)
-      return result.data
-    }
-
     return {
+      dark,
       datos,
       dialogInfo,
       logout,
@@ -336,7 +444,9 @@ export default defineComponent({
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value
-      }
+      },
+      getEstablecimientos,
+      readFile
     }
   }
 });
