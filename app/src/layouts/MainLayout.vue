@@ -116,7 +116,7 @@
           </q-item-section>
 
           <q-item-section>
-            Actualizar
+            Enviar
           </q-item-section>
         </q-item>
 
@@ -370,7 +370,7 @@ export default defineComponent({
           {
             type: 'application/json'
           })
-        formData.append('file[]', blob, item.name)
+        formData.append('Documentos_json[]', blob, item.name)
       }
 
       for (var entrie of formData.entries()) {
@@ -381,9 +381,9 @@ export default defineComponent({
         console.log(value);
       }
 
-      formData.append('user', userName.value)
-      formData.append('pass', passWord.value)
-      api.post('https://uesapi.000webhostapp.com/upload/graphql/apiPost.php', formData, {
+      formData.append('usuario', userName.value)
+      formData.append('clave', passWord.value)
+      api.post('http://192.168.1.95:8081/index.php?r=sistema/cargar-entrevistas-realizadas', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

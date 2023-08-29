@@ -37,8 +37,8 @@
         <q-spinner-pie color="primary" size="70px" />
       </q-inner-loading>
     </div>
-    <q-dialog v-model="dialog" persistent>
-      <q-card style="max-width: 95vw;">
+    <q-dialog v-model="dialog" persistent position="top">
+      <q-card style="max-width: 90vw; max-height: 80vh" class="q-mt-md">
         <q-linear-progress :value="10" color="blue" />
         <q-card-section class="row items-center">
           <div class="text-h6"> </div>
@@ -54,8 +54,8 @@
         <q-card-section class="q-pa-none q-pt-sm">
           <q-form ref="myForm" @submit.prevent="">
             <div style="max-width: 100vw;">
-              <q-tabs v-model="tab" inline-label outside-arrows mobile-arrows active-color="blue-13"
-                indicator-color="blue-13" class="text-grey-9 shadow-2">
+              <q-tabs v-model="tab" dense inline-label outside-arrows mobile-arrows active-color="white"
+                indicator-color="orange" class="shadow-2 fixed-bottom z-max bg-info">
                 <q-tab name="section1" label="Sección 1" />
                 <q-tab name="section2" label="Sección 2" />
                 <q-tab name="section3" label="Sección 3" />
@@ -167,7 +167,7 @@
                         :disable="criaderos.length == 10" />
                     </div>
                     <div v-for="(criadero, index) in criaderos" :key="index">
-                      <div class="bg-grey-2 q-mt-sm q-pa-sm">
+                      <div :class="$q.dark.mode ? 'q-mt-sm q-pa-sm' : 'bg-grey-2 q-mt-sm q-pa-sm'">
                         <div class="row">
                           <div class="text-blue">{{ index + 1 }}</div>
                           <div class="col text-right">
@@ -372,7 +372,7 @@
                         :disable="criaderosPotencial.length == 10" />
                     </div>
                     <div v-for="(criaderoPotencial, index) in criaderosPotencial" :key="index">
-                      <div class="bg-grey-2 q-mt-sm q-pa-sm">
+                      <div :class="$q.dark.mode ? 'q-mt-sm q-pa-sm' : 'bg-grey-2 q-mt-sm q-pa-sm'">
                         <div class="row">
                           <div class="text-blue">{{ index + 1 }}</div>
                           <div class="col text-right">
@@ -428,7 +428,7 @@
                     </template>
                     Toldillos para pacientes febriles en centros hospitalarios, batallones militares y afines
                   </q-banner>
-                  <div class="bg-grey-2 q-mt-sm q-pa-sm">
+                  <div :class="$q.dark.mode ? 'q-mt-sm q-pa-sm' : 'bg-grey-2 q-mt-sm q-pa-sm'">
                     <div class="q-mb-md text-h6 text-weight-regular text-grey-9 col-md-12 col-sm-12 col-xs-12">
                       Toldillo adulto
                     </div>
@@ -453,7 +453,7 @@
                         :rules="[val => val <= toldillo_adulto_total || 'El valor no puede ser mayor al total', val => !!val || 'El campo es obligatorio']" />
                     </div>
                   </div>
-                  <div class="bg-grey-2 q-mt-sm q-pa-sm">
+                  <div :class="$q.dark.mode ? 'q-mt-sm q-pa-sm' : 'bg-grey-2 q-mt-sm q-pa-sm'">
                     <div class="q-mb-md text-h6 text-weight-regular text-grey-9 col-md-12 col-sm-12 col-xs-12">
                       Toldillo pediátrico
                     </div>
@@ -492,9 +492,9 @@
                     </q-input>
                   </div>
                   <div class="row justify-between">
-                    <q-card-actions align="left" class="bg-white text-teal">
+                    <q-card-actions align="left" class="text-teal">
                     </q-card-actions>
-                    <q-card-actions align="right" class="bg-white text-teal">
+                    <q-card-actions align="right" class="text-teal">
                       <div v-if="!isEditing">
                         <q-btn text-color="black" round icon="check" @click.prevent="onSubmit" color="teal-13" />
                         <q-tooltip>Guardar datos</q-tooltip>
@@ -511,26 +511,25 @@
                   </div>
                 </q-tab-panel>
               </q-tab-panels>
-              <q-tabs v-model="tab" inline-label outside-arrows mobile-arrows active-color="blue-13"
+              <!--<q-tabs v-model="tab" inline-label outside-arrows mobile-arrows active-color="blue-13"
                 indicator-color="blue-13" class="text-grey-9 shadow-2">
                 <q-tab name="section1" label="Sección 1" />
                 <q-tab name="section2" label="Sección 2" />
                 <q-tab name="section3" label="Sección 3" />
                 <q-tab name="section4" label="Sección 4" />
-              </q-tabs>
+              </q-tabs>-->
             </div>
           </q-form>
         </q-card-section>
       </q-card>
     </q-dialog>
-
     <q-dialog v-model="dialogWarning" persistent>
       <q-card>
         <q-card-section>
           <div class="text-h6">Información</div>
           {{ 'Mensaje: ' + message }}
         </q-card-section>
-        <q-card-actions align="right" class="bg-white text-teal">
+        <q-card-actions align="right" class="text-teal">
           <div>
             <q-btn round icon="fa-solid fa-xmark" v-close-popup color="red-7" />
             <q-tooltip>Cerrar</q-tooltip>
@@ -643,7 +642,7 @@ export default defineComponent({
     const dataEtv = ref([])
     const coords = ref(null)
     const acta = ref(1)
-    const fecha = ref('2023/06/12')
+    const fecha = ref(null)
     const dia = ref(null)
     const mes = ref(null)
     const anio = ref(null)
@@ -806,7 +805,7 @@ export default defineComponent({
     }
     const limpiarSelect = (nomSelect) => {
       if (nomSelect == 'establecimiento') {
-        barrio.value = null
+        establecimiento.value = null
       }
       if (nomSelect == 'direccion') {
         direccion.value = null
@@ -975,16 +974,19 @@ export default defineComponent({
       myForm.value.validate().then(async success => {
         if (success) {
           coords.value = await printCurrentPosition()
-          fecha.value = fecha.value.split('/')
+          const date = fecha.value.split('/')
+          const uidd = uid()
           const data = {
-            id: uid(),
+            id: uidd,
+            identificadorEntrevista: "F-EV-04",
+            versionEntrevista: "5.0",
+            usuarioEntrevistador: userName.value,
+            idEstablecimiento: direccion.value, // es direccion ya que es el id del establecimiento
             gps: coords.value.coords,
             timestamp: coords.value.timestamp,
-            usuario: userName.value,
-            dia: fecha.value[2],
-            mes: fecha.value[1],
-            anio: fecha.value[0],
-            idEstablecimiento: direccion.value, // es direccion ya que es el id del establecimiento
+            dia: date[2],
+            mes: date[1],
+            anio: date[0],
             //razon_social: razon_social.value,
             //telefono: telefono.value,
             caracter_institucional: caracter_institucional.value,
@@ -1005,13 +1007,14 @@ export default defineComponent({
             toldillo_pedriatico_malo: toldillo_pedriatico_malo.value,
             toldillo_pedriatico_total: toldillo_pedriatico_total.value,
             toldillo_pedriatico_uso: toldillo_pedriatico_uso.value,
-            toldillo_observaciones: toldillo_observaciones.value
+            toldillo_observaciones: toldillo_observaciones.value,
+            email: email.value
           }
           console.log(JSON.stringify(data))
           const consecutivo = await readFile('count.json')
 
           console.log(consecutivo.count)
-          saveFile(`${dir}/${consecutivo.count}-FV-EV-04.json`, JSON.stringify(data))
+          saveFile(`${dir}/${uidd}`, JSON.stringify(data))
             .then(() => {
               saveFile('count.json', JSON.stringify({ count: consecutivo.count + 1 }))
               dialog.value = false

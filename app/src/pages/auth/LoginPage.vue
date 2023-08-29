@@ -61,7 +61,7 @@
 }
 </style>
 <template>
-  <div class="fondo"></div>
+  <!--<div class="fondo"></div>-->
   <div class="row items-start q-col-gutter-sm fit wrap justify-center content-center">
     <!-- <div class="col-12 col-md-8" style="min-width: 300px;">
       <div>
