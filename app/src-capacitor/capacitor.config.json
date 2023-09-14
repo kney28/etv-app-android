@@ -1,11 +1,20 @@
 {
-  "appId": "org.capacitor.quasar.app",
-  "appName": "QuasarApp",
+  "appId": "gov.capacitor.quasar.uesvalle.etv",
+  "appName": "UESVALLE ETV",
   "bundledWebRuntime": false,
   "npmClient": "yarn",
   "webDir": "www",
   "server": {
-    "androidScheme": "https",
-    "url": "http://172.17.0.1:9500"
+    "androidScheme": "http"
+  },
+  "plugins": {
+    "CapacitorSQLite": {
+      "androidIsEncryption": true,
+      "androidBiometric": {
+        "biometricAuth": false,
+        "biometricTitle": "Biometric login for capacitor sqlite",
+        "biometricSubTitle": "Log in using your biometric"
+      }
+    }
   }
 }

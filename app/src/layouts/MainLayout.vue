@@ -1,4 +1,8 @@
 <template>
+  <q-inner-loading :showing="visible" class="z-max">
+    <q-spinner-facebook color="primary" size="140px" />
+    <div style="font-size: 10px;">Preparando el entorno...</div>
+  </q-inner-loading>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
@@ -6,7 +10,16 @@
 
         <q-toolbar-title>UESVALLE</q-toolbar-title>
 
-        <q-btn flat round dense icon="fas fa-sign-out-alt" @click="logout" />
+        <q-fab
+          color="blue-grey-2"
+          text-color="blue-grey-8"
+          icon="fa-solid fa-gear"
+          padding="xs"
+          direction="down"
+        >
+          <q-fab-action external-label label-position="left" label="Salir" color="cyan" @click="logout" icon="fa-solid fa-sign-out-alt" />
+          <q-fab-action external-label label-position="left" label="Configuración" to="/config/Config" color="deep-purple" icon="fa-solid fa-user-gear" />
+        </q-fab>
       </q-toolbar>
     </q-header>
 
@@ -49,63 +62,17 @@
               </q-item-section>
             </template>
 
-            <q-item @click="setTabSelected('/etv/encuestalarvaria', 'Enfermedades transmitidas por vectores')"
-              active-class="tab-active" to="/etv/FV-EV-04" exact class="q-ma-sm navigation-item" clickable v-ripple>
+            <q-item active-class="tab-active" to="/etv/F-EV-04" exact class="q-ma-sm navigation-item" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon color="black" name="fa-solid fa-marker" />
               </q-item-section>
 
               <q-item-section>
-                Formulario FV-EV-04
+                Formulario F-EV-04
               </q-item-section>
             </q-item>
           </q-expansion-item>
 
-          <!--<q-expansion-item :header-inset-level="0.2" :content-inset-level="0.5" expand-separator>
-            <template v-slot:header>
-              <q-item-section avatar>
-                <q-icon name="fa-solid fa-cat" color="primary" text-color="white" />
-              </q-item-section>
-  
-              <q-item-section>
-                Zoonosis
-              </q-item-section>
-            </template>
-
-            <q-item @click="setTabSelected('/encuestalarvaria/encuestalarvaria', 'Encuesta larvaria')"
-              active-class="tab-active" to="/encuestalarvaria" exact class="q-ma-sm navigation-item" clickable v-ripple>
-              <q-item-section avatar>
-                <q-icon color="black" name="fa-solid fa-marker" />
-              </q-item-section>
-
-              <q-item-section>
-                Encuesta larvaria
-              </q-item-section>
-            </q-item>
-          </q-expansion-item>
-
-          <q-expansion-item :header-inset-level="0.2" :content-inset-level="0.5" expand-separator>
-            <template v-slot:header>
-              <q-item-section avatar>
-                <q-icon name="fa-solid fa-glass-water-droplet" color="primary" text-color="white" />
-              </q-item-section>
-  
-              <q-item-section>
-                Agua para consumo humano
-              </q-item-section>
-            </template>
-
-            <q-item @click="setTabSelected('/encuestalarvaria/encuestalarvaria', 'Encuesta larvaria')"
-              active-class="tab-active" to="/encuestalarvaria" exact class="q-ma-sm navigation-item" clickable v-ripple>
-              <q-item-section avatar>
-                <q-icon color="black" name="fa-solid fa-marker" />
-              </q-item-section>
-
-              <q-item-section>
-                Encuesta larvaria
-              </q-item-section>
-            </q-item>
-          </q-expansion-item>-->
         </q-expansion-item>
 
         <q-separator></q-separator>
@@ -120,7 +87,7 @@
           </q-item-section>
         </q-item>
 
-        <q-item @click="setTabSelected('/profiles', 'Perfiles')" active-class="tab-active" to="/profiles" exact
+        <q-item active-class="tab-active" to="/profiles" exact
           class="q-ma-sm navigation-item" clickable v-ripple>
           <q-item-section avatar>
             <q-icon color="green" name="fa-solid fa-share-nodes" />
@@ -193,9 +160,13 @@
             <div class="col-lg-12 col-md-12 col-xs-12">
               Archivos no almacenados: {{ datos.no_almacenados }}
             </div>
+            <div class="col-lg-12 col-md-12 col-xs-12 q-pt-md" style="font-size: 10px; font-style: italic;">
+              Se ha realizado un registro (log) de los detalles de la transmisión de datos,
+              incluyendo la información de los archivos enviados
+            </div>
           </div>
         </q-card-section>
-        <q-card-actions align="right" class="bg-white text-teal">
+        <q-card-actions align="right" class="text-teal">
           <div>
             <q-btn flat round dense v-close-popup label="Ok" />
           </div>
@@ -210,27 +181,106 @@ import { defineComponent, ref, onMounted } from 'vue';
 import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from 'src/stores/auth';
+import { conexionBD } from 'src/stores/conexionBD';
 import { storeToRefs } from 'pinia';
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { api } from 'src/boot/axios';
+import { generateDate } from 'src/constants/constants';
+import { 
+  schemaMunicipios,
+  schemaSendFilesHistory,
+  schemaEstablecimientos,
+  schemaVisitas,
+  triggerEstablecimientos,
+  insertMunicipios
+} from 'src/constants/schemas';
 
 export default defineComponent({
   name: 'MainLayout',
 
   setup() {
+    const conn = conexionBD()
+    const { DB, SQLITE } = storeToRefs(conn)
+    const db = DB.value
+    db.open()
+    const sqlite = SQLITE.value
+    const visible = ref(false)
     const dark = ref(false)
     const dialogInfo = ref(false)
     const datos = ref(null)
     const $q = useQuasar()
     const router = useRouter()
     const auth = useAuthStore()
-    const { token, userName, passWord } = storeToRefs(auth)
+    const { token } = storeToRefs(auth)
+    const userName = ref($q.localStorage.getItem('username'))
+    const passWord = ref($q.localStorage.getItem('password'))
     const leftDrawerOpen = ref(false)
-    const dir = 'visitas/ETV'
+    let files = []
 
     onMounted(() => {
-      saveEstablecimientos()
+      //saveEstablecimientos()
+      createDatabase()
     })
+    const createDatabase = async () => {   
+      visible.value = true
+      let res
+
+      try {
+        //Crear base de datos
+        res = await db.execute(schemaMunicipios)
+        res = await db.execute(schemaSendFilesHistory)     
+        res = await db.execute(schemaEstablecimientos)
+        res = await db.execute(schemaVisitas)
+        res = await db.execute(triggerEstablecimientos)
+      } catch (error) {
+        visible.value = false
+        $q.dialog({
+          title: 'Error',
+          message: `No se pudo crear la base de datos. ${JSON.stringify(error)}`,
+          ok: {
+            label: 'Ok',
+            color: 'negative'
+          }
+        })
+      }
+      //Crear tabla de sicronización
+      await db.createSyncTable()
+      await db.getTableList()      
+      res = await getValues() // si retorna null entra en modo offline
+
+      if (!res) {
+        visible.value = false
+        /* Verifica si existen datos en la tabla establecimientos con el 
+        fin de asegurar que el sistema se encuentre sincronizado */
+        const verify = await db.query('SELECT * FROM establecimientos;')
+        verify.values.length == 0 ? $q.dialog({
+          title: 'Error',
+          message: 'No se han obtenido datos de establecimientos. Por favor, verifique la conexión a internet, salga e intentelo de nuevo.',
+          ok: {
+            label: 'Ok',
+            color: 'negative'          
+          }
+        }) : null
+        return null
+      }
+      const partialImport = {
+        database : 'uesvalle',
+        version: 2,
+        encrypted : false,
+        mode : 'partial',
+        tables :[{
+          name : 'establecimientos',
+          values : res
+        }]
+      }
+      await sqlite.importFromJson(JSON.stringify(partialImport))
+      let query = await db.query('SELECT * FROM municipios')
+      if (query.values.length == 0) {
+        await db.execute(insertMunicipios).catch(err => {
+          console.log('Error al insertar municipios: ', err)
+        })
+      }
+      visible.value = false
+    }
 
     const logout = () => {
       $q.dialog({
@@ -247,17 +297,23 @@ export default defineComponent({
       }).onOk(() => {
         token.value = null
         $q.cookies.remove('token')
+        $q.localStorage.remove('username')
+        $q.localStorage.remove('password')
+        db.close()
         router.push({ name: 'login' })
       })
     }
 
     const  getEstablecimientos = async () => {
+      if (!userName.value || !passWord.value) {
+        router.push({ name: 'login' })     
+      }
       let response = null
       try{     
         response = await api.post('http://192.168.1.95:8081/index.php?r=sistema/obtener-establecimientos',
           {
-            usuario: 'kevin',
-            clave: 'kevin'
+            usuario: userName.value,
+            clave: passWord.value
           },
           {
             headers: {
@@ -265,87 +321,53 @@ export default defineComponent({
             }
         })
       } catch (error) {
-        console.log(error)
         return null
       }
-      console.log(response.data)
       return response
     }
 
-    const readFile = async (path) => {
-      let result = null
-      try{
-        result = await Filesystem.readFile({
-          path: path,
-          directory: Directory.Data,
-          encoding: Encoding.UTF8
-        })
-      } catch (error) {
-        console.log(error)
+    const parseToImportFromJSON = (json) => {
+      let result = []
+      let i = 0
+
+      for (const item of json) {
+        result[i] = []
+        result[i][0] = i+1
+        result[i][1] = item.daneMunicipio
+        result[i][2] = item.documentoEstablecimiento
+        result[i][3] = item.nombreEstablecimiento
+        result[i][4] = item.direccionEstablecimiento
+        result[i][5] = parseInt(item.sql_deleted)
+        result[i][6] = parseInt(item.last_modified)
+        i++
+      }
+      return result
+    }
+
+    const getValues = async () => {
+      const result = await getEstablecimientos()
+      if (!result) {
+        console.log('Modo offline')
         return null
       }
-      // const obj = JSON.parse(result.data)
-      console.log(result.data)
-      return result.data
+      const data = parseToImportFromJSON(result.data.establecimientos)
+      return data
     }
 
-    const saveFile = async (path, data) => {
-      console.log(data)
-      await Filesystem.writeFile({
-        path: path,
-        data: data,
-        directory: Directory.Data,
-        encoding: Encoding.UTF8,
-      })
-    }
-
-    const saveEstablecimientos = async () => {
-      const exist = await readFile('establecimientos/establecimientos.json')
-      if (exist) {
-        console.log('existe')
-        $q.loading.hide()
-        return
-      } else {
-        $q.loading.show({
-          spinner: QSpinnerFacebook,
-          spinnerColor: 'yellow',
-          spinnerSize: 140,
-          backgroundColor: 'blue-grey-10',
-          message: 'Actualizando listado de establecimientos...',
-          messageColor: 'white'
-        })
-        const establecimientos = await getEstablecimientos()
-        if(!establecimientos || establecimientos.data.hasOwnProperty( 'error')){
-          $q.loading.hide()
-          const mensaje = !establecimientos ? '' : establecimientos.data.hasOwnProperty( 'error') ? establecimientos.data.mensaje : ''
-          $q.dialog({
-            title: 'Ups! algo salio mal',
-            message: 'Error al obtener los establecimientos, revise su conexión a internet e intente nuevamente: ' + mensaje,
-            ok: {
-              label: 'ok',
-              color: 'positive'
-            }
-          })
-        } else {
-          saveFile('establecimientos/establecimientos.json', JSON.stringify(establecimientos.data))
-          $q.loading.hide()
-          $q.dialog({
-            title: '¡Exito!',
-            message: 'El listado de establecimientos fue actualizado exitosamente',
-            ok: {
-              label: 'ok',
-              color: 'positive'
-            }
-          })
+    const upload = () => {
+      $q.dialog({
+        title: 'Enviar archivos',
+        message: 'Esta seguro que desea enviar los archivos? una vez confirmado no se podrá detener el proceso',
+        ok: {
+          label: 'Ok',
+          color: 'positive'
+        },
+        cancel: {
+          label: 'Cancelar',
+          color: 'negative'
         }
-      }
-    }
-
-    const setTabSelected = (url, name) => { return url + name }
-
-    const upload = async () => {
-      //visible.value = true
-      $q.loading.show({
+      }).onOk(async () => {
+        $q.loading.show({
         spinner: QSpinnerFacebook,
         spinnerColor: 'yellow',
         spinnerSize: 140,
@@ -353,32 +375,19 @@ export default defineComponent({
         message: 'Subiendo archivos...',
         messageColor: 'white'
       })
-      const result = await Filesystem.readdir({
-        path: dir,
-        directory: Directory.Data
-      })
+
       const data = []
       const formData = new FormData()
-      //formData.append("nombre", "kevin")
-      //console.log(formData)
 
-      for (const item of result.files) {
-        const temp = await readFile(`${dir}/${item.name}`)
-        // temp.formato = item.name
-        data.push(temp)
-        const blob = new Blob([temp],
+      const visitas = await db.query('SELECT id_form, json_data FROM visitas WHERE sql_deleted = 0')
+
+      for (const item of visitas.values) {
+        files.push(JSON.parse(item.json_data))
+        const blob = new Blob([item.json_data],
           {
             type: 'application/json'
           })
-        formData.append('Documentos_json[]', blob, item.name)
-      }
-
-      for (var entrie of formData.entries()) {
-        console.log(entrie[0] + ': ' + entrie[1]);
-      }
-
-      for (const value of formData.values()) {
-        console.log(value);
+        formData.append('Documentos_json[]', blob, item.id_form)
       }
 
       formData.append('usuario', userName.value)
@@ -388,13 +397,30 @@ export default defineComponent({
           'Content-Type': 'multipart/form-data'
         }
       })
-        .then(({ data }) => {
-          console.log(data)
+        .then(async ({ data }) => {
+          if (data.error) {
+            $q.loading.hide()
+            $q.dialog({
+              title: '!Ups, algo salio mal!',
+              message: data.mensaje,
+              ok: {
+                label: 'ok',
+                color: 'positive'
+              }
+            })
+            return
+          }
           datos.value = data
-          dialogInfo.value = true
-          //visible.value = false
-          $q.loading.hide()
           let response = ''
+          const fecha = generateDate()
+         
+          for(const item of files){
+            await db.execute(`INSERT INTO send_files_history (id_file, id_user_file, id_user_send, json_data, date) VALUES ('${item.id}',${item.usuarioEntrevistador},${userName.value},'${JSON.stringify(item)}','${fecha}')`)
+          }
+          await db.execute('DELETE FROM visitas')
+          $q.loading.hide()
+          router.push({ name: 'index' })
+          dialogInfo.value = true
           //data.nom_exitosos ?? []
           //data.nom_fallidos ?? []
 
@@ -421,7 +447,6 @@ export default defineComponent({
             html: true
           })*/
         }).catch((error) => {
-          console.log(error)
           $q.loading.hide()
 
           $q.dialog({
@@ -430,23 +455,25 @@ export default defineComponent({
             persistent: true
           })
         })
-
-      // 
+      }) 
     }
 
     return {
+      token,
+      userName,
+      passWord,
+      files,
+      visible,
       dark,
       datos,
       dialogInfo,
       logout,
-      setTabSelected,
       upload,
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
-      getEstablecimientos,
-      readFile
+      getEstablecimientos
     }
   }
 });
