@@ -215,9 +215,10 @@ export default defineComponent({
     const passWord = ref($q.localStorage.getItem('password'))
     const leftDrawerOpen = ref(false)
     let files = []
+    const urlDown = 'http://192.168.1.95:8081/index.php?r=sistema/obtener-establecimientos'
+    const urlUp = 'http://192.168.1.95:8081/index.php?r=sistema/cargar-entrevistas-realizadas'
 
     onMounted(() => {
-      //saveEstablecimientos()
       createDatabase()
     })
     const createDatabase = async () => {   
@@ -251,7 +252,7 @@ export default defineComponent({
         visible.value = false
         /* Verifica si existen datos en la tabla establecimientos con el 
         fin de asegurar que el sistema se encuentre sincronizado */
-        const verify = await db.query('SELECT * FROM establecimientos;')
+        const verify = await db.query('SELECT * FROM establecimientos LIMIT 3;')
         verify.values.length == 0 ? $q.dialog({
           title: 'Error',
           message: 'No se han obtenido datos de establecimientos. Por favor, verifique la conexión a internet, salga e intentelo de nuevo.',
@@ -310,7 +311,7 @@ export default defineComponent({
       }
       let response = null
       try{     
-        response = await api.post('http://192.168.1.95:8081/index.php?r=sistema/obtener-establecimientos',
+        response = await api.post(urlDown,
           {
             usuario: userName.value,
             clave: passWord.value
@@ -392,7 +393,7 @@ export default defineComponent({
 
       formData.append('usuario', userName.value)
       formData.append('clave', passWord.value)
-      api.post('http://192.168.1.95:8081/index.php?r=sistema/cargar-entrevistas-realizadas', formData, {
+      api.post(urlUp, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

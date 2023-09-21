@@ -657,6 +657,8 @@ export default defineComponent({
     const optEntidades = ref(null)
     const optDirecciones = ref(null)
     let establecimientos = ref([])
+    const dataEntidades = ref([])
+    const dataDirecciones = ref([])
 
     onMounted(() => {
       getEtv()
@@ -678,8 +680,6 @@ export default defineComponent({
       dataMunicipios.value = await db.query('SELECT * FROM municipios ORDER BY nom_municipio')
       dataMunicipios.value = dataMunicipios.value.values
     }
-    const dataEntidades = ref([])
-    const dataDirecciones = ref([])
  
     watch(() => municipio.value, async (val) => {
       dataEntidades.value = await db.query(`SELECT * FROM establecimientos WHERE dane_municipio = ${val}`)
@@ -816,6 +816,7 @@ export default defineComponent({
     }
     const onSubmit = async () => {
       if (await checkGps() !== 'granted') {
+        await Geolocation.requestPermissions()
         return
       }
       myForm.value.validate().then(async success => {

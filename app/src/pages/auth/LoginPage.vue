@@ -179,8 +179,6 @@ export default defineComponent({
     const salt = '10x104q'
 
     const login = () => {
-      //userName.value = username.value
-      //passWord.value = password.value
       $q.localStorage.set('username', username.value)
       $q.localStorage.set('password', password.value)
       console.log(encryptCedula(username.value, salt))

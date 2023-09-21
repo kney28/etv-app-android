@@ -83,14 +83,5 @@ export const schemaEstablecimientos =
   last_modified INTEGER DEFAULT (strftime('%s', 'now'))
 );`
 
-/*export const schemaEstablecimientos = 
-`CREATE TABLE IF NOT EXISTS establecimientos (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  dane_municipio TEXT NOT NULL,
-  doc_establecimiento TEXT NOT NULL,
-  nom_establecimiento TEXT NOT NULL,
-  direccion TEXT NOT NULL,
-);`*/
-
 export const triggerEstablecimientos =
 `CREATE TRIGGER IF NOT EXISTS establecimientos_trigger_last_modified AFTER UPDATE ON establecimientos FOR EACH ROW WHEN NEW.last_modified < OLD.last_modified BEGIN UPDATE establecimientos SET last_modified = (strftime('%s', 'now')) WHERE id = OLD.id; END;`
