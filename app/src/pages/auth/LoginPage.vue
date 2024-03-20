@@ -33,8 +33,26 @@
 .input-login {
   height: 25px;
 }
+.fondo{
+  background-image: url('../../images/fondo.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 30vh;
+  position: relative;
+  z-index: -1;
+}
+.mrtop{
+  margin-top: -60px;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 40px;
+  width: 90%;
+  margin-left: 5%;
+}
 </style>
 <template>
+  <div class="fondo"></div>
   <div class="row items-start q-col-gutter-sm fit wrap justify-center content-center">
     <!-- <div class="col-12 col-md-8" style="min-width: 300px;">
       <div>
@@ -55,20 +73,22 @@
     </div> -->
     <div class="col-12 col-md-4" style="min-width: 300px;">
       <div>
-        <q-card-section>
+        <q-card-section class="content-center justify-center">
+          <div class="mrtop q-pa-sm">
           <div class="text-center">
             <!--<q-icon name="fa-solid fa-stethoscope" size="70px" style="color: #12506A" class="q-mb-lg" />-->
           </div>
-          <div class="q-pt-xl">
+          <div class="">
             <p style="color: #12506A; font-size: 30px; font-weight: bolder;" class="text-center q-mb-sm">
               UESVALLE
             </p>
           </div>
           <div>
             <p style="color: #4794b6; font-size: 18px; font-weight: bolder;" class="text-center q-mb-lg">
-              Enfermedades transmitidas por vectores
+              Enfermedades transmitidas<br>por vectores
             </p>
           </div>
+        </div>
 
           <div class="col text-h6 text-center font-poppins-bold q-pt-lg" style="color: #12506A; font-weight:bold">
             Iniciar sesión
