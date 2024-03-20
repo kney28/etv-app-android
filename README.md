@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://kney28.github.io/" target="blank"><img src="img/etv.jpg" width="800" alt="Login App-ETV" /></a>
+  <a href="https://kney28.github.io/" target="blank"><img src="img/etv.jpg" width="450" alt="Login App-ETV" /></a>
 </p>
 
 <p align="center">Aplicación android contruida con:</p>
