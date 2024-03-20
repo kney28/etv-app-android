@@ -33,8 +33,26 @@
 .input-login {
   height: 25px;
 }
+.fondo{
+  background-image: url('../../images/fondo.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 30vh;
+  position: relative;
+  z-index: -1;
+}
+.mrtop{
+  margin-top: -60px;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 40px;
+  width: 90%;
+  margin-left: 5%;
+}
 </style>
 <template>
+  <div class="fondo"></div>
   <div class="row items-start q-col-gutter-sm fit wrap justify-center content-center">
     <!-- <div class="col-12 col-md-8" style="min-width: 300px;">
       <div>
@@ -55,19 +73,24 @@
     </div> -->
     <div class="col-12 col-md-4" style="min-width: 300px;">
       <div>
-        <q-card-section>
+        <q-card-section class="content-center justify-center">
+          <div class="mrtop q-pa-sm">
           <div class="text-center">
             <!--<q-icon name="fa-solid fa-stethoscope" size="70px" style="color: #12506A" class="q-mb-lg" />-->
           </div>
-          <div>
-            <p style="color: #60818E; font-size: 20px; font-weight: bolder;" class="text-center q-mb-xs">
-              Entidad
-            </p>
-            <p style="color: #12506A; font-size: 30px; font-weight: bolder;" class="text-center q-mb-lg">
+          <div class="">
+            <p style="color: #12506A; font-size: 30px; font-weight: bolder;" class="text-center q-mb-sm">
               UESVALLE
             </p>
           </div>
-          <div class="col text-h6 text-center font-poppins-bold" style="color: #12506A; font-weight:bold">
+          <div>
+            <p style="color: #4794b6; font-size: 18px; font-weight: bolder;" class="text-center q-mb-lg">
+              Enfermedades transmitidas<br>por vectores
+            </p>
+          </div>
+        </div>
+
+          <div class="col text-h6 text-center font-poppins-bold q-pt-lg" style="color: #12506A; font-weight:bold">
             Iniciar sesión
           </div>
         </q-card-section>
@@ -75,34 +98,30 @@
           <form class="q-form q-gutter-md">
             <div>
               <label class="font-poppins-regular" style="color: rgb(40,40,40)" for="">Usuario</label>
-              <q-input v-model="username" placeholder="Ej. will2023" lazy-rules
+              <q-input v-model="username" placeholder="Ej. 1234567890" lazy-rules
                 :rules="[val => !!val || 'Completa el campo', val => val.length >= 6 || 'Mínimo 6 caracteres']" rounded
                 outlined :input-style="{ marginTop: '15px' }" :input-class="{ 'input-login': 'a' }"
-                class="font-poppins-regular" mask="#" reverse-fill-mask />
+                class="font-poppins-regular" mask="#" reverse-fill-mask @update:model-value="()=>message=null" />
             </div>
             <div>
               <label class="font-poppins-regular" style="color: rgb(40,40,40)" for="">Constraseña</label>
               <q-input v-model="password" placeholder="Ingresa tu contraseña..." lazy-rules
                 :rules="[val => !!val || 'Completa el campo']" rounded outlined :input-style="{ marginTop: '15px' }"
-                :input-class="{ 'input-login': 'c' }" class="font-poppins-regular" :type="isPwd ? 'password' : 'text'">
+                :input-class="{ 'input-login': 'c' }" class="font-poppins-regular" :type="isPwd ? 'password' : 'text'" @update:model-value="()=>message=null" >
                 <template v-slot:append>
                   <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
                     @click="isPwd = !isPwd" />
                 </template>
               </q-input>
             </div>
-            <!--<div class="text-right font-poppins-bold q-mt-sm" style="color: #2fc1ff; font-size: 12px;">
-              Recuperar contraseña
-            </div>-->
-            <div>
+            <div class="q-mb-xl">
               <q-btn label="Iniciar sesión" @click="login" lazy-rules rounded class="full-width font-poppins-bold q-mt-md"
-                no-caps size="lg" style="background: #2fc1ff; color: white;" />
+                no-caps size="lg" style="background: linear-gradient(45deg, #20cbffa2, #073461e1); color: white;" />
             </div>
-            <!--<div class="q-mt-lg">
-              <p class="text-center font-poppins-regular q-mb-xs" style="font-size: 11px;">¿Necesitas usuario para
-                ingresar?</p>
-              <p class="text-center font-poppins-bold" style="color: #2fc1ff; font-size: 16px;">Solicitalo aquí</p>
-            </div>-->
+            <div class="col-md-12 col-sm-12 col-xs-12 text-center text-red"
+              style="font-size: 10px;">
+              {{ message }}
+            </div>
           </form>
         </q-card-section>
       </div>
@@ -112,76 +131,31 @@
 
 <script>
 
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { useAuthStore } from 'src/stores/auth';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useQuasar } from 'quasar';
-import { versionOS } from 'src/stores/global';
-import { Device } from '@capacitor/device';
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
-import { directories } from '../../constants/directories';
-
 
 export default defineComponent({
   name: 'LoginPage',
   setup() {
     const $router = useRouter()
     const $q = useQuasar()
-    const version = storeToRefs(versionOS)
     const username = ref(null)
     const password = ref(null)
+    const message = ref(null)
     const auth = useAuthStore()
-    const { token, userName, passWord  } = storeToRefs(auth)
+    const { token  } = storeToRefs(auth)
     const utf8Chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[{]}|;:,<.>/?';
-
-    onMounted(() => {
-      getVersion()
-      createDirectory(directories.paths)
-      readFile('count.json')
-    })
-    const readFile = async (path) => {
-      await Filesystem.readFile({
-        path: path,
-        directory: Directory.Data
-      }).then((res) => {
-        return res.data
-      }).catch((err) => {
-        console.log(err)
-        saveFile('count.json', JSON.stringify({ count: 1 }))
-      })
-    }
-    const saveFile = async (path, data) => {
-      await Filesystem.writeFile({
-        path: path,
-        data: data,
-        directory: Directory.Data,
-        encoding: Encoding.UTF8,
-      })
-    }
-    const getVersion = async () => {
-      const info = await Device.getInfo();
-      version.version = info.osVersion
-      // versionOS.version = 12
-      console.log('Versión de Android:', info.osVersion);
-    }
-
-    const createDirectory = async (paths) => {
-      for (const path of paths) {
-        await Filesystem.mkdir({
-          path: path,
-          directory: Directory.Data
-        })
-      }
-    }
 
     function encodeBase64(text) {
       return btoa(encodeURIComponent(text).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1)));
     }
 
-    function decodeBase64(base64) {
+    /*function decodeBase64(base64) {
       return decodeURIComponent(Array.prototype.map.call(atob(base64), (c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-    }
+    }*/
 
     function encryptCedula(cedula, salt) {
       const encodedSalt = encodeBase64(salt);
@@ -198,7 +172,7 @@ export default defineComponent({
       return encryptedCedula.join('');
     }
 
-    function decryptCedula(encryptedCedula, salt) {
+    /*function decryptCedula(encryptedCedula, salt) {
       const encodedSalt = encodeBase64(salt);
       const decryptedCedula = [];
 
@@ -212,7 +186,7 @@ export default defineComponent({
       }
 
       return decryptedCedula.join('');
-    }
+    }*/
 
     // Ejemplo de uso
     /* 
@@ -225,8 +199,8 @@ export default defineComponent({
     const salt = '10x104q'
 
     const login = () => {
-      userName.value = username.value
-      passWord.value = password.value
+      $q.localStorage.set('username', username.value)
+      $q.localStorage.set('password', password.value)
       console.log(encryptCedula(username.value, salt))
       const data = {
         username: username.value,
@@ -238,16 +212,17 @@ export default defineComponent({
           expires: '3h'
         })
         token.value = data.access_token
+        message.value = null
         $router.push({ name: 'index' })
       } else {
-        console.log('password incorrecto')
+        console.log('Credenciales incorrectas')
+        message.value = 'Credenciales incorrectas'
       }
       console.log($q.cookies.get('token'))
     }
 
-
-
     return {
+      message,
       username,
       password,
       login,

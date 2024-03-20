@@ -1,6 +1,7 @@
 .DS_Store
 .thumbs.db
 node_modules
+yarn.lock
 
 # Quasar core related directories
 .quasar
@@ -11,6 +12,8 @@ node_modules
 /src-cordova/platforms
 /src-cordova/plugins
 /src-cordova/www
+/src-cordova/yarn.lock
+/src-cordova/package-lock.json
 
 # Capacitor related directories and files
 /src-capacitor/www
