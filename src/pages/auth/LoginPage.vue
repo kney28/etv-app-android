@@ -45,50 +45,35 @@
 }
 .mrtop{
   margin-top: -60px;
-  background-color: rgba(255, 255, 255, 1);
   border-radius: 40px;
   width: 90%;
   margin-left: 5%;
+}
+.bg-white{
+  background-color: rgba(255, 255, 255, 1);
 }
 </style>
 <template>
   <div class="fondo"></div>
   <div class="row items-start q-col-gutter-sm fit wrap justify-center content-center">
-    <!-- <div class="col-12 col-md-8" style="min-width: 300px;">
-      <div>
-        <q-img src="images/hospital.jpeg" style="position: relative; width: 100%; height: 100vh">
-        <div class="fullscreen">
-          <div class="absolute-center justify-center fixed-left">
-            <div class="text-h4 text-weight-bolder">
-              ¡Bienvenid@!
-            </div>
-            <div class="text-h5 q-mt-sm font-poppins-regular" style="text-shadow:3px 5px 6px #000;">
-              Aquí encontraras todas las herramientas que necesitas para gestionar
-              todos los aspectos administrativos de tu hospital
-            </div>
-          </div>
-        </div>
-        </q-img>
-      </div>
-    </div> -->
-    <div class="col-12 col-md-4" style="min-width: 300px;">
+    <div :class="$q.dark.isActive ? 'col-12 col-md-4 bg-dark' : 'col-12 col-md-4'" style="min-width: 300px;">
       <div>
         <q-card-section class="content-center justify-center">
-          <div class="mrtop q-pa-sm">
-          <div class="text-center">
-            <!--<q-icon name="fa-solid fa-stethoscope" size="70px" style="color: #12506A" class="q-mb-lg" />-->
+          <div :class="$q.dark.isActive ? 'bg-dark mrtop q-pa-sm' : 'bg-white mrtop q-pa-sm'">
+            <div class="text-center">
+              <!--<q-icon name="fa-solid fa-stethoscope" size="70px" style="color: #12506A" class="q-mb-lg" />-->
+            </div>
+            <div>
+              <p style="color: #12506A; font-size: 30px; font-weight: bolder;" class="text-center q-mb-sm">
+                UESVALLE
+              </p>
+            </div>
+            <div>
+              <p style="color: #4794b6; font-size: 18px; font-weight: bolder;" class="text-center q-mb-lg">
+                Enfermedades transmitidas<br>por vectores
+              </p>
+            </div>
           </div>
-          <div class="">
-            <p style="color: #12506A; font-size: 30px; font-weight: bolder;" class="text-center q-mb-sm">
-              UESVALLE
-            </p>
-          </div>
-          <div>
-            <p style="color: #4794b6; font-size: 18px; font-weight: bolder;" class="text-center q-mb-lg">
-              Enfermedades transmitidas<br>por vectores
-            </p>
-          </div>
-        </div>
 
           <div class="col text-h6 text-center font-poppins-bold q-pt-lg" style="color: #12506A; font-weight:bold">
             Iniciar sesión
@@ -136,6 +121,7 @@ import { useAuthStore } from 'src/stores/auth';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useQuasar } from 'quasar';
+import { Encrypt } from 'src/components/Encrypt';
 
 export default defineComponent({
   name: 'LoginPage',
@@ -147,66 +133,16 @@ export default defineComponent({
     const message = ref(null)
     const auth = useAuthStore()
     const { token  } = storeToRefs(auth)
-    const utf8Chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[{]}|;:,<.>/?';
-
-    function encodeBase64(text) {
-      return btoa(encodeURIComponent(text).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1)));
-    }
-
-    /*function decodeBase64(base64) {
-      return decodeURIComponent(Array.prototype.map.call(atob(base64), (c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-    }*/
-
-    function encryptCedula(cedula, salt) {
-      const encodedSalt = encodeBase64(salt);
-      const encryptedCedula = [];
-
-      for (let i = 0; i < cedula.length; i++) {
-        const charCode = cedula.charCodeAt(i);
-        const saltCharCode = encodedSalt.charCodeAt(i % encodedSalt.length);
-        const encryptedCharCode = (charCode + saltCharCode + i) % utf8Chars.length;
-        const encryptedChar = utf8Chars.charAt(encryptedCharCode);
-        encryptedCedula.push(encryptedChar);
-      }
-
-      return encryptedCedula.join('');
-    }
-
-    /*function decryptCedula(encryptedCedula, salt) {
-      const encodedSalt = encodeBase64(salt);
-      const decryptedCedula = [];
-
-      for (let i = 0; i < encryptedCedula.length; i++) {
-        const encryptedChar = encryptedCedula.charAt(i);
-        const encryptedCharCode = utf8Chars.indexOf(encryptedChar);
-        const saltCharCode = encodedSalt.charCodeAt(i % encodedSalt.length);
-        const charCode = (encryptedCharCode - saltCharCode - i + utf8Chars.length) % utf8Chars.length;
-        const decryptedChar = String.fromCharCode(charCode);
-        decryptedCedula.push(decryptedChar);
-      }
-
-      return decryptedCedula.join('');
-    }*/
-
-    // Ejemplo de uso
-    /* 
-      const salt = '10x104q';
-      const encryptedCedula = encryptCedula('1113594', salt);
-      console.log('Cedula encriptada:', encryptedCedula);
-      const decryptedCedula = decryptCedula(encryptedCedula, salt);
-      console.log('Cedula desencriptada:', decryptedCedula);
-    */
-    const salt = '10x104q'
 
     const login = () => {
       $q.localStorage.set('username', username.value)
       $q.localStorage.set('password', password.value)
-      console.log(encryptCedula(username.value, salt))
       const data = {
         username: username.value,
-        password: encryptCedula(username.value, salt),
+        password: new Encrypt(username.value).get(),
         access_token: 'success_x01'
       }
+      console.log(data.password)
       if (data.password == password.value) {
         $q.cookies.set('token', data.access_token, {
           expires: '3h'

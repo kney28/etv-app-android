@@ -1,5 +1,8 @@
 <template>
-  <k-inner-loading />
+  <q-inner-loading :showing="visible" class="z-max">
+    <q-spinner-facebook color="primary" size="140px" />
+    <div style="font-size: 10px;">Preparando el entorno...</div>
+  </q-inner-loading>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
@@ -14,11 +17,83 @@
             color="deep-purple" icon="fa-solid fa-user-gear" />
         </q-fab>
       </q-toolbar>
-      <q-btn label="Click" color="primary" @click="showNotif" />
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <k-menu></k-menu>
+      <q-list>
+        <q-item-label header>
+          Menú
+        </q-item-label>
+
+        <q-item active-class="tab-active" to="/" exact class="navigation-item" clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon color="orange" name="fa-solid fa-house" />
+          </q-item-section>
+
+          <q-item-section>
+            Dashboard
+          </q-item-section>
+        </q-item>
+
+        <q-separator></q-separator>
+
+        <q-expansion-item>
+          <template v-slot:header>
+            <q-item-section avatar>
+              <q-icon name="fa-regular fa-pen-to-square" color="primary" text-color="white" />
+            </q-item-section>
+
+            <q-item-section>
+              Actividades
+            </q-item-section>
+          </template>
+          <q-expansion-item :header-inset-level="0.2" :content-inset-level="0.5" expand-separator>
+            <template v-slot:header>
+              <q-item-section avatar>
+                <q-icon name="fa-solid fa-mosquito" color="primary" text-color="white" />
+              </q-item-section>
+
+              <q-item-section>
+                Enfermedades transmitidas por vectores
+              </q-item-section>
+            </template>
+
+            <q-item @click="initComponent('F-AM-1')" active-class="tab-active" exact class="q-ma-sm navigation-item"
+              clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon color="black" name="fa-solid fa-marker" />
+              </q-item-section>
+
+              <q-item-section>
+                Formulario F-EV-04
+              </q-item-section>
+            </q-item>
+          </q-expansion-item>
+
+        </q-expansion-item>
+
+        <q-separator></q-separator>
+
+        <q-item @click="upload()" active-class="tab-active" exact class="q-ma-sm navigation-item" clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon color="primary" name="fa-solid fa-cloud-arrow-up" />
+          </q-item-section>
+
+          <q-item-section>
+            Enviar
+          </q-item-section>
+        </q-item>
+
+        <q-item active-class="tab-active" to="/profiles" exact class="q-ma-sm navigation-item" clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon color="green" name="fa-solid fa-share-nodes" />
+          </q-item-section>
+
+          <q-item-section>
+            Compartir
+          </q-item-section>
+        </q-item>
+      </q-list>
       <br>
       <div class="col-lg-12 col-md-12 col-xs-12 text-left">
         <q-toggle v-model="dark" checked-icon="fa-solid fa-moon" color="blue-grey" unchecked-icon="fa-solid fa-sun"
@@ -28,20 +103,70 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+    <q-dialog v-model="dialogInfo" persistent>
+      <q-card>
+        <q-card-section>
+          <div class="row q-mb-sm">
+            <div class="col-lg-8 col-md-8 col-xs-8 text-h6">
+            </div>
+            <div class="col-lg-4 col-md-4 col-xs-4 text-right">
+              <q-btn icon="close" flat round dense v-close-popup />
+            </div>
+          </div>
+          <q-markup-table>
+            <thead>
+              <tr>
+                <th colspan="2" class="text-center bg-black text-yellow-7">Resumen de la operación</th>
+              </tr>
+              <tr>
+                <th class="text-left">Archivo</th>
+                <th class="text-center">Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(dato, index) in datos.nom_exitosos" :key="index">
+                <td>{{ dato }}</td>
+                <td class="text-center"><q-avatar text-color="white" size="xs" round color="green"
+                    icon="fa-solid fa-check"></q-avatar></td>
+              </tr>
+              <tr v-for="(dato, index) in datos.nom_fallidos" :key="index">
+                <td>{{ dato }}</td>
+                <td class="text-center"><q-avatar text-color="white" size="xs" round color="red"
+                    icon="fa-solid fa-xmark"></q-avatar></td>
+              </tr>
+            </tbody>
+          </q-markup-table>
+        </q-card-section>
+        <q-card-section>
+          <div class="row shadow-2 q-pa-sm">
+            <div class="col-lg-12 col-md-12 col-xs-12">
 
-    <k-dialog :visible="false" type="ok" :banner="false">
-      <template v-slot:body>
-        <k-transaction-report />
-      </template>
-    </k-dialog>
+              Archivos enviados: {{ datos.enviados }}
+            </div>
+            <div class="col-lg-12 col-md-12 col-xs-12">
+              Archivos almacenados: {{ datos.almacenados }}
+            </div>
+            <div class="col-lg-12 col-md-12 col-xs-12">
+              Archivos no almacenados: {{ datos.no_almacenados }}
+            </div>
+            <div class="col-lg-12 col-md-12 col-xs-12 q-pt-md" style="font-size: 10px; font-style: italic;">
+              Se ha realizado un registro (log) de los detalles de la transmisión de datos,
+              incluyendo la información de los archivos enviados
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right" class="text-teal">
+          <div>
+            <q-btn flat round dense v-close-popup label="Ok" />
+          </div>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
 <script>
-import MenuComponent from 'src/components/Menu.vue'
-import TransactionReportComponent from './TransactionReport.vue'
-import DialogComponent from 'src/components/Dialog.vue'
-import InnersLoadingComponent from 'src/components/InnersLoading.vue'
+import { useDialogTree } from 'src/stores/dialogTree';
 
 import { defineComponent, ref, onMounted, } from 'vue';
 import { useQuasar, QSpinnerFacebook } from 'quasar';
@@ -62,14 +187,18 @@ import {
 
 export default defineComponent({
   name: 'MainLayout',
-  components: {
-    kMenu: MenuComponent,
-    kTransactionReport: TransactionReportComponent,
-    kDialog: DialogComponent,
-    kInnerLoading: InnersLoadingComponent
-  },
+
   setup() {
+    const dialogTree = useDialogTree()
+    const route = 'pages/etv/'
     const router = useRouter()
+    const initComponent = async (name) => {
+      const rout = `${route}${name}/init.ts`
+      const nodes = await import(rout)
+      console.log(nodes)
+      router.push({ name: 'F-EV-04' })
+      // dialogTree.nodes = nodes
+    }
     const conn = conexionBD()
     const { DB, SQLITE } = storeToRefs(conn)
     const db = DB.value
@@ -77,7 +206,7 @@ export default defineComponent({
     const sqlite = SQLITE.value
     const visible = ref(false)
     const dark = ref(false)
-    const dialogInfo = ref(true)
+    const dialogInfo = ref(false)
     const datos = ref(null)
     const $q = useQuasar()
     const auth = useAuthStore()
@@ -330,12 +459,8 @@ export default defineComponent({
     }
 
     return {
-      showNotif() {
-        $q.notify({
-          message: 'Jim pinged you.',
-          color: 'purple'
-        })
-      },
+      initComponent,
+      dialogTree,
       token,
       userName,
       passWord,
