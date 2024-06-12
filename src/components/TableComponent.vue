@@ -1,10 +1,6 @@
 <template>
   <q-table dense :rows-per-page-options="[10, 15, 20, 25, 50, 0]" v-model:pagination="pagination"
-    title="Asientos contables" :rows="data" :filter="filter" :columns="columns" row-key="name">
-    <template v-slot:top-left>
-      <btn type="create" permission="A" @action="create()" />
-      <q-space />
-    </template>
+    title="Encuestas realizadas" :rows="data" :filter="filter" :columns="columns" row-key="name">
     <template v-slot:top-right>
       <q-input dense debounce="300" v-model="filter" placeholder="Buscar">
         <template v-slot:append>
@@ -18,8 +14,8 @@
           {{ col.label }}
         </q-th>
         <q-th v-if="detail" auto-width>Detalle</q-th>
-        <q-th auto-width>Editar</q-th>
-        <q-th auto-width>Eliminar</q-th>
+        <q-th auto-width>Ver</q-th>
+        <!-- <q-th auto-width>Eliminar</q-th> -->
       </q-tr>
     </template>
     <template v-slot:body="props">
@@ -31,11 +27,11 @@
           <q-btn size="sm" color="accent" round dense />
         </q-td>
         <q-td auto-width class="text-center">
-          <btn type="edit" @action="edit(props.row, props.rowIndex)" permission="A" />
+          <btn type="view" @action="edit(props.row, props.rowIndex)" permission="A" />
         </q-td>
-        <q-td auto-width class="text-center">
+        <!-- <q-td auto-width class="text-center">
           <btn type="delete" @action="onDelete(props.row, props.rowIndex)" permission="A" />
-        </q-td>
+        </q-td> -->
       </q-tr>
     </template>
   </q-table>
@@ -88,9 +84,6 @@ export default defineComponent({
       }
     }
 
-    const create = () => {
-      emitAction('create', true)
-    }
     const edit = (row, index) => {
       const obj = {
         data: row,
@@ -111,7 +104,6 @@ export default defineComponent({
     return {
       filter,
       pagination,
-      create,
       edit,
       onDelete
     }

@@ -16,7 +16,7 @@ export default defineComponent({
   },
   props: {
     cardElements: {
-      type: Array as () => Array<{ label: string, iconColor?: string, iconName?: string }>,
+      type: Array as () => Array<{ label: string, iconColor?: string, iconName?: string, cardKey?: number }>,
       required: true
     }
   },

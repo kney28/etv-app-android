@@ -1,6 +1,6 @@
 <template>
   <div class="col-xs-4 col-sm-3 col-md-3">
-    <q-card class="clickable-card" @click="action">
+    <q-card :class="$q.dark.isActive ? 'clickable-card' : 'clickable-card bg-deep-purple text-white'" @click="action">
       <q-card-section class="text-center">
         {{ label }}
       </q-card-section>

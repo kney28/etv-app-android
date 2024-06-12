@@ -5,23 +5,37 @@ import { GeneralDirector } from './Director'
 
 export interface Mediator {
   notify: NotifyType
+  setDirector: (director: GeneralDirector) => void
+  setComponent: (component: BaseComponent) => void
 }
 
-export class FormInitComponent implements Mediator {
+export class AppMediator implements Mediator {
   protected director!: GeneralDirector
 
-  constructor(c1: BaseComponent) {
-    c1.setMediator(this)
-  }
-  setDirector(director: any): void {
+  setDirector(director: GeneralDirector): void {
     this.director = director
   }
+
+  setComponent(component: BaseComponent) {
+    component.setMediator(this)
+  }
+
   notify: NotifyType = (groupEvent, specificEvent, sender) => {
     try {
       switch (groupEvent) {
         case 'LOAD_DYNAMIC_COMPONENT':
           this.director.loadComponent(specificEvent as SpecificsForGroups<'LOAD_DYNAMIC_COMPONENT'>, FormEnvironment)
-          console.log(sender, ' Hola desde mediator')
+          console.log(groupEvent, specificEvent, sender, ' Hola desde mediator')
+          break
+        case 'ACTION_BUTTON':
+          switch (specificEvent as SpecificsForGroups<'ACTION_BUTTON'>) {
+            case 'ShowTree':
+              this.director.showTree(sender)
+              break
+            case 'Save':
+              this.director.save()
+              break
+          }
           break
         default:
           break

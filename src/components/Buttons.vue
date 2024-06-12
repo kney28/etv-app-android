@@ -15,6 +15,8 @@
   <q-btn v-if="type === 'check'" round icon="check" @click.prevent="add()" color="secondary" />
   <!-- Button cancel -->
   <q-btn v-if="type === 'cancel'" round icon="cancel" v-close-popup color="negative" />
+  <!-- Button view -->
+  <q-btn v-if="type === 'view'" round size="xs" icon="fa-solid fa-eye" color="primary" v-on:click="edit()" />
   <!-- <q-tooltip v-if="type === 'cancel'">Cancelar</q-tooltip> -->
 </template>
 <script>
@@ -38,7 +40,7 @@ export default defineComponent({
     }
   },
   emits: ['action'],
-  setup (props, { emit }) {
+  setup(props, { emit }) {
     const onDelete = () => {
       if (props.useEmit) {
         emit('action')

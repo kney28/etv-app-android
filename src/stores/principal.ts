@@ -4,8 +4,12 @@ import { TreeItem, GroupCards, TableData, TableColumns, PagesList } from 'src/co
 interface Principal {
   /** @property {string} pagina actual */
   page: string
+  /** @property {number} barra de progreso */
+  progressBar: number
   /** @property {string} componente dinamico */
   dynamicComponent: PagesList
+  /** @property {string} titulo del dialogo que contiene el q-tree */
+  titleDialogTree: string
   /** @property {boolean} visibilidad del dialogo que contiene el q-tree */
   visibleDialogTree: boolean
   /** @property {boolean} visibilidad del dialogo que contiene los forms */
@@ -20,21 +24,52 @@ interface Principal {
   tableData: TableData[] | null
   /** @property {TableColumns[]} nombres de las columnas de la tabla */
   tableColumns: TableColumns[] | null
-  /** @property {TreeItem[]} datos para el q-tree */
+  /** @property {TreeItem[]} colección de arreglos de elementos tipo q-tree */
+  nodesCollection: TreeItem[][]
+  /** @property {TreeItem[]} nodo para el q-tree */
   nodes: TreeItem[]
 }
 
 export const usePrincipal = defineStore('principal', {
   state: (): Principal => ({
     page: 'F-AM-1',
+    progressBar: 0,
     dynamicComponent: 'MyComponent2',
+    titleDialogTree: '',
     visibleDialogTree: false,
     visibleDialog: false,
     headerTitle: 'Formato de prueba',
     headerContent: 'Este formato desde una Store',
     cardElements: [],
-    tableData: [],
-    tableColumns: [],
+    tableData: [
+      { id: '1', formato: 'F-AM-1' },
+      { id: '2', formato: 'F-AM-2' },
+      { id: '3', formato: 'F-AM-3' },
+      { id: '4', formato: 'F-AM-4' }
+    ],
+    tableColumns: [
+      { name: 'id', align: 'left', label: 'Id', field: 'id', sortable: true },
+      { name: 'formato', align: 'left', label: 'Formato', field: 'formato', sortable: true }
+    ],
+    nodesCollection: [],
     nodes: []
+  })
+})
+
+export const useEntityIdentification = defineStore('entityIdentification', {
+  state: () => ({
+    fechaRealizacion: null,
+    municipio: null,
+    optMunicipios: [],
+    establecimiento: null,
+    optEntidades: [],
+    direccion: null,
+    optDirecciones: [],
+    AnexaCopiaVisitaAnterior: null,
+    PlazosEstablecidosEjecucionRequerimientos: null,
+    DispusoPlanMejoramiento: null,
+    NumeroTotalHabitantesAtendidosESPMunicipio: null,
+    NumeroTotalViviendasCascoUrbano: null,
+    NumeroTotalViviendasRestoNoAtendidas: null,
   })
 })

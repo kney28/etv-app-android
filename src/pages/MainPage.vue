@@ -1,9 +1,9 @@
 <template>
   <q-page class="q-pa-md">
-    <k-principal-view>
+    <k-principal-view @action="action">
       <template v-slot:content>
         <q-card-section>
-          <k-dynamic-component :componentName="dynamicComponent" @action="action" />
+          <k-dynamic-component :componentName="dynamicComponent" :index="idNode" @action="action" />
         </q-card-section>
       </template>
     </k-principal-view>
@@ -22,10 +22,11 @@ export default defineComponent({
     kDynamicComponent: DynamicComponent
   },
   setup() {
+    const idNode = ref(0)
     const action = (e) => {
       switch (e.type) {
-        case 'hiddenDialog':
-          // activado.value = false
+        case 'selectNode':
+          idNode.value = e.data
           break;
         default:
           break;
@@ -34,6 +35,7 @@ export default defineComponent({
     const { dynamicComponent } = usePrincipal()
     console.log(dynamicComponent)
     return {
+      idNode,
       action,
       dynamicComponent
     }

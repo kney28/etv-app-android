@@ -1,6 +1,8 @@
+import { FormEnvironment } from 'src/modules/FormEnvironment'
+
 /**
  * Interface para los elementos del menú que contienen sub-elementos.
- * 
+ *
  * @interface TreeItemBase
  */
 interface TreeItemBase {
@@ -10,10 +12,16 @@ interface TreeItemBase {
    */
   label: string
   /**
+   * Identificador que actuara en el array de de los modulos usados en
+   * DynamicComponent.vue
+   * @type {string}
+   */
+  id?: number
+  /**
    * Identificador unico que será devuelto al hacer click sobre la opción.
    * @type {string}
    */
-  id?: string
+  code: string
   /**
    * Ruta al componente que se renderiza
    * @type {string}.
@@ -27,7 +35,7 @@ interface TreeItemBase {
   selectable?: boolean
   /**
    * Indica si la opción es deshabilitada.
-   * @type {boolean} 
+   * @type {boolean}
    */
   disabled?: boolean
   /**
@@ -56,7 +64,7 @@ function isTreeParent(item: TreeItem): item is TreeParent {
 
 /* Estuctura de un elemento Tree */
 
-/**
+/*
 const nodes: TreeItem[] = [
   {
     id: '1',
@@ -74,8 +82,8 @@ const nodes: TreeItem[] = [
             label: 'Quality ingredients',
             disabled: true
           },
-          { 
-            id: '1.1.2', 
+          {
+            id: '1.1.2',
             label: 'Good recipe',
             img: 'https://cdn.quasar.dev/img/logo_calendar_128px.png'
           }
@@ -86,15 +94,23 @@ const nodes: TreeItem[] = [
   ]
 */
 
+/**
+ * Props para el componente GroupCards.vue
+ * @property {string} label - Etiqueta del elemento
+ * @property {string} description - Descripción del elemento
+ * @property {string} iconColor - Color del icono
+ * @property {string} iconName - Nombre del icono
+ */
 export interface GroupCards {
   label: string
+  description: string
   iconColor?: string
   iconName?: string
 }
 
 export type TableData = { [key: string]: string | number | boolean } | null
 
-export type TableColumns = { [key: string]: string } | null
+export type TableColumns = { [key: string]: string | number | boolean } | null
 
 /**
  * Interface para la comprobación de los formularios.
@@ -108,7 +124,41 @@ export interface DynamicComponents {
 }
 
 /**
- *Tipo para la lista de paginas dinamicas.
+ *Tipo para la lista de formularios dinamicos.
+ *basado en la clase FormEnvironment
  * @type PagesList
  */
-export type PagesList = keyof DynamicComponents
+export type PagesList = Exclude<keyof typeof FormEnvironment, 'prototype'>
+
+/**
+ *Tipo para los enlaces estaticos id: 'upload'
+ *@type StaticRoutes
+ */
+export type StaticRoutes = 'Upload' | 'Compartir'
+
+interface NotificationGroups {
+  'LOAD_DYNAMIC_COMPONENT': PagesList
+  'LOAD_STATIC_ROUTE': StaticRoutes
+  'ACTION_BUTTON': 'Save' | 'Upload' | 'Share' | 'Profile' | 'Logout' | 'ShowTree'
+  'GENERALS_FILTERS': 'Municipality' | 'Neighborhood' | 'District' | 'Entity'
+  'DATA_RETRIEVER': 'GetMunicipalities' | 'GetNeighborhoods' | 'GetDistricts' | 'GetEntities'
+}
+
+export type SpecificsForGroups<G extends keyof NotificationGroups> = NotificationGroups[G]
+
+export type NotifyType = <G extends keyof NotificationGroups>(
+  groupEvent: G,
+  specificEvent: SpecificsForGroups<G>,
+  sender: any
+) => void
+
+export type NotifyForGroup<G extends keyof NotificationGroups> = (
+  specificEvent: SpecificsForGroups<G>,
+  sender?: any
+) => void
+
+export interface FormActions {
+  validate(): Promise<boolean>
+  save(): Promise<void>
+  reset(): void
+}

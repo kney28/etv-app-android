@@ -1,6 +1,6 @@
 import { App } from 'vue';
 import { conexionBD } from 'src/stores/conexionBD';
-import { storeToRefs } from "pinia";
+import { storeToRefs } from 'pinia';
 import { CapacitorSQLite, SQLiteConnection } from '@capacitor-community/sqlite';
 
 const conn = conexionBD();
@@ -16,7 +16,7 @@ export default async ({ app }: { app: App }) => {
       return result
     }
   )
-  
+
   let db
 
   if (ret.result && isConn.result) {

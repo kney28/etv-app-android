@@ -1,7 +1,7 @@
-
+import { PagesList, StaticRoutes } from 'src/constants/Interfaces'
 /**
  * Interface para los elementos del menú que contienen sub-elementos.
- * 
+ *
  * @interface MenuItemBase
  */
 interface MenuItemBase {
@@ -14,7 +14,7 @@ interface MenuItemBase {
    * Identificador unico que será devuelto al hacer click sobre la opción si la opción onClick = true.
    * @type {string}
    */
-  id?: string
+  id?: PagesList | StaticRoutes
   /**
    * Ruta de la opción. no usar junto con onClick. Aunque ambas opciones manejan rutas
    * to se usa como una definicion de ruta directa sin procesar.
@@ -62,12 +62,12 @@ export const menu: MenuItem[] = [
     label: 'Actividades',
     children: [
       {
-        label: 'Enfermedades transmitidas por vectores',
-        iconName: 'fa-solid fa-mosquito',
+        label: 'Alimentos',
+        iconName: 'fa-solid fa-plate-wheat',
         children: [
           {
-            id: 'F-AM-1',
-            label: 'Formulario F-EV-04',
+            id: 'FAMA08',
+            label: 'Formulario F-AM-A-08',
             iconColor: 'Black',
             iconName: 'fa-solid fa-marker',
             onClick: true
@@ -77,7 +77,7 @@ export const menu: MenuItem[] = [
     ]
   },
   {
-    id: 'upload',
+    id: 'Upload',
     label: 'Enviar',
     onClick: true,
     iconName: 'fa-solid fa-cloud-arrow-up',

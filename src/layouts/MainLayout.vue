@@ -14,7 +14,6 @@
             color="deep-purple" icon="fa-solid fa-user-gear" />
         </q-fab>
       </q-toolbar>
-      <q-btn label="Click" color="primary" @click="showNotif" />
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
@@ -116,11 +115,11 @@ export default defineComponent({
       }
       //Crear tabla de sicronización
       await db.createSyncTable()
-      // await db.getTableList()      
+      // await db.getTableList()
       // res = await getValues() // si retorna null entra en modo offline
       /* if (!res) {
         visible.value = false */
-      /* Verifica si existen datos en la tabla establecimientos con el 
+      /* Verifica si existen datos en la tabla establecimientos con el
       fin de asegurar que el sistema se encuentre sincronizado */
       /* const verify = await db.query('SELECT * FROM establecimientos LIMIT 3;')
       verify.values.length == 0 ? $q.dialog({
@@ -128,7 +127,7 @@ export default defineComponent({
         message: 'No se han obtenido datos de establecimientos. Por favor, verifique la conexión a internet, salga e intentelo de nuevo.',
         ok: {
           label: 'Ok',
-          color: 'negative'          
+          color: 'negative'
         }
       }) : null
       return null
@@ -300,7 +299,7 @@ export default defineComponent({
               response += '</b>'
               response += '<br>'
             }
-  
+
             for (const item of data.nom_fallidos ? data.nom_fallidos : []) {
               response += '<b style="color: red">'
               response += `Error al intentar guardar el archivo ${item}`
@@ -310,7 +309,7 @@ export default defineComponent({
             response += `Total enviados: ${data.enviados}<br>`
             response += `Archivos guardados: ${data.almacenados}<br>`
             response += `Archivos no guardados: ${data.no_almacenados}`
-  
+
             $q.dialog({
               title: 'Resumen',
               message: response,
@@ -330,12 +329,6 @@ export default defineComponent({
     }
 
     return {
-      showNotif() {
-        $q.notify({
-          message: 'Jim pinged you.',
-          color: 'purple'
-        })
-      },
       token,
       userName,
       passWord,

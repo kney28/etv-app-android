@@ -21,7 +21,7 @@
 
       <q-card-actions v-if="type === 'default'" align="right">
         <btn type="submit" permission="A" @action="submit()" />
-        <btn type="cancel" permission="A" />
+        <!-- <btn type="cancel" permission="A" /> -->
       </q-card-actions>
 
       <q-card-actions v-if="type === 'check'" align="right">
@@ -88,8 +88,7 @@ export default defineComponent({
       }
     }
     const submit = () => {
-      console.log('myFoo1')
-      emitAction('submit', null)
+      emitAction('Save', null)
     }
     const check = () => {
       console.log('myFoo2')

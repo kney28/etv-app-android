@@ -14,8 +14,8 @@
     <MenuItemComponent v-for="(child, index) in node.children" :key="index" :node="child" />
   </q-expansion-item>
   <!--Hojas-->
-  <q-item v-else :to="node?.to ?? null" @click="node.onClick ? handleClick.onAction(node?.id) : null"
-    active-class="tab-active" exact class="navigation-item" :clickable="!!node?.to || !!node?.onClick" v-ripple>
+  <q-item v-else :to="node?.to ?? null" @click="node.onClick ? onAction(node?.id) : null" active-class="tab-active"
+    exact class="navigation-item" :clickable="!!node?.to || !!node?.onClick" v-ripple>
     <q-item-section avatar>
       <q-icon :color="node?.iconColor || 'orange'" :name="node?.iconName || 'fa-regular fa-pen-to-square'" />
     </q-item-section>
@@ -28,9 +28,7 @@
 
 <script>
 import { defineComponent, computed } from 'vue'
-import { FormInitComponent } from 'src/components/formComponentLoad/Mediator'
-import { Director } from 'src/components/formComponentLoad/Director'
-import { HandleRoutes } from 'src/components/formComponentLoad/Components'
+import { useMediator } from 'src/stores/mediator'
 
 export default defineComponent({
   name: 'MenuItemComponent',
@@ -51,6 +49,7 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const { menuHandler } = useMediator()
     const hasChildren = computed(() => {
       const isChildren = !!props.node?.children
       console.log(isChildren)
@@ -60,19 +59,14 @@ export default defineComponent({
       }
       return result
     })
-    const handleClick = new HandleRoutes()
-    const director = new Director()
-    const formInit = new FormInitComponent(handleClick)
-    formInit.setDirector(director)
-    /* const handleClick = (link) => {
-      console.log('estoy haciendo click ', link)
-      return true
-    } */
+    const onAction = (sender) => {
+      console.log('estoy haciendo click ', sender)
+      menuHandler.onAction(sender)
+    }
     return {
-      handleClick,
-      director,
-      formInit,
-      hasChildren
+      menuHandler,
+      hasChildren,
+      onAction
     }
   }
 })

@@ -1,5 +1,5 @@
 <template>
-  <q-tree :nodes="nodes" dense selected-color="primary" node-key="id" v-model:selected="selected"
+  <q-tree :nodes="nodes" dense selected-color="primary" node-key="code" v-model:selected="selected"
     v-model:expanded="expanded" @update:selected="action" />
 </template>
 
@@ -19,8 +19,24 @@ export default defineComponent({
     const selected = ref(null)
     const expanded = ref([])
 
+    function findNodeByCode(nodes, code) {
+      for (const node of nodes) {
+        if (node.code === code) {
+          return node;
+        }
+        if (node.children) {
+          const found = findNodeByCode(node.children, code);
+          if (found) {
+            return found;
+          }
+        }
+      }
+      return null;
+    }
+
     const action = (node) => {
-      emit('action', node)
+      const result = findNodeByCode(props.nodes, node)
+      emit('action', result.id)
     }
 
     return {

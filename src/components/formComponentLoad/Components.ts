@@ -1,4 +1,5 @@
 import { Mediator } from './Mediator'
+import { NotifyType } from 'src/constants/Interfaces'
 
 export class BaseComponent {
   protected mediator: Mediator
@@ -12,7 +13,7 @@ export class BaseComponent {
 }
 
 export class HandleRoutes extends BaseComponent {
-  onAction(event: string) {
-    this.mediator.notify(event, null)
+  onAction: NotifyType = (groupEvent, specificEvent, sender): void => {
+    this.mediator.notify(groupEvent, specificEvent, sender)
   }
 }
