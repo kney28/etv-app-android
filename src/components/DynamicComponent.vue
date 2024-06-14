@@ -43,6 +43,7 @@ export default defineComponent({
     //return props.componentName;
     // });
     const groupModules: { [key: string]: () => Promise<moduleColletion> } = {
+      FAMA02: () => import('pages/formats/F-AM-A-02/FormsCollection.ts'),
       FAMA08: () => import('pages/formats/F-AM-A-08/FormsCollection.ts')
     }
     const components = shallowRef<any>(null);
@@ -51,7 +52,7 @@ export default defineComponent({
       // Importa dinámicamente los componentes desde FormsCollection.ts
       const modules = await groupModules[props.componentName]();
       const module = modules.default
-      components.value = module[0]
+      components.value = module[props.index]
     }
 
     // Llama a la función para cargar los componentes

@@ -65,11 +65,19 @@ export const useEntityIdentification = defineStore('entityIdentification', {
     optEntidades: [],
     direccion: null,
     optDirecciones: [],
-    AnexaCopiaVisitaAnterior: null,
-    PlazosEstablecidosEjecucionRequerimientos: null,
-    DispusoPlanMejoramiento: null,
-    NumeroTotalHabitantesAtendidosESPMunicipio: null,
-    NumeroTotalViviendasCascoUrbano: null,
-    NumeroTotalViviendasRestoNoAtendidas: null,
+    email: null
+  })
+})
+
+export const useGeneralities = defineStore('generalities', {
+  state: () => ({
+    motivoVisita: null,
+    motivoVisitaEsp: '',
+    muestrasTomadas: 0,
+    actaTomaMuestras: '',
+    medidaSanitaria: null,
+    obsMedidaSanitaria: null,
+    obsAutoridadSanitaria: null,
+    obsEstablecimiento: null
   })
 })

@@ -33,7 +33,8 @@
 .input-login {
   height: 25px;
 }
-.fondo{
+
+.fondo {
   background-image: url('../../images/fondo.jpeg');
   background-repeat: no-repeat;
   background-size: cover;
@@ -43,13 +44,15 @@
   position: relative;
   z-index: -1;
 }
-.mrtop{
+
+.mrtop {
   margin-top: -60px;
   border-radius: 40px;
   width: 90%;
   margin-left: 5%;
 }
-.bg-white{
+
+.bg-white {
   background-color: rgba(255, 255, 255, 1);
 }
 </style>
@@ -70,7 +73,7 @@
             </div>
             <div>
               <p style="color: #4794b6; font-size: 18px; font-weight: bolder;" class="text-center q-mb-lg">
-                Enfermedades transmitidas<br>por vectores
+                Alimentos
               </p>
             </div>
           </div>
@@ -86,13 +89,14 @@
               <q-input v-model="username" placeholder="Ej. 1234567890" lazy-rules
                 :rules="[val => !!val || 'Completa el campo', val => val.length >= 6 || 'Mínimo 6 caracteres']" rounded
                 outlined :input-style="{ marginTop: '15px' }" :input-class="{ 'input-login': 'a' }"
-                class="font-poppins-regular" mask="#" reverse-fill-mask @update:model-value="()=>message=null" />
+                class="font-poppins-regular" mask="#" reverse-fill-mask @update:model-value="() => message = null" />
             </div>
             <div>
               <label class="font-poppins-regular" style="color: rgb(40,40,40)" for="">Constraseña</label>
               <q-input v-model="password" placeholder="Ingresa tu contraseña..." lazy-rules
                 :rules="[val => !!val || 'Completa el campo']" rounded outlined :input-style="{ marginTop: '15px' }"
-                :input-class="{ 'input-login': 'c' }" class="font-poppins-regular" :type="isPwd ? 'password' : 'text'" @update:model-value="()=>message=null" >
+                :input-class="{ 'input-login': 'c' }" class="font-poppins-regular" :type="isPwd ? 'password' : 'text'"
+                @update:model-value="() => message = null">
                 <template v-slot:append>
                   <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
                     @click="isPwd = !isPwd" />
@@ -100,11 +104,11 @@
               </q-input>
             </div>
             <div class="q-mb-xl">
-              <q-btn label="Iniciar sesión" @click="login" lazy-rules rounded class="full-width font-poppins-bold q-mt-md"
-                no-caps size="lg" style="background: linear-gradient(45deg, #20cbffa2, #073461e1); color: white;" />
+              <q-btn label="Iniciar sesión" @click="login" lazy-rules rounded
+                class="full-width font-poppins-bold q-mt-md" no-caps size="lg"
+                style="background: linear-gradient(45deg, #20cbffa2, #073461e1); color: white;" />
             </div>
-            <div class="col-md-12 col-sm-12 col-xs-12 text-center text-red"
-              style="font-size: 10px;">
+            <div class="col-md-12 col-sm-12 col-xs-12 text-center text-red" style="font-size: 10px;">
               {{ message }}
             </div>
           </form>
@@ -132,7 +136,7 @@ export default defineComponent({
     const password = ref(null)
     const message = ref(null)
     const auth = useAuthStore()
-    const { token  } = storeToRefs(auth)
+    const { token } = storeToRefs(auth)
 
     const login = () => {
       $q.localStorage.set('username', username.value)

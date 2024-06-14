@@ -2,6 +2,10 @@ import entity from './IdentificationForm.vue'
 import reasonVisit from './ReasonVisitForm.vue'
 import evaluation1 from './Evaluation1Form.vue'
 import evaluation2 from './Evaluation2Form.vue'
+import evaluation3 from './Evaluation3Form.vue'
+import evaluation4 from './Evaluation4Form.vue'
+import evaluation5 from './Evaluation5Form.vue'
+import evaluation6 from './Evaluation6Form.vue'
 import concept from './ConceptForm.vue'
 import samples from './SamplesForm.vue'
 import sanitaryMeasure from './SanitaryMeasureForm.vue'
@@ -19,6 +23,10 @@ const formsCollection = [
   reasonVisit,
   evaluation1,
   evaluation2,
+  evaluation3,
+  evaluation4,
+  evaluation5,
+  evaluation6,
   concept,
   samples,
   sanitaryMeasure,

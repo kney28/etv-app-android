@@ -35,8 +35,10 @@ export default defineComponent({
     }
 
     const action = (node) => {
-      const result = findNodeByCode(props.nodes, node)
-      emit('action', result.id)
+      if (selected.value) {
+        const result = findNodeByCode(props.nodes, node)
+        emit('action', result?.id)
+      }
     }
 
     return {

@@ -66,6 +66,13 @@ export const menu: MenuItem[] = [
         iconName: 'fa-solid fa-plate-wheat',
         children: [
           {
+            id: 'FAMA02',
+            label: 'Formulario F-AM-A-02',
+            iconColor: 'Black',
+            iconName: 'fa-solid fa-marker',
+            onClick: true
+          },
+          {
             id: 'FAMA08',
             label: 'Formulario F-AM-A-08',
             iconColor: 'Black',

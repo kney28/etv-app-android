@@ -25,7 +25,7 @@ export const nodes1: TreeItem[] = [
 export const nodes2: TreeItem[] = [
   {
     code: '1',
-    label: 'Condiciones sanitarias de instalaciones y proceso',
+    label: 'Bloques de evaluación',
     selectable: false,
     children: [
       {
@@ -37,7 +37,31 @@ export const nodes2: TreeItem[] = [
       {
         code: '1.2',
         id: 3,
+        label: 'Equipos y utensilios',
+        selectable: true
+      },
+      {
+        code: '1.3',
+        id: 4,
+        label: 'Personal manipulador de alimentos',
+        selectable: true
+      },
+      {
+        code: '1.4',
+        id: 5,
+        label: 'Requisitos higiénicos',
+        selectable: true
+      },
+      {
+        code: '1.5',
+        id: 6,
         label: 'Saneamiento',
+        selectable: true
+      },
+      {
+        code: '1.6',
+        id: 7,
+        label: 'Actividades secundarias',
         selectable: true
       }
     ]
@@ -47,7 +71,7 @@ export const nodes2: TreeItem[] = [
 export const nodes3: TreeItem[] = [
   {
     code: '1',
-    id: 4,
+    id: 8,
     label: 'Concepto sanitario',
     selectable: true
   }
@@ -61,19 +85,19 @@ export const nodes4: TreeItem[] = [
     children: [
       {
         code: '1.1',
-        id: 5,
+        id: 9,
         label: 'Relación de las muestras tomadas en el establecimiento',
         selectable: true
       },
       {
         code: '1.2',
-        id: 6,
+        id: 10,
         label: 'Aplicación de medida sanitaria de seguridad',
         selectable: true
       },
       {
         code: '1.3',
-        id: 7,
+        id: 11,
         label: 'Observaciones',
         selectable: true
       }
