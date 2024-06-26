@@ -122,6 +122,8 @@ export const useFAMA08 = defineStore('fama08', {
     // getter
   },
   actions: {
-    // methods
+    resetStore() {
+      this.$reset()
+    }
   }
 })

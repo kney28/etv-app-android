@@ -11,9 +11,13 @@ export default defineComponent({
   components: {
     kEntityIdent: EntityIdentComponent
   },
-  setup() {
-    const onAction = () => {
-      console.log('estoy filtrando')
+  emits: ['action'],
+  setup(props, { emit }) {
+    const onAction = (data) => {
+      emitAction(data.type, data.data)
+    }
+    const emitAction = (type, data) => {
+      emit('action', { type, data })
     }
     return {
       onAction

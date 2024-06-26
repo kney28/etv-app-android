@@ -1,9 +1,13 @@
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 import { TreeItem, GroupCards, TableData, TableColumns, PagesList } from 'src/constants/Interfaces'
 
 interface Principal {
-  /** @property {string} pagina actual */
-  page: string
+  /** @property {number | string} sección del formulario activa actualmente
+   * esta propiedad es usada para identificar a la store asociada la
+   * seccion del formulario
+   */
+  currentForm: number | string
   /** @property {number} barra de progreso */
   progressBar: number
   /** @property {string} componente dinamico */
@@ -28,13 +32,27 @@ interface Principal {
   nodesCollection: TreeItem[][]
   /** @property {TreeItem[]} nodo para el q-tree */
   nodes: TreeItem[]
+  /** @property {boolean[]} puntos críticos */
+  criticalPoints: boolean[]
+  /** @property {number} clave de la tarjeta actual */
+  cardKey: number
+  /** Array que contendrá el estado de cada sección validable o calculable */
+  formValid: boolean[]
+  /** Indica la longitud que debera tener el array formValid[], este numero se usa
+  * con el fin de definir cuantas secciones son validables o calculables
+  * para con ello indicar que el formulario esta listo para envío
+  */
+  calculableSections: number
 }
 
 export const usePrincipal = defineStore('principal', {
   state: (): Principal => ({
-    page: 'F-AM-1',
+    formValid: [],
+    calculableSections: 0,
+    cardKey: 0,
+    currentForm: 0,
     progressBar: 0,
-    dynamicComponent: 'MyComponent2',
+    dynamicComponent: 'FAMA02',
     titleDialogTree: '',
     visibleDialogTree: false,
     visibleDialog: false,
@@ -52,12 +70,27 @@ export const usePrincipal = defineStore('principal', {
       { name: 'formato', align: 'left', label: 'Formato', field: 'formato', sortable: true }
     ],
     nodesCollection: [],
-    nodes: []
-  })
+    nodes: [],
+    criticalPoints: []
+  }),
+  getters: {
+    hasCriticalPoints(state) {
+      return state.criticalPoints.length > 0
+    },
+    formIsValid(state) {
+      return state.formValid.filter(e => e !== null).length === state.calculableSections
+    }
+  },
+  actions: {
+    toggleCriticalPoint(value: boolean) {
+      value ? this.criticalPoints.push(value) : this.criticalPoints.pop()
+    }
+  }
 })
 
 export const useEntityIdentification = defineStore('entityIdentification', {
   state: () => ({
+    form: ref<null | InstanceType<typeof import('quasar').QForm>>(null),
     fechaRealizacion: null,
     municipio: null,
     optMunicipios: [],
@@ -72,9 +105,9 @@ export const useEntityIdentification = defineStore('entityIdentification', {
 export const useGeneralities = defineStore('generalities', {
   state: () => ({
     motivoVisita: null,
-    motivoVisitaEsp: '',
-    muestrasTomadas: 0,
-    actaTomaMuestras: '',
+    motivoVisitaEsp: null,
+    muestrasTomadas: null,
+    actaTomaMuestras: null,
     medidaSanitaria: null,
     obsMedidaSanitaria: null,
     obsAutoridadSanitaria: null,

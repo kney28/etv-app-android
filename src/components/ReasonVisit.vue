@@ -10,7 +10,7 @@
 
 <script>
 import { defineComponent, ref, watchEffect } from 'vue'
-import { useGeneralities } from 'src/stores/principal'
+import { useGeneralities, usePrincipal } from 'src/stores/principal'
 
 const opts = [
   { 'label': 'Programación', 'value': 'PROGRAMACIÓN' },
@@ -35,6 +35,8 @@ export default defineComponent({
   setup() {
     const general = useGeneralities()
     const disabled = ref(false)
+    const principal = usePrincipal()
+    principal.currentForm = 8
     watchEffect(() => {
       if (general.motivoVisita === 'OTRO') {
         disabled.value = false
@@ -42,6 +44,15 @@ export default defineComponent({
         disabled.value = true
         general.motivoVisitaEsp = ''
       }
+    })
+
+    watchEffect(() => {
+      const radioIsValid = general.motivoVisita !== null && general.motivoVisita !== 'OTRO'
+      const inputIsValid = general.motivoVisita === 'OTRO' && (general.motivoVisitaEsp !== '' && general.motivoVisitaEsp !== null)
+      const fields = [general.motivoVisita !== null, radioIsValid || inputIsValid]
+      const completedFields = fields.filter(field => field).length
+      const progress = completedFields / fields.length
+      principal.progressBar = progress
     })
 
     return {

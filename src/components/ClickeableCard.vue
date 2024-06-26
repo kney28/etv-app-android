@@ -29,12 +29,12 @@ export default defineComponent({
     iconColor: {
       type: String,
       required: false,
-      default: 'green'
+      default: 'red'
     },
     iconName: {
       type: String,
       required: false,
-      default: 'fa-solid fa-check'
+      default: 'fa-solid fa-xmark'
     }
   },
   emits: ['action'],

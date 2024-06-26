@@ -1,5 +1,14 @@
 import { defineStore } from 'pinia'
 
+const weighting: { [key: string]: number } = {
+  aspect1: 0.1,
+  aspect2: 0.12,
+  aspect3: 0.22,
+  aspect4: 0.24,
+  aspect5: 0.28,
+  aspect6: 0.04
+}
+
 export const useFAMA02 = defineStore('fama02', {
   state: () => ({
     aspect1: [
@@ -436,5 +445,27 @@ export const useFAMA02 = defineStore('fama02', {
         ]
       }
     ]
-  })
+  }),
+  getters: {
+    /**
+     * Calcula la puntuación total basada en el estado del almacén.
+     *
+     * @param {object} state - El estado del almacén.
+     * @returns {number} La puntuación total.
+     */
+    score(state: { [key: string]: any }): number {
+      const aspects: string[] = ['aspect1', 'aspect2', 'aspect3', 'aspect4', 'aspect5', 'aspect6'];
+      const totalScore = aspects.reduce((total, aspect) => {
+        const sum = state[aspect].reduce((acc: number, item: { value: number | null }) => acc + (item.value ?? 0), 0);
+        return total + sum * weighting[aspect];
+      }, 0);
+      const scale = 21.04 // la escala esta dada por el puntaje maximo posible
+      return (totalScore * 100) / scale;
+    }
+  },
+  actions: {
+    resetStore() {
+      this.$reset()
+    }
+  }
 })

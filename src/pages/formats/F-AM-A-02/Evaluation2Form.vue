@@ -8,6 +8,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { useFAMA02 } from 'src/stores/F-AM-A-02'
+import { usePrincipal } from 'src/stores/principal'
 import EvaluationOptionsComponent from 'src/components/EvaluationOptions.vue'
 import EvaluationInfoComponent from 'src/components/EvaluationInfo.vue'
 
@@ -20,6 +21,8 @@ export default defineComponent({
   emits: ['action'],
   setup() {
     const { aspect2 } = useFAMA02()
+    const principal = usePrincipal()
+    principal.currentForm = 2
     return {
       aspect2,
     }

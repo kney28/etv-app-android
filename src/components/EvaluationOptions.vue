@@ -26,7 +26,8 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, watchEffect } from 'vue'
+import { usePrincipal } from 'src/stores/principal'
 
 const opts = [
   {
@@ -58,17 +59,33 @@ export default defineComponent({
   },
   emits: ['action'],
   setup(props, { emit }) {
+    const principal = usePrincipal()
     const types = { opt: 'opt', cr: 'cr' }
-    const updateValue = (e, index, id = null) => {
+    /* const updateValue = (e, index, id = null) => {
       if (id === null) {
         emitAction(types.cr, { index, value: e })
       } else {
         emitAction(types.opt, { index, id, value: e })
       }
+    } */
+    const updateValue = (e, index, id = null) => {
+      if (id === null) {
+        emitAction(types.cr, { index, value: e })
+        principal.toggleCriticalPoint(e)
+        console.log(principal.criticalPoints)
+      }
     }
     const emitAction = (type, data) => {
       emit('action', { type, data })
     }
+
+    watchEffect(() => {
+      const fields = [...props.items]
+      const completedFields = fields.filter(field => field.value || field.cr || field.value === 0).length
+      const progress = completedFields / fields.length
+      principal.progressBar = progress
+    })
+
     return {
       updateValue
     }

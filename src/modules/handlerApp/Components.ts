@@ -30,3 +30,9 @@ export class ButtonHandler extends BaseComponent {
     this.mediator.notify('ACTION_BUTTON', specificEvent, sender)
   }
 }
+
+export class FilterHandler extends BaseComponent {
+  onAction: NotifyForGroup<'GENERALS_FILTERS'> = (specificEvent: SpecificsForGroups<'GENERALS_FILTERS'>, sender: any): void => {
+    this.mediator.notify('GENERALS_FILTERS', specificEvent, sender)
+  }
+}

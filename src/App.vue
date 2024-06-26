@@ -6,9 +6,8 @@
 import { defineComponent } from 'vue'
 import { useMediator } from 'src/stores/mediator'
 import { AppMediator } from 'src/modules/handlerApp/Mediator'
-import { MenuHandler, ButtonHandler } from 'src/modules/handlerApp/Components'
+import { MenuHandler, ButtonHandler, FilterHandler } from 'src/modules/handlerApp/Components'
 import { Director } from 'src/modules/handlerApp/Director'
-
 
 export default defineComponent({
   name: 'App',
@@ -17,6 +16,7 @@ export default defineComponent({
     /* Instanciar los Componentes */
     const menuHandler = new MenuHandler()
     const buttonHandler = new ButtonHandler()
+    const filterHandler = new FilterHandler()
     /* Instanciar el Director */
     const director = new Director()
     /* Instanciar el Mediador */
@@ -24,11 +24,13 @@ export default defineComponent({
     /* Setear los componentes y director en el mediador */
     appMediator.setComponent(menuHandler)
     appMediator.setComponent(buttonHandler)
+    appMediator.setComponent(filterHandler)
     appMediator.setDirector(director)
 
     /* Setear en Store el mediador y los componentes */
     mediator.menuHandler = menuHandler
     mediator.buttonHandler = buttonHandler
+    mediator.filterHandler = filterHandler
     mediator.mediator = appMediator
     return {
     }

@@ -73,7 +73,7 @@
             </div>
             <div>
               <p style="color: #4794b6; font-size: 18px; font-weight: bolder;" class="text-center q-mb-lg">
-                Alimentos
+                IVC Alimentos
               </p>
             </div>
           </div>
@@ -153,7 +153,7 @@ export default defineComponent({
         })
         token.value = data.access_token
         message.value = null
-        $router.push({ name: 'index' })
+        $router.push({ name: 'Index' })
       } else {
         console.log('Credenciales incorrectas')
         message.value = 'Credenciales incorrectas'

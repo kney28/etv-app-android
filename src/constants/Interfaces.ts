@@ -1,4 +1,6 @@
 import { FormEnvironment } from 'src/modules/FormEnvironment'
+import { AppMediator } from 'src/modules/handlerApp/Mediator'
+import { MenuHandler, ButtonHandler, FilterHandler } from 'src/modules/handlerApp/Components'
 
 /**
  * Interface para los elementos del menú que contienen sub-elementos.
@@ -139,8 +141,8 @@ export type StaticRoutes = 'Upload' | 'Compartir'
 interface NotificationGroups {
   'LOAD_DYNAMIC_COMPONENT': PagesList
   'LOAD_STATIC_ROUTE': StaticRoutes
-  'ACTION_BUTTON': 'Save' | 'Upload' | 'Share' | 'Profile' | 'Logout' | 'ShowTree'
-  'GENERALS_FILTERS': 'Municipality' | 'Neighborhood' | 'District' | 'Entity'
+  'ACTION_BUTTON': 'Save' | 'Upload' | 'Share' | 'Profile' | 'Logout' | 'ShowTree' | 'Check' | 'Close'
+  'GENERALS_FILTERS': 'Municipality' | 'Neighborhood' | 'Adress' | 'Entity'
   'DATA_RETRIEVER': 'GetMunicipalities' | 'GetNeighborhoods' | 'GetDistricts' | 'GetEntities'
 }
 
@@ -161,4 +163,19 @@ export interface FormActions {
   validate(): Promise<boolean>
   save(): Promise<void>
   reset(): void
+  checkSectionStatus(date: number): Promise<{ status: boolean, message: string }>
+  setStores(): void
+  validateSectionByCardKey(cardKey: number): boolean
+}
+
+export interface dataInsert {
+  id: number,
+  identificadorEntrevista: string
+}
+
+export interface MediatorState {
+  mediator: AppMediator | null
+  menuHandler: MenuHandler | null
+  buttonHandler: ButtonHandler | null
+  filterHandler: FilterHandler | null
 }

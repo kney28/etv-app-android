@@ -13,4 +13,12 @@ export class Form implements FormActions {
   reset(): void {
     console.log('reset')
   }
+
+  async checkSectionStatus(currentForm: number) {
+    return { status: true, message: '' }
+  }
 }
+
+export const form = new Form()
+
+

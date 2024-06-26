@@ -1,7 +1,9 @@
 <template>
   <q-dialog :model-value="visible" @update:model-value="show" persistent>
     <q-card :style="style">
-      <q-linear-progress :value="progress" color="blue" />
+      <div class="fijo">
+        <q-linear-progress :value="progress" color="blue" />
+      </div>
 
       <q-card-section v-if="banner" class="row items-center q-pa-none">
         <q-banner inline-actions :class="$q.dark.isActive ? '' : 'bg-grey-3'">
@@ -10,7 +12,7 @@
           </template>
           Los campos marcados con (*) son obligatorios
           <template v-slot:action>
-            <q-btn icon="close" flat round dense v-close-popup />
+            <q-btn icon="close" @click="close" flat round dense v-close-popup />
           </template>
         </q-banner>
       </q-card-section>
@@ -24,9 +26,15 @@
         <!-- <btn type="cancel" permission="A" /> -->
       </q-card-actions>
 
-      <q-card-actions v-if="type === 'check'" align="right">
+      <q-card-actions class="fijo2"
+        :style="$q.dark.isActive ? [{ backgroundColor: 'rgb(41, 41, 41)' }] : [{ backgroundColor: 'rgb(240,240,240)' }]"
+        v-if="type === 'check'" align="right">
         <btn type="check" permission="A" @action="check()" />
       </q-card-actions>
+
+      <!-- <div class="fijo" v-if="type === 'check'">
+        <btn type="check" permission="A" @action="check()" />
+      </div> -->
 
       <q-card-actions v-if="type === 'ok'" align="right" class="text-teal">
         <q-btn flat round dense v-close-popup label="Ok" />
@@ -87,6 +95,9 @@ export default defineComponent({
         emit('action', { type, data })
       }
     }
+    const close = () => {
+      emitAction('close', null)
+    }
     const submit = () => {
       emitAction('Save', null)
     }
@@ -100,6 +111,7 @@ export default defineComponent({
       emitAction('hiddenDialog', state)
     }
     return {
+      close,
       submit,
       check,
       show
@@ -107,3 +119,22 @@ export default defineComponent({
   }
 })
 </script>
+
+<style>
+.fijo {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.fijo2 {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  padding: 10px;
+}
+</style>

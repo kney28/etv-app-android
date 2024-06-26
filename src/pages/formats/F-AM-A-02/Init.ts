@@ -8,8 +8,16 @@ export const headerContent = `Acta de inspección sanitaria con enfoque de riesg
 export const cardElements: GroupCards[] = [
   { label: 'Sección 1', description: 'Identificación del establecimiento' },
   { label: 'Sección 2', description: 'I. Condiciones sanitarias de instalaciones y proceso' },
-  { label: 'Concepto', description: 'II. Concepto sanitario' },
+  { label: 'Concepto', description: 'II. Concepto sanitario', iconName: '' },
   { label: 'Sección 3', description: 'Puntos III, IV, V y VI' }
 ]
+// indica la longitud que debera tener el array formValid[], este numero se usa
+// con el fin de definir cuantas secciones son validables o calculables
+// para con ello indicar que el formulario esta listo para envío
+export const formValid: (boolean | null)[] = [
+  false,
+  false,
+  null /* Espacio para representar la seccion concepto*/,
+  false]
 
 export const nodes = [nodes1, nodes2, nodes3, nodes4]

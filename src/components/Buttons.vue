@@ -12,7 +12,7 @@
   <!-- Button delete -->
   <q-btn v-if="type === 'delete'" round size="xs" color="negative" icon="delete_forever" @click="onDelete()" />
   <!-- Button check -->
-  <q-btn v-if="type === 'check'" round icon="check" @click.prevent="add()" color="secondary" />
+  <q-btn v-if="type === 'check'" round icon="check" @click.prevent="check()" color="secondary" />
   <!-- Button cancel -->
   <q-btn v-if="type === 'cancel'" round icon="cancel" v-close-popup color="negative" />
   <!-- Button view -->
@@ -27,7 +27,7 @@ export default defineComponent({
   props: {
     permission: {
       type: String,
-      required: true
+      required: false
     },
     type: {
       type: String,
@@ -71,7 +71,7 @@ export default defineComponent({
       }
     }
 
-    const add = () => {
+    const check = () => {
       if (props.useEmit) {
         emit('action')
       }
@@ -83,7 +83,7 @@ export default defineComponent({
       create,
       submit,
       update,
-      add
+      check
     }
   }
 })
