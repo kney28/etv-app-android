@@ -1,6 +1,11 @@
 import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance } from 'axios';
 
+export enum MODE {
+  PRODUCTION = 'production',
+  DEVELOPMENT = 'development',
+}
+
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $axios: AxiosInstance;
@@ -27,6 +32,9 @@ export default boot(({ app }) => {
   app.config.globalProperties.$api = api;
   // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
   //       so you can easily perform requests against your app's API
+
+  // Esta variable sirve para setear la tabla establecimientos en modo desarrollo
+  app.config.globalProperties.$mode = MODE.DEVELOPMENT;
 });
 
 export { api };

@@ -27,7 +27,6 @@ export default defineComponent({
     const input = ref(null)
     const disableNo = ref(false)
     const principal = usePrincipal()
-    principal.currentForm = 7
     const initial = () => {
       if (principal.hasCriticalPoints) {
         disableNo.value = true

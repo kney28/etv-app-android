@@ -2,12 +2,13 @@
   <div class="row justify-end q-mb-md">
     <k-evaluation-info />
   </div>
-  <k-evaluation :items="items.aspect2" />
+  <k-evaluation :items="aspect2" />
 </template>
 
 <script>
 import { defineComponent } from 'vue'
 import { useFAMA08 } from 'src/stores/F-AM-A-08'
+import { usePrincipal } from 'src/stores/principal'
 import EvaluationOptionsComponent from 'src/components/EvaluationOptions.vue'
 import EvaluationInfoComponent from 'src/components/EvaluationInfo.vue'
 
@@ -19,9 +20,11 @@ export default defineComponent({
   },
   emits: ['action'],
   setup() {
-    const items = useFAMA08()
+    const { aspect2 } = useFAMA08()
+    const principal = usePrincipal()
+    principal.currentForm = 2
     return {
-      items,
+      aspect2
     }
   }
 })

@@ -3,7 +3,8 @@
     <q-option-group v-model="general.motivoVisita" :options="options" color="teal" />
   </div>
   <div class="col-md-4 col-sm-6 col-xs-12">
-    <q-input type="textarea" :readonly="disabled" white color="blue" v-model="general.motivoVisitaEsp" lazy-rules
+    <q-input label="Especifique" type="textarea" :readonly="disabled" white color="blue"
+      v-model="general.motivoVisitaEsp" lazy-rules
       :rules="[val => val.length <= 200 || 'El campo es de maximo 200 caracteres']" />
   </div>
 </template>
@@ -36,7 +37,6 @@ export default defineComponent({
     const general = useGeneralities()
     const disabled = ref(false)
     const principal = usePrincipal()
-    principal.currentForm = 8
     watchEffect(() => {
       if (general.motivoVisita === 'OTRO') {
         disabled.value = false

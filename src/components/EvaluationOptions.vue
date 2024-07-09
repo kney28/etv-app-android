@@ -13,20 +13,21 @@
             <q-input white type="textarea" color="blue" v-model="item.observations" :label="item.labelObs" />
           </div>
           <div>
-            <q-radio v-for="(opt, id) in item.options" :key="id" color="teal" :label="opt.label" v-model="item.value"
-              :val="opt.val" @update:model-value="(e) => updateValue(e, index, id)" />
+            <q-radio ref="options" v-for="(opt, id) in item.options" :key="id" color="teal" :label="opt.label"
+              v-model="item.value" :val="opt.val" @update:model-value="(e) => updateValue(e, index, id)" />
             <q-checkbox color="teal" label="CR" v-model="item.cr" val="CR"
-              @update:model-value="(e) => updateValue(e, index)" />
+              @update:model-value="(e) => updateValue(e, index, 'CR')" />
+            <q-checkbox v-if="item.hasOwnProperty('na')" color="teal" label="NA" v-model="item.na" val="NA"
+              @update:model-value="(e) => updateValue(e, index, 'NA')" />
           </div>
         </q-card-section>
       </q-card>
     </div>
   </div>
-
 </template>
 
 <script>
-import { defineComponent, watchEffect } from 'vue'
+import { defineComponent, watchEffect, ref } from 'vue'
 import { usePrincipal } from 'src/stores/principal'
 
 const opts = [
@@ -59,8 +60,9 @@ export default defineComponent({
   },
   emits: ['action'],
   setup(props, { emit }) {
+    const options = ref([])
     const principal = usePrincipal()
-    const types = { opt: 'opt', cr: 'cr' }
+    const types = { opt: 'opt', cr: 'cr', na: 'na' }
     /* const updateValue = (e, index, id = null) => {
       if (id === null) {
         emitAction(types.cr, { index, value: e })
@@ -68,13 +70,23 @@ export default defineComponent({
         emitAction(types.opt, { index, id, value: e })
       }
     } */
-    const updateValue = (e, index, id = null) => {
-      if (id === null) {
+    const updateValue = (e, index, type) => {
+      /* if (id === null) {
+        emitAction(types.cr, { index, value: e })
+        principal.toggleCriticalPoint(e)
+        console.log(principal.criticalPoints)
+      } */
+      if (type === 'CR') {
         emitAction(types.cr, { index, value: e })
         principal.toggleCriticalPoint(e)
         console.log(principal.criticalPoints)
       }
+      if (type === 'NA') {
+        emitAction(types.na, { index, value: e })
+        console.log(e, index)
+      }
     }
+
     const emitAction = (type, data) => {
       emit('action', { type, data })
     }
@@ -87,6 +99,7 @@ export default defineComponent({
     })
 
     return {
+      options,
       updateValue
     }
   }

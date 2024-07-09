@@ -14,7 +14,7 @@ interface TreeItemBase {
    */
   label: string
   /**
-   * Identificador que actuara en el array de de los modulos usados en
+   * Identificador que actuara en el array de los modulos usados en
    * DynamicComponent.vue
    * @type {string}
    */
@@ -142,7 +142,7 @@ interface NotificationGroups {
   'LOAD_DYNAMIC_COMPONENT': PagesList
   'LOAD_STATIC_ROUTE': StaticRoutes
   'ACTION_BUTTON': 'Save' | 'Upload' | 'Share' | 'Profile' | 'Logout' | 'ShowTree' | 'Check' | 'Close'
-  'GENERALS_FILTERS': 'Municipality' | 'Neighborhood' | 'Adress' | 'Entity'
+  'GENERALS_FILTERS': 'Municipality' | 'Neighborhood' | 'Address' | 'Entity'
   'DATA_RETRIEVER': 'GetMunicipalities' | 'GetNeighborhoods' | 'GetDistricts' | 'GetEntities'
 }
 
@@ -160,17 +160,42 @@ export type NotifyForGroup<G extends keyof NotificationGroups> = (
 ) => void
 
 export interface FormActions {
-  validate(): Promise<boolean>
-  save(): Promise<void>
-  reset(): void
-  checkSectionStatus(date: number): Promise<{ status: boolean, message: string }>
+  /**
+   * Prepara los datos para ser guardados en la base de datos
+   * @param {string} userName - Código del usuario
+   * @param {object} GPS - Objeto con la ubicación del usuario
+   */
+  save(userName: string, GPS: { [key: string]: any }): Promise<DataInsert>
+  /**
+   * Funcion en la que se encapsulan las acciones de reseteo de valores
+   * de las Stores resetValues()
+   */
+  resetValues(): void
+  /**
+   * Resetea la instancia de la Store del formulario en cuestión.
+   * Este proceso libera la memoria ya que se restablece la Store
+   */
+  resetStore(): void
+  /**
+   * Valida un formulario que desprende de TreeItem
+   * @param {number} currentForm número asociado al formulario actual
+   */
+  checkSectionStatus(currentForm: number): Promise<{ status: boolean, message: string }>
+  /**
+   * Asigna las Stores correspondientes
+   */
   setStores(): void
+  /**
+   * Valida toda una sección o card
+   * @param {number} cardKey - La clave de la tarjeta a validar.
+   */
   validateSectionByCardKey(cardKey: number): boolean
 }
 
-export interface dataInsert {
-  id: number,
+export interface DataInsert {
+  id: string
   identificadorEntrevista: string
+  [key: string]: any
 }
 
 export interface MediatorState {

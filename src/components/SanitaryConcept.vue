@@ -1,6 +1,6 @@
 <template>
   <q-card>
-    <q-card-section style="font-size: 12px">
+    <q-card-section class="q-pa-xs" style="font-size: 12px">
       <div class="row bg-blue text-white items-center q-pa-sm">
         <div class="col-md-8 col-sm-8 col-xs-8">
           Concepto:
@@ -30,7 +30,7 @@
           Desfavorable
         </div>
         <div class="col-md-4 col-sm-4 col-xs-4">
-          {{ levels.desfavorable[0] }}-{{ levels.desfavorable[1] }}%
+          {{ levels.desfavorable[0] }} {{ levels.desfavorable[1] }}%
         </div>
       </div>
     </q-card-section>
@@ -54,6 +54,9 @@
 
 <script>
 import { defineComponent, ref, watchEffect } from 'vue'
+import { FormName } from 'src/modules/handlerApp/Director'
+import { usePrincipal } from 'src/stores/principal'
+
 const levels = {
   favorable: [95, 100],
   favorableRequerimientos: [50, 94],
@@ -76,7 +79,7 @@ export default defineComponent({
       default: levels
     },
     score: { // Puntaje de 0 a 100
-      type: Number || null,
+      type: String || null,
       required: false,
       default: 0
     },
@@ -87,6 +90,8 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const principal = usePrincipal()
+    principal.currentForm = FormName.EMPTY
     const opts = [
       '',
       'Favorable',
@@ -99,13 +104,13 @@ export default defineComponent({
       const favorable = props.levels.favorable
       const favorableRequerimientos = props.levels.favorableRequerimientos
       const desfavorable = props.levels.desfavorable
-      if (props.score >= favorable[0] && props.score <= favorable[1]) {
+      if ((props.score >= favorable[0] && props.score <= favorable[1]) && !props.critical) {
         concept.value = 1
       }
-      if (props.score >= favorableRequerimientos[0] && props.score <= favorableRequerimientos[1]) {
+      if ((props.score >= favorableRequerimientos[0] && props.score <= favorableRequerimientos[1]) && !props.critical) {
         concept.value = 2
       }
-      if (props.score < desfavorable[1]) {
+      if ((props.score < desfavorable[1]) || props.critical) {
         concept.value = 3
       }
     })

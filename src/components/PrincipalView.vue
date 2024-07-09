@@ -1,13 +1,11 @@
 <template>
   <k-header :title="principal.headerTitle" :content="principal.headerContent" />
   <q-separator class="q-mb-md" />
-  <q-btn color="secondary" icon="save" label="Guardar" />
+  <q-btn @click="action({ type: 'Save', data: null })" color="secondary" icon="save" label="Guardar" />
   <q-separator class="q-mb-md q-mt-md" />
   <k-group-cards :cardElements="principal.cardElements" @action="action" />
   <q-separator class="q-mt-md q-mb-md" />
   <k-table :data="principal.tableData" :columns="principal.tableColumns" @action="action" />
-  <!-- <q-btn class="q-pa-lg" color="secondary" icon-right="check" label="change color"
-    @click="() => principal.visibleDialogTree = true" /> -->
   <k-dialog-tree :nodes="principal.nodes" :title="principal.titleDialogTree" :dialog="principal.visibleDialogTree"
     @action="action" />
   <k-dialog :visible="principal.visibleDialog" type="check" :progress="principal.progressBar" :banner="true"
@@ -34,7 +32,7 @@ export default defineComponent({
     kGroupCards: GroupCardsComponent,
     kDialogTree: DialogTreeComponent,
     kDialog: DialogComponent,
-    kTable: TableComponent
+    kTable: TableComponent,
   },
   props: {
     config: {

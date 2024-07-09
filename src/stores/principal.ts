@@ -3,6 +3,8 @@ import { ref } from 'vue'
 import { TreeItem, GroupCards, TableData, TableColumns, PagesList } from 'src/constants/Interfaces'
 
 interface Principal {
+  /** @property {string} nombre del formato del formulario */
+  formatName: string
   /** @property {number | string} sección del formulario activa actualmente
    * esta propiedad es usada para identificar a la store asociada la
    * seccion del formulario
@@ -47,12 +49,13 @@ interface Principal {
 
 export const usePrincipal = defineStore('principal', {
   state: (): Principal => ({
+    formatName: '',
     formValid: [],
     calculableSections: 0,
     cardKey: 0,
     currentForm: 0,
     progressBar: 0,
-    dynamicComponent: 'FAMA02',
+    dynamicComponent: 'initial',
     titleDialogTree: '',
     visibleDialogTree: false,
     visibleDialog: false,
@@ -78,12 +81,22 @@ export const usePrincipal = defineStore('principal', {
       return state.criticalPoints.length > 0
     },
     formIsValid(state) {
-      return state.formValid.filter(e => e !== null).length === state.calculableSections
+      return state.formValid.filter(e => !!e).length === state.calculableSections
     }
   },
   actions: {
     toggleCriticalPoint(value: boolean) {
       value ? this.criticalPoints.push(value) : this.criticalPoints.pop()
+    },
+    resetStore() {
+      this.$reset()
+    },
+    resetValues() {
+      this.criticalPoints = []
+      for (let i = 0; i < this.cardElements.length; i++) {
+        this.cardElements[i].iconName = 'fa-solid fa-xmark'
+        this.cardElements[i].iconColor = 'red'
+      }
     }
   }
 })
@@ -99,7 +112,22 @@ export const useEntityIdentification = defineStore('entityIdentification', {
     direccion: null,
     optDirecciones: [],
     email: null
-  })
+  }),
+  actions: {
+    resetStore() {
+      this.$reset()
+    },
+    resetValues() {
+      this.fechaRealizacion = null
+      this.municipio = null
+      this.optMunicipios = []
+      this.establecimiento = null
+      this.optEntidades = []
+      this.direccion = null
+      this.optDirecciones = []
+      this.email = null
+    }
+  }
 })
 
 export const useGeneralities = defineStore('generalities', {
@@ -108,9 +136,26 @@ export const useGeneralities = defineStore('generalities', {
     motivoVisitaEsp: null,
     muestrasTomadas: null,
     actaTomaMuestras: null,
+    requerimientosSanitarios: null,
     medidaSanitaria: null,
     obsMedidaSanitaria: null,
     obsAutoridadSanitaria: null,
     obsEstablecimiento: null
-  })
+  }),
+  actions: {
+    resetStore() {
+      this.$reset()
+    },
+    resetValues() {
+      this.motivoVisita = null
+      this.motivoVisitaEsp = null
+      this.muestrasTomadas = null
+      this.actaTomaMuestras = null
+      this.requerimientosSanitarios = null
+      this.medidaSanitaria = null
+      this.obsMedidaSanitaria = null
+      this.obsAutoridadSanitaria = null
+      this.obsEstablecimiento = null
+    }
+  }
 })

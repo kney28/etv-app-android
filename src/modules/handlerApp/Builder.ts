@@ -1,5 +1,5 @@
 import { Geolocation } from '@capacitor/geolocation'
-import { dataInsert, SpecificsForGroups } from 'src/constants/Interfaces'
+import { DataInsert, SpecificsForGroups, TableData } from 'src/constants/Interfaces'
 import { conexionBD } from 'src/stores/conexionBD'
 import { CapacitorSQLite, SQLiteConnection, ISQLiteDBConnection, DBSQLiteValues } from '@capacitor-community/sqlite'
 
@@ -38,10 +38,12 @@ export class Builder {
     }
   }
 
-  async saveFile(data: dataInsert) {
+  async saveFile(data: DataInsert) {
     return new Promise(async (resolve, reject) => {
       try {
+        this.db.open()
         await this.db.execute(`INSERT INTO visitas (id_form, formato, json_data) VALUES ('${data.id}', '${data.identificadorEntrevista}', '${JSON.stringify(data)}')`)
+        this.db.close()
         resolve(true)
       } catch (error) {
         reject(error)
@@ -49,44 +51,58 @@ export class Builder {
     })
   }
 
-  createFilterQuery(specificsForGroups: SpecificsForGroups<'GENERALS_FILTERS'>): string {
+  async getVisits(formatName: string): Promise<TableData[]> {
+    this.db.open()
+    const visits = await this.db.query(`SELECT * FROM visitas WHERE formato = "${formatName}" AND sql_deleted = 0`)
+    this.db.close()
+    return visits.values as TableData[]
+  }
+
+  createFilterQuery(specificsForGroups: SpecificsForGroups<'GENERALS_FILTERS'>, id?: number): { [key: string]: any } {
     const querys: { [key: string]: any } = {
       Municipality: {
-        query: `SELECT * FROM municipios ORDER BY nom_municipio LIKE ?`
+        query: `SELECT * FROM municipios WHERE LOWER(nom_municipio) LIKE ?`,
+        default: `SELECT * FROM municipios ORDER BY nom_municipio LIMIT 10`
       },
       Entity: {
-        query: `SELECT * FROM establecimientos WHERE dane_municipio = ?
-        AND nom_establecimiento LIKE ?`
+        query: `SELECT * FROM establecimientos WHERE nom_establecimiento LIKE ?
+        AND dane_municipio = ?`,
+        default: `SELECT * FROM establecimientos WHERE dane_municipio = ${id}  LIMIT 10`
       },
-      Adress: {
-        query: `SELECT * FROM establecimientos WHERE doc_establecimiento = ?
-        AND direccion LIKE ?`
+      Address: {
+        query: `SELECT * FROM establecimientos WHERE direccion LIKE ?
+        AND doc_establecimiento = ?`,
+        default: `SELECT * FROM establecimientos WHERE doc_establecimiento = ${id}  LIMIT 10`
       }
     }
 
-    return querys[specificsForGroups].query
+    return querys[specificsForGroups]
   }
 
-  async filterFn({ val, update }: FilterFnParams, specificsForGroups: SpecificsForGroups<'GENERALS_FILTERS'>, id?: number): Promise<object[]> {
+  async filterFn({ val, update }: FilterFnParams, specificsForGroups: SpecificsForGroups<'GENERALS_FILTERS'>, id?: number): Promise<DBSQLiteValues[]> {
     let result: DBSQLiteValues[] | undefined = []
     console.log('entre al filtro')
+    this.db.open()
     if (val === '') {
-      update(() => {
-        result = []
+      const query = this.createFilterQuery(specificsForGroups, id).default
+      const res = await this.db.query(query)
+      update(async () => {
+        result = res.values
+        this.db.close()
       })
-    } else if (val.length > 2) {
+    }
+    console.log(result)
+    if (val.length > 2) {
       const needle = `%${val.toLowerCase()}%`
 
       try {
-        this.db.open()
-
-        const query = `SELECT * FROM municipios WHERE nom_municipio LIKE %oba%`
-        // const query = this.createFilterQuery(specificsForGroups)
-        console.log(query, val)
+        // const query = `SELECT * FROM municipios WHERE LOWER(nom_municipio) LIKE ?`
+        const query = this.createFilterQuery(specificsForGroups).query
         const params: (string | number)[] = [needle]
         if (id) params.push(id)
-
-        const res = await this.db.query(query)
+        console.log(params, id)
+        const res = await this.db.query(query, params)
+        console.log(res)
 
         if (res.values && res.values.length > 0) {
           update(() => {
@@ -103,7 +119,7 @@ export class Builder {
         console.error('Error al consultar la base de datos:', error);
       }
     }
-
+    console.log(result)
     return result
   }
 }

@@ -1,4 +1,5 @@
 import { usePrincipal } from 'src/stores/principal'
+import { useInners, Inners } from 'src/stores/global'
 import { useRouter } from 'vue-router'
 import { Builder, FilterFnParams } from './Builder'
 import { PagesList, SpecificsForGroups } from 'src/constants/Interfaces'
@@ -16,30 +17,37 @@ interface Forms {
 }
 
 export enum FormName {
+  /**
+   * Todo formulario que no se deba validar deberá configurarse con:
+   * currentForm = FormName.EMPTY
+   */
+  EMPTY = 'empty',
   ENTITY = 'entity',
   SAMPLE_RATIO = 'sampleRatio',
-  GENERAL_OBSERVATIONS = 'generalObservations'
+  GENERAL_OBSERVATIONS = 'generalObservations',
 }
 
 
 export interface GeneralDirector {
-  loadComponent: (componentName: PagesList, environment: typeof FormEnvironment) => void
+  loadComponent: (componentName: PagesList, environment: typeof FormEnvironment) => Promise<void>
   showTree: (cardKey: number) => void
   save: () => void
   check: () => void
-  setForms: (form: QFormRef, assing: FormName) => void
+  setForms: (form: QFormRef, assing: FormName.ENTITY | FormName.SAMPLE_RATIO | FormName.GENERAL_OBSERVATIONS) => void
   changeCardStatus: (cardKey?: number) => void
   filterfn: ({ val, update }: FilterFnParams, specificsForGroups: SpecificsForGroups<'GENERALS_FILTERS'>, id?: number) => Promise<object[]>
 }
 
 export class Director implements GeneralDirector {
   principal
+  inners
   $router
   builder
   forms: Forms
   $q
   constructor() {
     this.principal = usePrincipal()
+    this.inners = useInners()
     this.$router = useRouter()
     this.builder = new Builder()
     this.$q = useQuasar()
@@ -50,27 +58,46 @@ export class Director implements GeneralDirector {
     }
   }
 
-  setForms(form: QFormRef, assing: FormName) {
+  setForms(form: QFormRef, assing: FormName.ENTITY | FormName.SAMPLE_RATIO | FormName.GENERAL_OBSERVATIONS) {
     this.forms[assing] = form
   }
 
-  async loadComponent(componentName: SpecificsForGroups<'LOAD_DYNAMIC_COMPONENT'>, environment: typeof FormEnvironment) {
+  async loadComponent(componentName: SpecificsForGroups<'LOAD_DYNAMIC_COMPONENT'>, environment: typeof FormEnvironment): Promise<void> {
+    this.inners.type = Inners.Puff
+    this.inners.visible = true
+    if (this.principal.dynamicComponent !== 'initial') {
+      /**
+       * Aqui se libera la Store con el fin de no consumir mucha memoria, asi al cambiar de formulario
+       * se ejecuta el resetStore para crear una nueva instancia de la Store
+      */
+      const formClass = formClassRegistry[this.principal.dynamicComponent]
+      formClass.resetStore()
+      console.log('Store liberada', this.principal.dynamicComponent)
+    }
+    this.principal.$reset()
     try {
       console.log(componentName)
-      const { dynamicComponent, headerTitle, headerContent, nodes, cardElements, formValid } = await environment[componentName]()
+      const { dynamicComponent, headerTitle, headerContent, nodes, cardElements, formValid, formatName } = await environment[componentName]()
+      this.principal.formatName = formatName
       this.principal.dynamicComponent = dynamicComponent
       this.principal.headerTitle = headerTitle
       this.principal.headerContent = headerContent
       this.principal.nodesCollection = nodes
       this.principal.cardElements = cardElements
-      this.principal.formValid = formValid
-      this.principal.calculableSections = formValid.filter((e: boolean | null) => e !== null).length
+      this.principal.formValid = [...formValid]
+      console.log(formValid)
+      this.principal.calculableSections = this.principal.formValid.filter((e: boolean | null) => e !== null).length
+      this.principal.tableData = await this.builder.getVisits(formatName)
+      this.resetCardStatus()
       if (await this.builder.checkGps()) {
-        this.$router.push({ name: 'Main' })
+        await this.$router.push({ name: 'Main' })
+        this.inners.visible = false
       } else {
-        this.$router.push({ name: 'Index' })
+        await this.$router.push({ name: 'Index' })
+        this.inners.visible = false
       }
     } catch (e) {
+      this.inners.visible = false
       throw e
     }
   }
@@ -83,19 +110,43 @@ export class Director implements GeneralDirector {
   }
 
   async save() {
-    console.log(this.principal.formIsValid)
-    // const component = this.principal.dynamicComponent
-    // const entityIdentification = formStoreRegistry.EntityIdentification
-    // const formClass = new formClassRegistry[component]
-    // await formClass.validate()
-    // await formClass.save()
-    // formClass.reset()
+    console.log(this.principal.formIsValid, this.principal.calculableSections, this.principal.formValid)
+    /* if (!this.principal.formIsValid) {
+      this.$q.notify({
+        message: 'Ups! debes completar todas las secciones',
+        color: 'warning'
+      })
+      return
+    }
+    this.inners.visible = true
+    const component = this.principal.dynamicComponent
+    const formClass = formClassRegistry[component]
+    const userName = this.$q.localStorage.getItem('username')
+    const result = await formClass.save(userName as string, await this.builder.printCurrentPosition())
+    console.log(result)
+    await this.builder.saveFile(result).then(async () => {
+      this.$q.notify({
+        message: 'Guardado exitosamente',
+        color: 'positive'
+      })
+      formClass.resetValues()
+      this.principal.tableData = await this.builder.getVisits(this.principal.formatName)
+      this.principal.resetValues()
+      this.inners.visible = false
+    }).catch((e) => {
+      this.inners.visible = false
+      throw e
+    }) */
   }
 
   async validateGeneralForms() {
     let result = false
     let isGeneralForm = false
-    if (this.principal.currentForm === FormName.ENTITY) {
+    if (this.principal.currentForm === FormName.EMPTY) {
+      /** Esto evita que los formularios o avisos informativos se validen */
+      isGeneralForm = true
+      result = true
+    } else if (this.principal.currentForm === FormName.ENTITY) {
       isGeneralForm = true
       result = await this.forms.entity.value.validate()
     } else if (this.principal.currentForm === FormName.SAMPLE_RATIO) {
@@ -108,6 +159,13 @@ export class Director implements GeneralDirector {
     if (result) this.principal.visibleDialog = false
 
     return isGeneralForm
+  }
+
+  resetCardStatus() {
+    this.principal.cardElements.forEach((element) => {
+      element.iconName = 'fa-solid fa-xmark'
+      element.iconColor = 'red'
+    })
   }
 
   changeCardStatus(cardKey: number = this.principal.cardKey) {

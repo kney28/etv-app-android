@@ -2,24 +2,24 @@
   <q-form ref="form1" @submit.prevent="">
     <div class="row">
       <div class="col-md-4 col-sm-6 col-xs-12">
-        <k-input-date @update:model="entity.fechaRealizacion" />
+        <k-input-date />
       </div>
       <div class="col-md-4 col-sm-6 col-xs-12">
         <q-select use-input v-model="entity.municipio" label="Municipio *" @filter="filterMunicipios"
-          :options="optMunicipios" option-label="nom_municipio" option-value="cod_municipio" emit-value map-options
-          lazy-rules :rules="[val => !!val || 'El campo es obligatorio']"
+          :options="entity.optMunicipios" option-label="nom_municipio" option-value="cod_municipio" emit-value
+          map-options lazy-rules :rules="[val => !!val || 'El campo es obligatorio']"
           @update:model-value="limpiarSelect('establecimiento')" />
       </div>
       <div class="col-md-4 col-sm-6 col-xs-12">
         <q-select use-input v-model="entity.establecimiento" label="Establecimiento *" @filter="filterEntidades"
-          :options="optEntidades" option-label="nom_establecimiento" option-value="doc_establecimiento" emit-value
-          map-options lazy-rules :rules="[val => !!val || 'El campo es obligatorio']"
+          :options="entity.optEntidades" option-label="nom_establecimiento" option-value="doc_establecimiento"
+          emit-value map-options lazy-rules :rules="[val => !!val || 'El campo es obligatorio']"
           @update:model-value="limpiarSelect('direccion')" />
       </div>
       <div class="col-md-4 col-sm-6 col-xs-12">
         <q-select use-input v-model="entity.direccion" label="Dirección *" @filter="filterDirecciones"
-          :options="optDirecciones" option-label="direccion" option-value="doc_establecimiento" emit-value map-options
-          lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+          :options="entity.optDirecciones" option-label="direccion" option-value="doc_establecimiento" emit-value
+          map-options lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
       </div>
       <div class="col-md-4 col-sm-6 col-xs-12">
         <q-input white color="blue" prefix="Email:" type="email" v-model="entity.email" lazy-rules
@@ -34,8 +34,8 @@
   <!-- <q-btn label="enviar" @click="onClick" /> -->
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue'
+<script lang="ts">
+import { defineComponent, ref, watchEffect } from 'vue'
 import { useMediator } from 'src/stores/mediator'
 import { FormName } from 'src/modules/handlerApp/Director'
 import { storeToRefs } from 'pinia'
@@ -50,11 +50,12 @@ export default defineComponent({
   emits: ['filter'],
   setup(props, { emit }) {
     const entity = useEntityIdentification()
-    const { mediator } = useMediator()
+    const { mediator, filterHandler } = useMediator()
     const { currentForm } = storeToRefs(usePrincipal())
+    const { progressBar } = storeToRefs(usePrincipal())
     currentForm.value = FormName.ENTITY
     const form1 = ref('form1')
-    mediator.director.setForms(form1, FormName.ENTITY)
+    mediator!.director.setForms(form1, FormName.ENTITY)
     const optDirecciones = []
     const optEntidades = []
     const optMunicipios = []
@@ -62,14 +63,12 @@ export default defineComponent({
       emitAction('Municipality', { val, update })
     }
 
-    const filterEntidades = () => {
-      console.log('filterEntidades')
-      emitAction('Entity', null)
+    const filterEntidades = (val, update) => {
+      filterHandler!.onAction('Entity', { val, update, id: entity.municipio })
     }
 
-    const filterDirecciones = () => {
-      console.log('filterDirecciones')
-      emitAction('Adress', null)
+    const filterDirecciones = (val, update) => {
+      filterHandler!.onAction('Address', { val, update, id: entity.establecimiento })
     }
 
     const emitAction = (type, data) => {
@@ -84,6 +83,20 @@ export default defineComponent({
         entity.direccion = null
       }
     }
+
+    watchEffect(() => {
+      const fields = [
+        entity.fechaRealizacion !== null,
+        entity.municipio !== null,
+        entity.establecimiento !== null,
+        entity.direccion !== null,
+        entity.email !== null
+      ]
+      const completedFields = fields.filter(field => field).length
+      const progress = completedFields / fields.length
+      progressBar.value = progress
+    })
+
     return {
       form1,
       entity,

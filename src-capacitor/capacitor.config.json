@@ -1,11 +1,12 @@
 {
-  "appId": "gov.capacitor.quasar.uesvalle.etv",
-  "appName": "UESVALLE ETV",
+  "appId": "gov.capacitor.quasar.uesvalle.ivc",
+  "appName": "UESVALLE IVC",
   "bundledWebRuntime": false,
   "npmClient": "yarn",
   "webDir": "www",
   "server": {
-    "androidScheme": "http"
+    "androidScheme": "http",
+    "url": "http://192.168.110.204:9500"
   },
   "plugins": {
     "CapacitorSQLite": {

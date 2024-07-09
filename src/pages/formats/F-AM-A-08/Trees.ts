@@ -68,12 +68,18 @@ export const nodes4: TreeItem[] = [
       {
         code: '1.2',
         id: 6,
-        label: 'Aplicación de medida sanitaria de seguridad',
+        label: 'Requerimientos sanitarios',
         selectable: true
       },
       {
         code: '1.3',
         id: 7,
+        label: 'Aplicación de medida sanitaria de seguridad',
+        selectable: true
+      },
+      {
+        code: '1.4',
+        id: 8,
         label: 'Observaciones',
         selectable: true
       }

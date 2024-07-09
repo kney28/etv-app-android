@@ -3,6 +3,7 @@ import { FormEnvironment } from 'src/modules/FormEnvironment'
 import { BaseComponent } from './Components'
 import { GeneralDirector } from './Director'
 import { useQuasar } from 'quasar'
+import { useEntityIdentification } from 'src/stores/principal'
 
 export interface Mediator {
   notify: NotifyType
@@ -13,8 +14,10 @@ export interface Mediator {
 export class AppMediator implements Mediator {
   director!: GeneralDirector
   $q
+  entity
   constructor() {
     this.$q = useQuasar()
+    this.entity = useEntityIdentification()
   }
 
   setDirector(director: GeneralDirector): void {
@@ -25,11 +28,11 @@ export class AppMediator implements Mediator {
     component.setMediator(this)
   }
 
-  notify: NotifyType = (groupEvent, specificEvent, sender) => {
+  notify: NotifyType = async (groupEvent, specificEvent, sender) => {
     try {
       switch (groupEvent) {
         case 'LOAD_DYNAMIC_COMPONENT':
-          this.director.loadComponent(specificEvent as SpecificsForGroups<'LOAD_DYNAMIC_COMPONENT'>, FormEnvironment)
+          await this.director.loadComponent(specificEvent as SpecificsForGroups<'LOAD_DYNAMIC_COMPONENT'>, FormEnvironment)
           console.log(groupEvent, specificEvent, sender, ' Hola desde mediator')
           break
         case 'ACTION_BUTTON':
@@ -51,8 +54,22 @@ export class AppMediator implements Mediator {
         case 'GENERALS_FILTERS':
           switch (specificEvent as SpecificsForGroups<'GENERALS_FILTERS'>) {
             case 'Municipality':
-              this.director.filterfn(sender, 'Municipality')
+              const result = await this.director.filterfn(sender, 'Municipality')
+              this.entity.optMunicipios = result as []
+              console.log(result)
               break
+            case 'Entity': {
+              const { val, update, id } = sender
+              this.entity.optEntidades = await this.director.filterfn({ val, update }, 'Entity', id) as []
+              console.log(sender)
+              break
+            }
+            case 'Address': {
+              const { val, update, id } = sender
+              console.log(sender)
+              this.entity.optDirecciones = await this.director.filterfn({ val, update }, 'Address', id) as []
+              break
+            }
           }
         default:
           break

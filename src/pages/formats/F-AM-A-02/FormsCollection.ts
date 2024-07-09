@@ -7,6 +7,7 @@ import evaluation4 from './Evaluation4Form.vue'
 import evaluation5 from './Evaluation5Form.vue'
 import evaluation6 from './Evaluation6Form.vue'
 import concept from './ConceptForm.vue'
+import sanitaryRequirements from './SanitaryRequirementsForm.vue'
 import samples from './SamplesForm.vue'
 import sanitaryMeasure from './SanitaryMeasureForm.vue'
 import observations from './ObservationsForm.vue'
@@ -29,6 +30,7 @@ const formsCollection = [
   evaluation6,
   concept,
   samples,
+  sanitaryRequirements,
   sanitaryMeasure,
   observations
 ]

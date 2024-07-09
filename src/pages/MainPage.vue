@@ -3,7 +3,7 @@
     <k-principal-view @action="action">
       <template v-slot:content>
         <q-card-section>
-          <k-dynamic-component :componentName="dynamicComponent" :index="idNode" @action="action" />
+          <k-dynamic-component :componentName="principal.dynamicComponent" :index="idNode" @action="action" />
         </q-card-section>
       </template>
     </k-principal-view>
@@ -13,7 +13,7 @@
 import { defineComponent, ref } from 'vue'
 import PrincipalViewComponent from 'src/components/PrincipalView.vue'
 import DynamicComponent from 'src/components/DynamicComponent.vue'
-import { usePrincipal } from 'stores/principal'
+import { usePrincipal } from 'src/stores/principal'
 import { useMediator } from 'src/stores/mediator'
 
 export default defineComponent({
@@ -25,10 +25,12 @@ export default defineComponent({
   setup() {
     const idNode = ref(0)
     const { filterHandler } = useMediator()
-    const action = (e) => {
+    const principal = usePrincipal()
+    const action = (e: { [key: string]: any }) => {
       switch (e.type) {
         case 'selectNode':
           idNode.value = e.data
+          console.log(idNode.value)
           break
         case 'Municipality':
           console.log('filterMunicipios')
@@ -37,13 +39,11 @@ export default defineComponent({
           break
       }
     }
-    const { dynamicComponent } = usePrincipal()
-    console.log(dynamicComponent)
     return {
       filterHandler,
       idNode,
       action,
-      dynamicComponent
+      principal
     }
   }
 })

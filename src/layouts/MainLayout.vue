@@ -4,7 +4,6 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
-
         <q-toolbar-title>UESVALLE</q-toolbar-title>
 
         <q-fab color="blue-grey-2" text-color="blue-grey-8" icon="fa-solid fa-gear" padding="xs" direction="down">
@@ -42,13 +41,14 @@ import TransactionReportComponent from './TransactionReport.vue'
 import DialogComponent from 'src/components/Dialog.vue'
 import InnersLoadingComponent from 'src/components/InnersLoading.vue'
 
-import { defineComponent, ref, onMounted, } from 'vue';
+import { defineComponent, ref, onMounted, getCurrentInstance } from 'vue';
 import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from 'src/stores/auth';
 import { conexionBD } from 'src/stores/conexionBD';
+import { useInners, Inners } from 'src/stores/global'
 import { storeToRefs } from 'pinia';
-import { api } from 'src/boot/axios';
+import { api, MODE } from 'src/boot/axios';
 import { generateDate } from 'src/constants/constants';
 import {
   schemaMunicipios,
@@ -56,7 +56,9 @@ import {
   schemaEstablecimientos,
   schemaVisitas,
   triggerEstablecimientos,
-  // insertMunicipios
+  insertMunicipios,
+  insertEstablecimientos,
+  resetEstablecimientos
 } from 'src/constants/schemas';
 
 export default defineComponent({
@@ -68,12 +70,17 @@ export default defineComponent({
     kInnerLoading: InnersLoadingComponent
   },
   setup() {
+    const { appContext } = getCurrentInstance()
+    const mode = appContext.config.globalProperties.$mode
     const router = useRouter()
     const conn = conexionBD()
     const { DB, SQLITE } = storeToRefs(conn)
     const db = DB.value
     db.open()
     const sqlite = SQLITE.value
+    const inner = useInners()
+    inner.type = Inners.Facebook
+    inner.label = 'Preparando el entorno...'
     const visible = ref(false)
     const dark = ref(false)
     const dialogInfo = ref(true)
@@ -92,7 +99,7 @@ export default defineComponent({
       createDatabase()
     })
     const createDatabase = async () => {
-      visible.value = true
+      inner.visible = true
       let res
 
       try {
@@ -103,7 +110,7 @@ export default defineComponent({
         res = await db.execute(schemaVisitas)
         res = await db.execute(triggerEstablecimientos)
       } catch (error) {
-        visible.value = false
+        inner.visible = false
         $q.dialog({
           title: 'Error',
           message: `No se pudo crear la base de datos. ${JSON.stringify(error)}`,
@@ -117,8 +124,9 @@ export default defineComponent({
       await db.createSyncTable()
       // await db.getTableList()
       // res = await getValues() // si retorna null entra en modo offline
-      /* if (!res) {
-        visible.value = false */
+      res = null
+      if (!res) {
+        inner.visible = false
       /* Verifica si existen datos en la tabla establecimientos con el
       fin de asegurar que el sistema se encuentre sincronizado */
       /* const verify = await db.query('SELECT * FROM establecimientos LIMIT 3;')
@@ -131,7 +139,7 @@ export default defineComponent({
         }
       }) : null
       return null
-    } */
+    */ }
       /* const partialImport = {
         database : 'uesvalle',
         version: 2,
@@ -142,14 +150,31 @@ export default defineComponent({
           values : res
         }]
       }
-      await sqlite.importFromJson(JSON.stringify(partialImport))
+      await sqlite.importFromJson(JSON.stringify(partialImport))*/
       let query = await db.query('SELECT * FROM municipios')
       if (query.values.length == 0) {
         await db.execute(insertMunicipios).catch(err => {
           console.log('Error al insertar municipios: ', err)
         })
-      } */
-      visible.value = false
+      }
+      if (mode === MODE.DEVELOPMENT) {
+        /* cons esto se resetea la tabla establecimientos y la secuencia
+        await db.execute(resetEstablecimientos[0]).catch(err => {
+          console.log('Error al resetear establecimientos: ', err)
+        })
+        await db.execute(resetEstablecimientos[1]).catch(err => {
+          console.log('Error al resetear la secuencia: ', err)
+        }) */
+        const query = await db.query('SELECT * FROM establecimientos LIMIT 3')
+        if (query.values.length === 0) {
+          await db.execute(insertEstablecimientos).catch(err => {
+            console.log('Error al insertar establecimientos: ', err)
+          })
+          await db.query('SELECT * FROM establecimientos LIMIT 3')
+        }
+      }
+      db.close()
+      inner.visible = false
     }
 
     const logout = () => {
@@ -216,7 +241,7 @@ export default defineComponent({
 
     const getValues = async () => {
       const result = await getEstablecimientos()
-      if (!result) {
+      if (!result || !result.data.error) {
         console.log('Modo offline')
         return null
       }

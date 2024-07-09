@@ -9,6 +9,7 @@
 import { defineComponent } from 'vue'
 import { useFAMA02 } from 'src/stores/F-AM-A-02'
 import { usePrincipal } from 'src/stores/principal'
+import { storeToRefs } from 'pinia'
 import EvaluationOptionsComponent from 'src/components/EvaluationOptions.vue'
 import EvaluationInfoComponent from 'src/components/EvaluationInfo.vue'
 
@@ -20,7 +21,7 @@ export default defineComponent({
   },
   emits: ['action'],
   setup() {
-    const { aspect1 } = useFAMA02()
+    const { aspect1 } = storeToRefs(useFAMA02())
     const principal = usePrincipal()
     principal.currentForm = 1
     const onAction = (data) => {

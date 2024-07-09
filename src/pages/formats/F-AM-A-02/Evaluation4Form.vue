@@ -2,13 +2,14 @@
   <div class="row justify-end q-mb-md">
     <k-evaluation-info />
   </div>
-  <k-evaluation :items="aspect4" />
+  <k-evaluation :items="aspect4" @action="onAction" />
 </template>
 
 <script>
 import { defineComponent } from 'vue'
 import { useFAMA02 } from 'src/stores/F-AM-A-02'
 import { usePrincipal } from 'src/stores/principal'
+import { storeToRefs } from 'pinia'
 import EvaluationOptionsComponent from 'src/components/EvaluationOptions.vue'
 import EvaluationInfoComponent from 'src/components/EvaluationInfo.vue'
 
@@ -20,10 +21,17 @@ export default defineComponent({
   },
   emits: ['action'],
   setup() {
-    const { aspect4 } = useFAMA02()
+    const { aspect4 } = storeToRefs(useFAMA02())
     const principal = usePrincipal()
     principal.currentForm = 4
+
+    const onAction = (val) => {
+      if (val.type === 'na') {
+        aspect4.value[2].value = aspect4.value[2].options[0].val
+      }
+    }
     return {
+      onAction,
       aspect4,
     }
   }
