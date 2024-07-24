@@ -81,7 +81,7 @@ export class Form extends GeneralForms implements FormActions {
     this.fama02.resetValues()
     this.generalities.resetValues()
     this.entity.resetValues()
-    console.log('resetValues FAMA02')
+    console.log('resetValues FAMA01')
   }
 
   resetStore(): void {
@@ -93,7 +93,7 @@ export class Form extends GeneralForms implements FormActions {
     this.fama02.$reset()
   }
 
-  validateAspect(aspect: any[]) {
+  validateAspect(aspect: any[] = [{ value: null, cr: false, literal: '' }]) {
     const result = aspect.find((item: { value: number | null, cr: boolean }) => {
       return item.value === null && item.cr === false
     })

@@ -456,13 +456,13 @@ export const useFAMA02 = defineStore('fama02', {
      * @returns {number} La puntuación total.
      */
     score(state: { [key: string]: any }): number {
-      const aspects: string[] = ['aspect1', 'aspect2', 'aspect3', 'aspect4', 'aspect5', 'aspect6'];
+      const aspects: string[] = ['aspect1', 'aspect2', 'aspect3', 'aspect4', 'aspect5', 'aspect6']
       const totalScore = aspects.reduce((total, aspect) => {
-        const sum = state[aspect].reduce((acc: number, item: { value: number | null }) => acc + (item.value ?? 0), 0);
-        return total + sum * weighting[aspect];
-      }, 0);
+        const sum = state[aspect].reduce((acc: number, item: { value: number | null }) => acc + (item.value ?? 0), 0)
+        return total + sum * weighting[aspect]
+      }, 0)
       const scale = 21.04 // la escala esta dada por el puntaje maximo posible en porcentaje
-      return (totalScore * 100) / scale;
+      return Number(((totalScore * 100) / scale).toFixed(2))
     },
     /**
      * Calcula el concepto basado en la puntuación de la tienda.
@@ -494,7 +494,7 @@ export const useFAMA02 = defineStore('fama02', {
        */
       return (aspect: string): number => {
         return state[aspect].reduce((total: number, { value }: { value: number }) => {
-          return total + value;
+          return total + value
         }, 0)
       }
     }

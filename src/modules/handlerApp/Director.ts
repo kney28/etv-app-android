@@ -2,7 +2,7 @@ import { usePrincipal } from 'src/stores/principal'
 import { useInners, Inners } from 'src/stores/global'
 import { useRouter } from 'vue-router'
 import { Builder, FilterFnParams } from './Builder'
-import { PagesList, SpecificsForGroups } from 'src/constants/Interfaces'
+import { PagesList, SpecificsForGroups, Config } from 'src/constants/Interfaces'
 import { FormEnvironment } from 'src/modules/FormEnvironment'
 import { formClassRegistry } from 'src/modules/handlerApp/FormClassRegistry'
 import { QForm, useQuasar } from 'quasar'
@@ -77,17 +77,17 @@ export class Director implements GeneralDirector {
     this.principal.$reset()
     try {
       console.log(componentName)
-      const { dynamicComponent, headerTitle, headerContent, nodes, cardElements, formValid, formatName } = await environment[componentName]()
-      this.principal.formatName = formatName
-      this.principal.dynamicComponent = dynamicComponent
-      this.principal.headerTitle = headerTitle
-      this.principal.headerContent = headerContent
-      this.principal.nodesCollection = nodes
-      this.principal.cardElements = cardElements
-      this.principal.formValid = [...formValid]
-      console.log(formValid)
+      const { config }: { config: Config } = await environment[componentName]()
+      this.principal.formatName = config.formatName
+      this.principal.dynamicComponent = config.dynamicComponent
+      this.principal.headerTitle = config.headerTitle
+      this.principal.headerContent = config.headerContent
+      this.principal.nodesCollection = config.nodes
+      this.principal.cardElements = config.cardElements
+      this.principal.formValid = [...config.formValid]
+      console.log(config.formValid)
       this.principal.calculableSections = this.principal.formValid.filter((e: boolean | null) => e !== null).length
-      this.principal.tableData = await this.builder.getVisits(formatName)
+      this.principal.tableData = await this.builder.getVisits(config.formatName)
       this.resetCardStatus()
       if (await this.builder.checkGps()) {
         await this.$router.push({ name: 'Main' })
@@ -111,7 +111,7 @@ export class Director implements GeneralDirector {
 
   async save() {
     console.log(this.principal.formIsValid, this.principal.calculableSections, this.principal.formValid)
-    /* if (!this.principal.formIsValid) {
+    if (!this.principal.formIsValid) {
       this.$q.notify({
         message: 'Ups! debes completar todas las secciones',
         color: 'warning'
@@ -136,7 +136,7 @@ export class Director implements GeneralDirector {
     }).catch((e) => {
       this.inners.visible = false
       throw e
-    }) */
+    })
   }
 
   async validateGeneralForms() {

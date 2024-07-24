@@ -204,3 +204,25 @@ export interface MediatorState {
   buttonHandler: ButtonHandler | null
   filterHandler: FilterHandler | null
 }
+
+export interface Config {
+  /** Nombre del formato */
+  formatName: string
+  /** Nombre del componente dinamico, este nombre sera usado para ser usado por toda la app */
+  dynamicComponent: PagesList
+  /** Titulo de la card superior */
+  headerTitle: string
+  /** Descripción del formato */
+  headerContent: string
+  /** Colección de Cards. Aqui se setean el total de secciones que existiran en el formulario */
+  cardElements: GroupCards[]
+  /**
+   * indica la longitud que debera tener el array formValid[], este numero se usa
+   * con el fin de definir cuantas secciones son validables o calculables
+   * para con ello indicar que el formulario esta listo para envío.
+   * Aquellas secciones o cards que sean de solo lectura definirlas como true.
+  */
+  formValid: boolean[]
+  /** Aqui se establecen todos los menus tipo Tree */
+  nodes: TreeItem[][]
+}

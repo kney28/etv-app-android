@@ -87,7 +87,7 @@ export class Form extends GeneralForms implements FormActions {
     this.fama08.$reset()
   }
 
-  validateAspect(aspect: any[]) {
+  validateAspect(aspect: any[] = [{ value: null, cr: false, literal: '' }]) {
     const result = aspect.find((item: { value: number | null, cr: boolean }) => {
       return item.value === null && item.cr === false
     })

@@ -6,8 +6,9 @@ interface Principal {
   /** @property {string} nombre del formato del formulario */
   formatName: string
   /** @property {number | string} sección del formulario activa actualmente
-   * esta propiedad es usada para identificar a la store asociada la
-   * seccion del formulario
+   * esta propiedad es usada por checkSectionStatus(currentForm) para ejecutar la validación correspondiente.
+   *
+   * Esta propiedad no esta relacionada con la posición dentro de FormsCollection.ts
    */
   currentForm: number | string
   /** @property {number} barra de progreso */

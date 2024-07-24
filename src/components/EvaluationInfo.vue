@@ -37,6 +37,12 @@ const opts = [
       descritos en el instructivo para el aspecto a evaluar`
   },
   {
+    label: 'No Aplica (NA)',
+    description: `Marque con una X la casilla "NA" en caso que el aspecto a verificar no
+    se realice por parte del establecimiento y calificar como Aceptable (A).
+    Justificar la razón del no aplica en el espacio de hallazgos.`
+  },
+  {
     label: 'Crítico (C)',
     description: `Marque la casilla "C" cuando el incumplimiento del aspecto a verificar
       afecte la inocuidad de los alimentos y deba aplicar Medida Sanitaria

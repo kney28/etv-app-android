@@ -66,6 +66,13 @@ export const menu: MenuItem[] = [
         iconName: 'fa-solid fa-plate-wheat',
         children: [
           {
+            id: 'FAMA01',
+            label: 'Formulario F-AM-A-01',
+            iconColor: 'Black',
+            iconName: 'fa-solid fa-marker',
+            onClick: true
+          },
+          {
             id: 'FAMA02',
             label: 'Formulario F-AM-A-02',
             iconColor: 'Black',
@@ -73,12 +80,61 @@ export const menu: MenuItem[] = [
             onClick: true
           },
           {
+            id: 'FAMA03',
+            label: 'Formulario F-AM-A-03',
+            iconColor: 'Black',
+            iconName: 'fa-solid fa-marker',
+            onClick: true
+          },
+          /* {
+            id: 'FAMA04',
+            label: 'Formulario F-AM-A-04',
+            iconColor: 'Black',
+            iconName: 'fa-solid fa-marker',
+            onClick: true
+          }, */
+          {
+            id: 'FAMA05',
+            label: 'Formulario F-AM-A-05',
+            iconColor: 'Black',
+            iconName: 'fa-solid fa-marker',
+            onClick: true
+          },
+          /* {
+            id: 'FAMA06',
+            label: 'Formulario F-AM-A-06',
+            iconColor: 'Black',
+            iconName: 'fa-solid fa-marker',
+            onClick: true
+          },
+          {
+            id: 'FAMA07',
+            label: 'Formulario F-AM-A-07',
+            iconColor: 'Black',
+            iconName: 'fa-solid fa-marker',
+            onClick: true
+          }, */
+          {
             id: 'FAMA08',
             label: 'Formulario F-AM-A-08',
             iconColor: 'Black',
             iconName: 'fa-solid fa-marker',
             onClick: true
-          }
+          },
+          /* {
+            id: 'FAMA09',
+            label: 'Formulario F-AM-A-09',
+            iconColor: 'Black',
+            iconName: 'fa-solid fa-marker',
+            onClick: true
+          },
+          {
+            id: 'FAMA10',
+            label: 'Formulario F-AM-A-10',
+            iconColor: 'Black',
+            iconName: 'fa-solid fa-marker',
+            onClick: true
+          } */
         ]
       }
     ]
