@@ -4,7 +4,7 @@ import { CapacitorSQLite, SQLiteConnection, ISQLiteDBConnection } from '@capacit
 export const conexionBD = defineStore('db', {
   state: () => ({
     DB: {} as ISQLiteDBConnection,
-    SQLITE: null as object | null
+    SQLITE: {} as SQLiteConnection
   }),
 
   /*getters: {

@@ -29,6 +29,7 @@
 <script>
 import { defineComponent, computed } from 'vue'
 import { useMediator } from 'src/stores/mediator'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   name: 'MenuItemComponent',
@@ -49,7 +50,8 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { menuHandler } = useMediator()
+    const { menuHandler, buttonHandler } = useMediator()
+    const $q = useQuasar()
     const hasChildren = computed(() => {
       const isChildren = !!props.node?.children
       console.log(isChildren)
@@ -61,7 +63,25 @@ export default defineComponent({
     })
     const onAction = (sender) => {
       console.log('estoy haciendo click ', sender)
-      menuHandler.onAction(sender)
+      switch (sender) {
+        case 'Upload':
+          $q.dialog({
+            title: 'Confirmación',
+            message: 'Se enviarán las visitas al servidor. ¿Desea continuar?',
+            cancel: true,
+            persistent: true,
+            ok: {
+              label: 'Ok',
+              color: 'primary'
+            }
+          }).onOk(() => {
+            buttonHandler.onAction('Upload')
+          })
+          break
+        default:
+          menuHandler.onAction(sender)
+          break
+      }
     }
     return {
       menuHandler,

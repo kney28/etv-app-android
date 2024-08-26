@@ -439,6 +439,7 @@ export const useFAMA02 = defineStore('fama02', {
         observations: '',
         labelObs: 'Hallazgos',
         cr: false,
+        na: false,
         value: null,
         options: [
           { label: 'A', val: 4 },

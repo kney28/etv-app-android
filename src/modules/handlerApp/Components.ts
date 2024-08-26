@@ -36,3 +36,9 @@ export class FilterHandler extends BaseComponent {
     this.mediator.notify('GENERALS_FILTERS', specificEvent, sender)
   }
 }
+
+export class InitialSetup extends BaseComponent {
+  onAction: NotifyForGroup<'CONFIGURATION'> = (specificEvent: SpecificsForGroups<'CONFIGURATION'>, sender: { username: string, password: string }): void => {
+    this.mediator.notify('CONFIGURATION', specificEvent, sender)
+  }
+}

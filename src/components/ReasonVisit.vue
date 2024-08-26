@@ -14,12 +14,12 @@ import { defineComponent, ref, watchEffect } from 'vue'
 import { useGeneralities, usePrincipal } from 'src/stores/principal'
 
 const opts = [
-  { 'label': 'Programación', 'value': 'PROGRAMACIÓN' },
+  { 'label': 'Programación', 'value': 'PROGRAMACION' },
   { 'label': 'Solicitud del interesado', 'value': 'INTERESADO' },
-  { 'label': 'Asociada a peticiones, quejas y reclamos', 'value': 'ASOCIADA A PETICIONES, QUEJAS Y RECLAMOS' },
-  { 'label': 'Solicitud oficial', 'value': 'SOLICITUD OFICIAL' },
-  { 'label': 'Evento de interés en salud pública', 'value': 'EVENTO DE INTERÉS EN SALUD PÚBLICA' },
-  { 'label': 'Solicitud de práctica de pruebas/procesos sancionatorios ADMIN', 'value': 'SOLICITUD DE PRÁCTICA DE PRUEBAS/ PROCESOS SANCIONATORIOS ADMIN.' },
+  { 'label': 'Asociada a peticiones, quejas y reclamos', 'value': 'QUEJAS-RECLAMOS' },
+  { 'label': 'Solicitud oficial', 'value': 'SOLICITUD-OFICIAL' },
+  { 'label': 'Evento de interés en salud pública', 'value': 'EVENTO-INTERES' },
+  { 'label': 'Solicitud de práctica de pruebas/procesos sancionatorios ADMIN', 'value': 'SOLICITUD-PRACTICA' },
   { 'label': 'Otro', 'value': 'OTRO' }
 ]
 

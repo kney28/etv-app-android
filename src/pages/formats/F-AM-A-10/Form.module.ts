@@ -49,6 +49,27 @@ export class Form extends GeneralForms implements FormActions {
     return aspectosYClasificaciones
   }
 
+  flattenAspectsAndScores(): Record<string, any> {
+    const aspectosYClasificaciones = this.getAspectsAndScores()
+    const aspectosLineales: Record<string, any> = {}
+
+    Object.keys(aspectosYClasificaciones).forEach((key) => {
+      const value = aspectosYClasificaciones[key]
+
+      if (typeof value === 'object' && value !== null) {
+        // Aplana las propiedades de los objetos
+        Object.keys(value).forEach((subKey) => {
+          aspectosLineales[`${key}.${subKey}`] = value[subKey]
+        })
+      } else {
+        // Si no es un objeto, simplemente lo copia al resultado final
+        aspectosLineales[key] = value
+      }
+    })
+
+    return aspectosLineales
+  }
+
   async save(userName: string, GPS: { [key: string]: any }): Promise<DataInsert> {
     const date = this.entity.fechaRealizacion.split('/')
     return {
@@ -59,10 +80,10 @@ export class Form extends GeneralForms implements FormActions {
       idEstablecimiento: this.entity.direccion,
       gps: GPS.coords,
       timestamp: GPS.timestamp,
-      Fecha: date[2] + '/' + date[1] + '/' + date[0],
-      MotivoVisita: this.generalities.motivoVisita,
-      MotivoVisitaOtroTexto: this.generalities.motivoVisitaEsp,
-      ...this.getAspectsAndScores(),
+      fecha: date[2] + '/' + date[1] + '/' + date[0],
+      motivoVisita: this.generalities.motivoVisita,
+      motivoVisitaOtroTexto: this.generalities.motivoVisitaEsp,
+      ...this.flattenAspectsAndScores(),
       puntajeConceptoSanitario: this.fama10.score,
       conceptoSanitario: this.fama10.emitConcept,
       muestrasTomadas: this.generalities.muestrasTomadas,

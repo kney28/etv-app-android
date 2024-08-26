@@ -49,6 +49,9 @@ export class AppMediator implements Mediator {
             case 'Close':
               this.director.changeCardStatus()
               break
+            case 'Upload':
+              await this.director.uploadVisits()
+              break
           }
           break
         case 'GENERALS_FILTERS':
@@ -70,6 +73,14 @@ export class AppMediator implements Mediator {
               this.entity.optDirecciones = await this.director.filterfn({ val, update }, 'Address', id) as []
               break
             }
+          }
+          break
+        case 'CONFIGURATION':
+          switch (specificEvent as SpecificsForGroups<'CONFIGURATION'>) {
+            case 'InitialSetup':
+              await this.director.inicializeDB()
+              await this.director.updateEstablishments()
+              break
           }
         default:
           break

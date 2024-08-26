@@ -5,6 +5,13 @@ export enum Inners {
   Puff = 'puff'
 }
 
+export interface StatusNetwork {
+  /**
+   * @property {'Online' | 'Offline'} estado
+   */
+  state: 'Online' | 'Offline'
+}
+
 interface InnerState {
   visible: boolean;
   type: Inners;
@@ -32,4 +39,10 @@ export const useInners = defineStore('inners', {
     type: Inners.Puff,
     label: null
   })
-});
+})
+
+export const useStatusNetwork = defineStore('statusNetwork', {
+  state: (): StatusNetwork => ({
+    state: 'Offline'
+  })
+})

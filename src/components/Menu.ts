@@ -86,13 +86,13 @@ export const menu: MenuItem[] = [
             iconName: 'fa-solid fa-marker',
             onClick: true
           },
-          /* {
+          {
             id: 'FAMA04',
             label: 'Formulario F-AM-A-04',
             iconColor: 'Black',
             iconName: 'fa-solid fa-marker',
             onClick: true
-          }, */
+          },
           {
             id: 'FAMA05',
             label: 'Formulario F-AM-A-05',
@@ -113,7 +113,7 @@ export const menu: MenuItem[] = [
             iconColor: 'Black',
             iconName: 'fa-solid fa-marker',
             onClick: true
-          }, */
+          },
           {
             id: 'FAMA08',
             label: 'Formulario F-AM-A-08',
@@ -121,7 +121,7 @@ export const menu: MenuItem[] = [
             iconName: 'fa-solid fa-marker',
             onClick: true
           },
-          /* {
+          {
             id: 'FAMA09',
             label: 'Formulario F-AM-A-09',
             iconColor: 'Black',

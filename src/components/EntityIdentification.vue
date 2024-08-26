@@ -18,8 +18,8 @@
       </div>
       <div class="col-md-4 col-sm-6 col-xs-12">
         <q-select use-input v-model="entity.direccion" label="Dirección *" @filter="filterDirecciones"
-          :options="entity.optDirecciones" option-label="direccion" option-value="doc_establecimiento" emit-value
-          map-options lazy-rules :rules="[val => !!val || 'El campo es obligatorio']" />
+          :options="entity.optDirecciones" option-label="direccion" option-value="id" emit-value map-options lazy-rules
+          :rules="[val => !!val || 'El campo es obligatorio']" />
       </div>
       <div class="col-md-4 col-sm-6 col-xs-12">
         <q-input white color="blue" prefix="Email:" type="email" v-model="entity.email" lazy-rules

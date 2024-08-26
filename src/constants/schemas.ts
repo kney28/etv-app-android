@@ -74,7 +74,7 @@ export const insertMunicipios =
 
 export const schemaEstablecimientos =
   `CREATE TABLE IF NOT EXISTS establecimientos (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id INTEGER PRIMARY KEY NOT NULL,
   dane_municipio TEXT NOT NULL,
   doc_establecimiento TEXT NOT NULL,
   nom_establecimiento TEXT NOT NULL,
@@ -139,6 +139,10 @@ export const resetEstablecimientos = [
   `DELETE FROM establecimientos;`,
   `DELETE FROM sqlite_sequence WHERE name='establecimientos';`
 ]
-
+/**
+ * Este trigger se encarga de actualizar el campo last_modified de la tabla establecimientos
+ * cada vez que se actualice la base de datos
+ * ya que la base de datos SQlite no lo hace automáticamente
+ */
 export const triggerEstablecimientos =
   `CREATE TRIGGER IF NOT EXISTS establecimientos_trigger_last_modified AFTER UPDATE ON establecimientos FOR EACH ROW WHEN NEW.last_modified < OLD.last_modified BEGIN UPDATE establecimientos SET last_modified = (strftime('%s', 'now')) WHERE id = OLD.id; END;`

@@ -6,6 +6,7 @@ export const useMediator = defineStore('mediator', {
     mediator: null,
     menuHandler: null,
     buttonHandler: null,
-    filterHandler: null
+    filterHandler: null,
+    initialSetup: null
   })
 })

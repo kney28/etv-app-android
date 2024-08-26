@@ -1,6 +1,6 @@
 import { FormEnvironment } from 'src/modules/FormEnvironment'
 import { AppMediator } from 'src/modules/handlerApp/Mediator'
-import { MenuHandler, ButtonHandler, FilterHandler } from 'src/modules/handlerApp/Components'
+import { MenuHandler, ButtonHandler, FilterHandler, InitialSetup } from 'src/modules/handlerApp/Components'
 
 /**
  * Interface para los elementos del menú que contienen sub-elementos.
@@ -144,6 +144,7 @@ interface NotificationGroups {
   'ACTION_BUTTON': 'Save' | 'Upload' | 'Share' | 'Profile' | 'Logout' | 'ShowTree' | 'Check' | 'Close'
   'GENERALS_FILTERS': 'Municipality' | 'Neighborhood' | 'Address' | 'Entity'
   'DATA_RETRIEVER': 'GetMunicipalities' | 'GetNeighborhoods' | 'GetDistricts' | 'GetEntities'
+  'CONFIGURATION': 'InitialSetup'
 }
 
 export type SpecificsForGroups<G extends keyof NotificationGroups> = NotificationGroups[G]
@@ -203,6 +204,7 @@ export interface MediatorState {
   menuHandler: MenuHandler | null
   buttonHandler: ButtonHandler | null
   filterHandler: FilterHandler | null
+  initialSetup: InitialSetup | null
 }
 
 export interface Config {
@@ -225,4 +227,61 @@ export interface Config {
   formValid: boolean[]
   /** Aqui se establecen todos los menus tipo Tree */
   nodes: TreeItem[][]
+}
+
+export interface Establishment {
+  id: number
+  codigoCIIU: string
+  correoEstablecimiento: string
+  daneDepartamento: string
+  daneMunicipio: string | null
+  direccionEstablecimiento: string
+  documentoEstablecimiento: string
+  idAreaOperativa: number
+  identificacionRepresentanteLegal: string
+  nombreActividad: string
+  nombreBarrio: string | null
+  nombreComercial: string
+  nombreComuna: string | null
+  nombreCorregimiento: string | null
+  nombreCorregimientoVeredaLocalidadSector: string | null
+  nombreDepartamento: string
+  nombreEstablecimiento: string
+  nombreLocalidad: string | null
+  nombreMunicipio: string
+  nombreprofesional1: string | null
+  nombreprofesional2: string | null
+  nombreRepresentanteLegal: string | null
+  nombreTipoEstablecimiento: string
+  nombreYCargoRepresentanteLegal: string | null
+  razonSocial: string
+  tarjetaprofesional1: string | null
+  tarjetaprofesional2: string | null
+  telefonoEstablecimiento: string
+  tipoIdentificacionRepresentanteLegal: string
+  sql_deleted: string
+  last_modified: string
+}
+
+export interface EstablishmentsResponse {
+  establecimientos: Establishment[];
+}
+
+export type Table = {
+  name: string;
+  values: Array<Array<number | string | null>>;
+}
+
+export type PartialImport = {
+  database: string;
+  version: number;
+  encrypted: boolean;
+  mode: string;
+  tables: Table[];
+}
+
+export interface DataResponseServer {
+  error?: number
+  mensaje: string
+  trace?: string
 }

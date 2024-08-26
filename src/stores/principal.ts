@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { TreeItem, GroupCards, TableData, TableColumns, PagesList } from 'src/constants/Interfaces'
+import { MODE } from 'src/boot/axios'
 
 interface Principal {
   /** @property {string} nombre del formato del formulario */
@@ -46,10 +47,18 @@ interface Principal {
   * para con ello indicar que el formulario esta listo para envío
   */
   calculableSections: number
+  /**
+   * @property {MODE} modo de ejecución
+   */
+  mode: MODE
+  /**
+   * @property {'Online' | 'Offline'} estado
+   */
 }
 
 export const usePrincipal = defineStore('principal', {
   state: (): Principal => ({
+    mode: MODE.DEVELOPMENT,
     formatName: '',
     formValid: [],
     calculableSections: 0,

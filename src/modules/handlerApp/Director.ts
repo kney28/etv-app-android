@@ -1,4 +1,5 @@
 import { usePrincipal } from 'src/stores/principal'
+import { useStatusNetwork } from 'src/stores/global'
 import { useInners, Inners } from 'src/stores/global'
 import { useRouter } from 'vue-router'
 import { Builder, FilterFnParams } from './Builder'
@@ -7,6 +8,7 @@ import { FormEnvironment } from 'src/modules/FormEnvironment'
 import { formClassRegistry } from 'src/modules/handlerApp/FormClassRegistry'
 import { QForm, useQuasar } from 'quasar'
 import { Ref } from 'vue'
+import { AxiosProgressEvent } from 'axios'
 
 type QFormRef = Ref<InstanceType<typeof QForm>>
 
@@ -36,6 +38,9 @@ export interface GeneralDirector {
   setForms: (form: QFormRef, assing: FormName.ENTITY | FormName.SAMPLE_RATIO | FormName.GENERAL_OBSERVATIONS) => void
   changeCardStatus: (cardKey?: number) => void
   filterfn: ({ val, update }: FilterFnParams, specificsForGroups: SpecificsForGroups<'GENERALS_FILTERS'>, id?: number) => Promise<object[]>
+  updateEstablishments(): Promise<void>
+  inicializeDB(): Promise<void>
+  uploadVisits(): Promise<void>
 }
 
 export class Director implements GeneralDirector {
@@ -45,11 +50,13 @@ export class Director implements GeneralDirector {
   builder
   forms: Forms
   $q
+  simulationInterval!: ReturnType<typeof setInterval>
   constructor() {
     this.principal = usePrincipal()
     this.inners = useInners()
     this.$router = useRouter()
     this.builder = new Builder()
+    this.builder.initializeNetworkListener()
     this.$q = useQuasar()
     this.forms = {
       entity: {} as QFormRef,
@@ -213,5 +220,108 @@ export class Director implements GeneralDirector {
 
   async filterfn({ val, update }: FilterFnParams, specificsForGroups: SpecificsForGroups<'GENERALS_FILTERS'>, id?: number): Promise<object[]> {
     return this.builder.filterFn({ val, update }, specificsForGroups, id)
+  }
+
+  handleProgress(progressEvent: AxiosProgressEvent) {
+    const percentCompleted = (progressEvent.loaded / progressEvent.total!) * 100
+    console.log(`Progress: ${percentCompleted.toFixed(2)}%`)
+    /* this.inners.type = Inners.Facebook
+    this.inners.label = `${percentCompleted.toFixed(2)}%`
+    this.inners.visible = true
+    console.log(`Progress: ${percentCompleted.toFixed(2)}%`)
+
+    if (percentCompleted >= 100) {
+      this.inners.label = 'Datos actualizados!'
+      setTimeout(() => {
+        this.inners.visible = false
+      }, 1000);
+    } */
+  }
+
+  startProgress() {
+    this.inners.type = Inners.Facebook
+    this.inners.label = ''
+    this.inners.visible = true
+
+    let simulatedProgress = 0
+    this.simulationInterval = setInterval(() => {
+      simulatedProgress += 2
+      this.inners.label = `${simulatedProgress}%`
+
+      if (simulatedProgress >= 100) {
+        this.inners.label = `100%`
+      }
+    }, 200);
+  }
+
+  stopProgress(finalLabel: string) {
+    clearInterval(this.simulationInterval);
+    this.inners.label = finalLabel;
+
+    setTimeout(() => {
+      this.inners.visible = false;
+    }, 2600);
+  }
+
+  async updateEstablishments() {
+    if (!await this.builder.checkInternetConnection()) {
+      throw new Error('Sin conexión a internet, entrando en modo offline')
+    }
+    try {
+      const timestamp = await this.builder.getTimestamp()
+      const username = this.$q.localStorage.getItem('username') as string
+      const password = this.$q.localStorage.getItem('password') as string
+      const user = { username, password, timestamp }
+      this.startProgress()
+      const establishments = await this.builder.getEstablishments(user)
+
+      if (establishments.establecimientos.length === 0) {
+        this.stopProgress('Finalizando...')
+        return
+      }
+      const parseToimport = this.builder.parseToImportFromJSON(establishments.establecimientos)
+      const result = await this.builder.importFromJSON(parseToimport)
+      this.stopProgress(`Establecimientos actualizados: (${result.changes?.changes})`)
+    } catch (error: any) {
+      this.inners.visible = false
+      throw new Error(`Error actualizando establecimientos: ${error.message || error}`)
+    }
+  }
+
+  async inicializeDB() {
+    try {
+      this.inners.type = Inners.Puff
+      this.inners.visible = true
+      await this.builder.createDatabase()
+      await this.builder.createSyncTable()
+      await this.builder.insertMunicipalities()
+      await this.builder.insertEstablishmentsDevMode()
+      this.inners.visible = false
+    } catch (error: any) {
+      this.inners.visible = false
+      throw new Error(`Error en base de datos: ${error.message || error}`)
+    }
+  }
+
+  async uploadVisits(): Promise<void> {
+    if (!await this.builder.checkInternetConnection()) {
+      throw new Error('Sin conexión a internet, intente en otro momento')
+    }
+    try {
+      const username = this.$q.localStorage.getItem('username') as string
+      const password = this.$q.localStorage.getItem('password') as string
+      const { formData, files } = await this.builder.prepareSubmissionData(username, password)
+      this.startProgress()
+      await this.builder.submitVisits(formData)
+      await this.builder.logFileHistory(files, username)
+      this.stopProgress('')
+      this.$q.notify({
+        message: 'Carga exitosa',
+        color: 'green'
+      })
+    } catch (error: any) {
+      this.inners.visible = false
+      throw new Error(`${error.message || error}`)
+    }
   }
 }
