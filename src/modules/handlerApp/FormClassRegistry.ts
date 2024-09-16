@@ -9,6 +9,7 @@ import { form as form07 } from 'src/pages/formats/F-AM-A-07/Form.module'
 import { form as form08 } from 'src/pages/formats/F-AM-A-08/Form.module'
 import { form as form09 } from 'src/pages/formats/F-AM-A-09/Form.module'
 import { form as form10 } from 'src/pages/formats/F-AM-A-10/Form.module'
+import { form as form29 } from 'src/pages/formats/F-AM-A-29/Form.module'
 import { FormEnvironment } from 'src/modules/FormEnvironment'
 import { FormActions } from 'src/constants/Interfaces'
 
@@ -30,5 +31,6 @@ export const formClassRegistry: { [K in Exclude<keyof typeof FormEnvironment, 'p
   FAMA07: form07,
   FAMA08: form08,
   FAMA09: form09,
-  FAMA10: form10
+  FAMA10: form10,
+  FAMA29: form29
 }

@@ -52,7 +52,8 @@ export default defineComponent({
       FAMA07: () => import('pages/formats/F-AM-A-07/FormsCollection.ts'),
       FAMA08: () => import('pages/formats/F-AM-A-08/FormsCollection.ts'),
       FAMA09: () => import('pages/formats/F-AM-A-09/FormsCollection.ts'),
-      FAMA10: () => import('pages/formats/F-AM-A-10/FormsCollection.ts')
+      FAMA10: () => import('pages/formats/F-AM-A-10/FormsCollection.ts'),
+      FAMA29: () => import('pages/formats/F-AM-A-29/FormsCollection.ts')
     }
     const components = shallowRef<any>(null);
 

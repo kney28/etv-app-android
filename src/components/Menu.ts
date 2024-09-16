@@ -100,7 +100,7 @@ export const menu: MenuItem[] = [
             iconName: 'fa-solid fa-marker',
             onClick: true
           },
-          /* {
+          {
             id: 'FAMA06',
             label: 'Formulario F-AM-A-06',
             iconColor: 'Black',
@@ -134,7 +134,14 @@ export const menu: MenuItem[] = [
             iconColor: 'Black',
             iconName: 'fa-solid fa-marker',
             onClick: true
-          } */
+          },
+          {
+            id: 'FAMA29',
+            label: 'Formulario F-AM-A-29',
+            iconColor: 'Black',
+            iconName: 'fa-solid fa-marker',
+            onClick: true
+          }
         ]
       }
     ]

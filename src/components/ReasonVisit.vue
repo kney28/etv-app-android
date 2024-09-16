@@ -2,10 +2,9 @@
   <div class="col-md-4 col-sm-6 col-xs-12">
     <q-option-group v-model="general.motivoVisita" :options="options" color="teal" />
   </div>
-  <div class="col-md-4 col-sm-6 col-xs-12">
+  <div v-if="!disabled" class="col-md-4 col-sm-6 col-xs-12">
     <q-input label="Especifique" type="textarea" :readonly="disabled" white color="blue"
-      v-model="general.motivoVisitaEsp" lazy-rules
-      :rules="[val => val.length <= 200 || 'El campo es de maximo 200 caracteres']" />
+      v-model="general.motivoVisitaEsp" :rules="[val => val.length <= 100 || 'El campo es de maximo 100 caracteres']" />
   </div>
 </template>
 

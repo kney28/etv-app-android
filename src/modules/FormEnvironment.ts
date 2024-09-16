@@ -16,4 +16,5 @@ export class FormEnvironment {
   static FAMA07: () => Promise<any> = () => import('pages/formats/F-AM-A-07/Init.ts')
   static FAMA09: () => Promise<any> = () => import('pages/formats/F-AM-A-09/Init.ts')
   static FAMA10: () => Promise<any> = () => import('pages/formats/F-AM-A-10/Init.ts')
+  static FAMA29: () => Promise<any> = () => import('pages/formats/F-AM-A-29/Init.ts')
 }
