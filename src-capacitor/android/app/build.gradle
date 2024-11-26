@@ -4,7 +4,7 @@ android {
     namespace "org.capacitor.quasar.app"
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "gov.capacitor.quasar.uesvalle.ivc"
+        applicationId "gov.capacitor.quasar.uesvalle.etv"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

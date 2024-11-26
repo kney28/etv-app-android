@@ -7,6 +7,7 @@ export const useMediator = defineStore('mediator', {
     menuHandler: null,
     buttonHandler: null,
     filterHandler: null,
+    staticRouteHandler: null,
     initialSetup: null
   })
 })

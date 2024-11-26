@@ -3,12 +3,13 @@ import { useStatusNetwork } from 'src/stores/global'
 import { useInners, Inners } from 'src/stores/global'
 import { useRouter } from 'vue-router'
 import { Builder, FilterFnParams } from './Builder'
-import { PagesList, SpecificsForGroups, Config } from 'src/constants/Interfaces'
+import { PagesList, SpecificsForGroups, Config, StaticRoutes } from 'src/constants/Interfaces'
 import { FormEnvironment } from 'src/modules/FormEnvironment'
 import { formClassRegistry } from 'src/modules/handlerApp/FormClassRegistry'
 import { QForm, useQuasar } from 'quasar'
 import { Ref } from 'vue'
 import { AxiosProgressEvent } from 'axios'
+import { routeStatic as share } from 'src/pages/share/module'
 
 type QFormRef = Ref<InstanceType<typeof QForm>>
 
@@ -32,6 +33,7 @@ export enum FormName {
 
 export interface GeneralDirector {
   loadComponent: (componentName: PagesList, environment: typeof FormEnvironment) => Promise<void>
+  loadStaticRoute: (routeName: StaticRoutes) => void
   showTree: (cardKey: number) => void
   save: () => void
   check: () => void
@@ -41,6 +43,7 @@ export interface GeneralDirector {
   updateEstablishments(): Promise<void>
   inicializeDB(): Promise<void>
   uploadVisits(): Promise<void>
+  share(): Promise<void>
 }
 
 export class Director implements GeneralDirector {
@@ -105,6 +108,17 @@ export class Director implements GeneralDirector {
       }
     } catch (e) {
       this.inners.visible = false
+      throw e
+    }
+  }
+
+  async loadStaticRoute(routeName: SpecificsForGroups<'LOAD_STATIC_ROUTE'>) {
+    console.log('Entrando a ruta estatica share')
+    try {
+      share.setStores()
+      await share.loadFiles()
+      share.setItems()
+    } catch (e) {
       throw e
     }
   }
@@ -322,6 +336,14 @@ export class Director implements GeneralDirector {
     } catch (error: any) {
       this.inners.visible = false
       throw new Error(`${error.message || error}`)
+    }
+  }
+
+  async share(): Promise<void> {
+    try {
+      await share.share()
+    } catch (e) {
+      throw e
     }
   }
 }

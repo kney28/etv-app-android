@@ -43,17 +43,7 @@ export default defineComponent({
     //return props.componentName;
     // });
     const groupModules: { [key: string]: () => Promise<moduleColletion> } = {
-      FAMA01: () => import('pages/formats/F-AM-A-01/FormsCollection.ts'),
-      FAMA02: () => import('pages/formats/F-AM-A-02/FormsCollection.ts'),
-      FAMA03: () => import('pages/formats/F-AM-A-03/FormsCollection.ts'),
-      FAMA04: () => import('pages/formats/F-AM-A-04/FormsCollection.ts'),
-      FAMA05: () => import('pages/formats/F-AM-A-05/FormsCollection.ts'),
-      FAMA06: () => import('pages/formats/F-AM-A-06/FormsCollection.ts'),
-      FAMA07: () => import('pages/formats/F-AM-A-07/FormsCollection.ts'),
-      FAMA08: () => import('pages/formats/F-AM-A-08/FormsCollection.ts'),
-      FAMA09: () => import('pages/formats/F-AM-A-09/FormsCollection.ts'),
-      FAMA10: () => import('pages/formats/F-AM-A-10/FormsCollection.ts'),
-      FAMA29: () => import('pages/formats/F-AM-A-29/FormsCollection.ts')
+      FAMA01: () => import('pages/formats/F-AM-A-01/FormsCollection.ts')
     }
     const components = shallowRef<any>(null);
 

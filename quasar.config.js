@@ -23,9 +23,9 @@ module.exports = configure(function (/* ctx */) {
       errors: true
     },
 
-    bin: {
-      linuxAndroidStudio: '/home/kney28/Documentos/android-studio/bin/studio.sh'
-    },
+    // bin: {
+    //   linuxAndroidStudio: '/home/kney28/Documentos/android-studio/bin/studio.sh'
+    // },
 
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,

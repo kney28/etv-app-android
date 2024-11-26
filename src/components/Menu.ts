@@ -62,85 +62,23 @@ export const menu: MenuItem[] = [
     label: 'Actividades',
     children: [
       {
-        label: 'Alimentos',
-        iconName: 'fa-solid fa-plate-wheat',
+        label: 'Enfermedades transmitidas por vectores',
+        iconName: 'fa-solid fa-mosquito',
         children: [
+          // {
+          //   id: 'FAMA01',
+          //   label: 'Formulario F-AM-A-01',
+          //   iconColor: 'Black',
+          //   iconName: 'fa-solid fa-marker',
+          //   onClick: true
+          // },
           {
-            id: 'FAMA01',
-            label: 'Formulario F-AM-A-01',
+            id: 'FEV04',
+            label: 'Formulario F-EV-04',
             iconColor: 'Black',
             iconName: 'fa-solid fa-marker',
-            onClick: true
-          },
-          {
-            id: 'FAMA02',
-            label: 'Formulario F-AM-A-02',
-            iconColor: 'Black',
-            iconName: 'fa-solid fa-marker',
-            onClick: true
-          },
-          {
-            id: 'FAMA03',
-            label: 'Formulario F-AM-A-03',
-            iconColor: 'Black',
-            iconName: 'fa-solid fa-marker',
-            onClick: true
-          },
-          {
-            id: 'FAMA04',
-            label: 'Formulario F-AM-A-04',
-            iconColor: 'Black',
-            iconName: 'fa-solid fa-marker',
-            onClick: true
-          },
-          {
-            id: 'FAMA05',
-            label: 'Formulario F-AM-A-05',
-            iconColor: 'Black',
-            iconName: 'fa-solid fa-marker',
-            onClick: true
-          },
-          {
-            id: 'FAMA06',
-            label: 'Formulario F-AM-A-06',
-            iconColor: 'Black',
-            iconName: 'fa-solid fa-marker',
-            onClick: true
-          },
-          {
-            id: 'FAMA07',
-            label: 'Formulario F-AM-A-07',
-            iconColor: 'Black',
-            iconName: 'fa-solid fa-marker',
-            onClick: true
-          },
-          {
-            id: 'FAMA08',
-            label: 'Formulario F-AM-A-08',
-            iconColor: 'Black',
-            iconName: 'fa-solid fa-marker',
-            onClick: true
-          },
-          {
-            id: 'FAMA09',
-            label: 'Formulario F-AM-A-09',
-            iconColor: 'Black',
-            iconName: 'fa-solid fa-marker',
-            onClick: true
-          },
-          {
-            id: 'FAMA10',
-            label: 'Formulario F-AM-A-10',
-            iconColor: 'Black',
-            iconName: 'fa-solid fa-marker',
-            onClick: true
-          },
-          {
-            id: 'FAMA29',
-            label: 'Formulario F-AM-A-29',
-            iconColor: 'Black',
-            iconName: 'fa-solid fa-marker',
-            onClick: true
+            to: '/formats/F-EV-04/',
+            onClick: false
           }
         ]
       }
@@ -154,8 +92,9 @@ export const menu: MenuItem[] = [
     iconColor: 'primary'
   },
   {
+    id: 'Load_Share',
     label: 'Compartir',
-    to: '/profiles',
+    to: '/share',
     iconName: 'fa-solid fa-share-nodes',
     iconColor: 'green',
   }

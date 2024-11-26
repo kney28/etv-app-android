@@ -6,7 +6,7 @@
 import { defineComponent } from 'vue'
 import { useMediator } from 'src/stores/mediator'
 import { AppMediator } from 'src/modules/handlerApp/Mediator'
-import { MenuHandler, ButtonHandler, FilterHandler, InitialSetup } from 'src/modules/handlerApp/Components'
+import { MenuHandler, ButtonHandler, FilterHandler, InitialSetup, StaticRouteHandler } from 'src/modules/handlerApp/Components'
 import { Director } from 'src/modules/handlerApp/Director'
 
 export default defineComponent({
@@ -18,6 +18,7 @@ export default defineComponent({
     const buttonHandler = new ButtonHandler()
     const filterHandler = new FilterHandler()
     const initialSetup = new InitialSetup()
+    const staticRouteHandler = new StaticRouteHandler()
     /* Instanciar el Director */
     const director = new Director()
     /* Instanciar el Mediador */
@@ -27,6 +28,7 @@ export default defineComponent({
     appMediator.setComponent(buttonHandler)
     appMediator.setComponent(filterHandler)
     appMediator.setComponent(initialSetup)
+    appMediator.setComponent(staticRouteHandler)
     appMediator.setDirector(director)
 
     /* Setear en Store el mediador y los componentes */
@@ -34,6 +36,7 @@ export default defineComponent({
     mediator.buttonHandler = buttonHandler
     mediator.filterHandler = filterHandler
     mediator.initialSetup = initialSetup
+    mediator.staticRouteHandler = staticRouteHandler
     mediator.mediator = appMediator
     return {
     }

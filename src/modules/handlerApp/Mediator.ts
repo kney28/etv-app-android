@@ -35,6 +35,12 @@ export class AppMediator implements Mediator {
           await this.director.loadComponent(specificEvent as SpecificsForGroups<'LOAD_DYNAMIC_COMPONENT'>, FormEnvironment)
           console.log(groupEvent, specificEvent, sender, ' Hola desde mediator')
           break
+        case 'LOAD_STATIC_ROUTE':
+          switch (specificEvent as SpecificsForGroups<'LOAD_STATIC_ROUTE'>) {
+            case 'Load_Share':
+              this.director.loadStaticRoute(specificEvent as SpecificsForGroups<'LOAD_STATIC_ROUTE'>)
+              break
+          }
         case 'ACTION_BUTTON':
           switch (specificEvent as SpecificsForGroups<'ACTION_BUTTON'>) {
             case 'ShowTree':
@@ -51,6 +57,9 @@ export class AppMediator implements Mediator {
               break
             case 'Upload':
               await this.director.uploadVisits()
+              break
+            case 'Share':
+              await this.director.share()
               break
           }
           break
@@ -79,7 +88,7 @@ export class AppMediator implements Mediator {
           switch (specificEvent as SpecificsForGroups<'CONFIGURATION'>) {
             case 'InitialSetup':
               await this.director.inicializeDB()
-              await this.director.updateEstablishments()
+              // await this.director.updateEstablishments()
               break
           }
         default:

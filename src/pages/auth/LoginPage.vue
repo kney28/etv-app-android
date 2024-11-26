@@ -34,13 +34,18 @@
   height: 25px;
 }
 
+:root {
+  --q-dark-page: #000000;
+}
+
 .fondo {
-  background-image: url('../../images/fondo.jpeg');
+  background-image: url('../../images/fondo.png');
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center;
+  background-position: 0px 0px;
+  background-clip: border-box;
   width: 100%;
-  height: 30vh;
+  height: 36vh;
   position: relative;
   z-index: -1;
 }
@@ -52,17 +57,21 @@
   margin-left: 5%;
 }
 
-.bg-white {
-  background-color: rgba(255, 255, 255, 1);
+.bg-whitee {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.bg-darke {
+  background-color: rgba(0, 0, 0, 0.9);
 }
 </style>
 <template>
   <div class="fondo"></div>
   <div class="row items-start q-col-gutter-sm fit wrap justify-center content-center">
-    <div :class="$q.dark.isActive ? 'col-12 col-md-4 bg-dark' : 'col-12 col-md-4'" style="min-width: 300px;">
+    <div :class="$q.dark.isActive ? 'col-12 col-md-4' : 'col-12 col-md-4'" style="min-width: 300px;">
       <div>
         <q-card-section class="content-center justify-center">
-          <div :class="$q.dark.isActive ? 'bg-dark mrtop q-pa-sm' : 'bg-white mrtop q-pa-sm'">
+          <div :class="$q.dark.isActive ? 'bg-darke mrtop q-pa-sm' : 'bg-whitee mrtop q-pa-sm'">
             <div class="text-center">
               <!--<q-icon name="fa-solid fa-stethoscope" size="70px" style="color: #12506A" class="q-mb-lg" />-->
             </div>
@@ -73,7 +82,7 @@
             </div>
             <div>
               <p style="color: #4794b6; font-size: 18px; font-weight: bolder;" class="text-center q-mb-lg">
-                IVC Alimentos
+                Enfermedades transmitidas por vectores
               </p>
             </div>
           </div>

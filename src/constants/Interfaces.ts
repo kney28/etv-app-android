@@ -1,6 +1,6 @@
 import { FormEnvironment } from 'src/modules/FormEnvironment'
 import { AppMediator } from 'src/modules/handlerApp/Mediator'
-import { MenuHandler, ButtonHandler, FilterHandler, InitialSetup } from 'src/modules/handlerApp/Components'
+import { MenuHandler, ButtonHandler, FilterHandler, InitialSetup, StaticRouteHandler } from 'src/modules/handlerApp/Components'
 
 /**
  * Interface para los elementos del menú que contienen sub-elementos.
@@ -112,7 +112,7 @@ export interface GroupCards {
 
 export type TableData = { [key: string]: string | number | boolean } | null
 
-export type TableColumns = { [key: string]: string | number | boolean } | null
+export type TableColumns = { [key: string]: string | number | boolean | object } | null
 
 /**
  * Interface para la comprobación de los formularios.
@@ -136,7 +136,7 @@ export type PagesList = Exclude<keyof typeof FormEnvironment, 'prototype'>
  *Tipo para los enlaces estaticos id: 'upload'
  *@type StaticRoutes
  */
-export type StaticRoutes = 'Upload' | 'Compartir'
+export type StaticRoutes = 'Upload' | 'Load_Share'
 
 interface NotificationGroups {
   'LOAD_DYNAMIC_COMPONENT': PagesList
@@ -205,6 +205,7 @@ export interface MediatorState {
   buttonHandler: ButtonHandler | null
   filterHandler: FilterHandler | null
   initialSetup: InitialSetup | null
+  staticRouteHandler: StaticRouteHandler | null
 }
 
 export interface Config {

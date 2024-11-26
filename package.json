@@ -10,13 +10,15 @@
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
-    "build": "quasar build"
+    "build": "quasar build",
+    "android": "quasar dev -m capacitor -T android"
   },
   "dependencies": {
     "@capacitor-community/sqlite": "^5.0.6",
     "@quasar/extras": "^1.0.0",
     "axios": "^1.2.1",
     "crypto-js": "^4.1.1",
+    "jszip": "^3.10.1",
     "pinia": "^2.0.11",
     "quasar": "^2.6.0",
     "vue": "^3.0.0",

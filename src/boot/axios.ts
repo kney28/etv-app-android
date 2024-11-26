@@ -34,7 +34,7 @@ export default boot(({ app }) => {
   //       so you can easily perform requests against your app's API
 
   // Esta variable sirve para setear la tabla establecimientos en modo desarrollo
-  app.config.globalProperties.$mode = MODE.PRODUCTION;
+  app.config.globalProperties.$mode = MODE.DEVELOPMENT
 });
 
 export { api };

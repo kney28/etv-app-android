@@ -42,3 +42,9 @@ export class InitialSetup extends BaseComponent {
     this.mediator.notify('CONFIGURATION', specificEvent, sender)
   }
 }
+
+export class StaticRouteHandler extends BaseComponent {
+  onAction: NotifyForGroup<'LOAD_STATIC_ROUTE'> = (specificEvent: SpecificsForGroups<'LOAD_STATIC_ROUTE'>, sender: any): void => {
+    this.mediator.notify('LOAD_STATIC_ROUTE', specificEvent, sender)
+  }
+}
