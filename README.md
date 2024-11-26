@@ -43,7 +43,7 @@ Estaré subiendo nuevas funcionalidades constantemente.
 
 - **Modo oscuro:** Permite habilitar el modo oscuro desde la app o desde el panel de notificaciones de Android
 
-- **Funcion compartir encuestas:** (En desarrollo...)
+- **Funcion compartir encuestas (Nuevo!!):** Permite compartir las encuestas realizadas con WhatsApp o con cualquier otra app
 
 > **Nota:** La validación del usuario en el login se a simplificado para efectos prácticos.
 
